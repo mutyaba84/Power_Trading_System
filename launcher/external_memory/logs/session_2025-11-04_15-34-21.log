@@ -1,0 +1,12 @@
+============================================= 
+  POWER TRADING SYSTEM - LAUNCHER             
+  Session started: 04/11/2025 15:34:21.42              
+============================================= 
+✅ Internet OK. 
+✅ Docker running. 
+⚠️ GPU not found. 
+✅ External storage found: C:\Users\dennis\Power_Trading_System\launcher\external_memory 
+python: can't open file 'C:\\Users\\dennis\\Power_Trading_System\\launcher\\ai_core\\system_runner.py': [Errno 2] No such file or directory
+============================================= 
+  ✅ SESSION ENDED CLEANLY - 04/11/2025 15:34:25.07     
+============================================= 

@@ -2,24 +2,25 @@
 setlocal enabledelayedexpansion
 
 REM ======================================================
-REM 🚀 POWER TRADING SYSTEM - ULTIMATE LAUNCHER (Updated)
+REM 🚀 POWER TRADING SYSTEM - ULTIMATE LAUNCHER (v2.1)
 REM ======================================================
 
-REM 🧭 Determine external memory path
-if exist "D:\" (
-    set "EXTERNAL_MEMORY=D:\AI_Trading_Storage"
-) else (
-    set "EXTERNAL_MEMORY=%~dp0external_memory"
-)
+REM 🧭 Determine base directory
+set "BASEDIR=%~dp0"
+cd /d "%BASEDIR%"
 
-REM 🗂️ Create external storage folder if missing
+REM 🧱 Set up external storage (fallback to local if D:\ not available)
+set "EXTERNAL_MEMORY=D:\AI_Trading_Storage"
+if not exist "D:\" (
+    echo ⚠️ Drive D: not found. Using local storage...
+    set "EXTERNAL_MEMORY=%BASEDIR%external_memory"
+)
 if not exist "%EXTERNAL_MEMORY%" mkdir "%EXTERNAL_MEMORY%"
 
-REM 🗂️ Setup log folder
+REM 🗂️ Log directory setup
 set "LOGDIR=%EXTERNAL_MEMORY%\logs"
 if not exist "%LOGDIR%" mkdir "%LOGDIR%"
 
-REM 🕒 Timestamp
 for /f "tokens=2 delims==." %%I in ('wmic os get localdatetime /value') do set datetime=%%I
 set "timestamp=%datetime:~0,4%-%datetime:~4,2%-%datetime:~6,2%_%datetime:~8,2%-%datetime:~10,2%-%datetime:~12,2%"
 set "LOGFILE=%LOGDIR%\session_%timestamp%.log"
@@ -44,7 +45,7 @@ ping -n 1 8.8.8.8 >nul 2>&1
 if %errorlevel% neq 0 (
     echo ❌ No internet connection. >> "%LOGFILE%"
     echo ❌ Internet not available.
-    if /I "%MODE%"=="diagnose" goto finish
+    if "%MODE%"=="diagnose" goto finish
     pause
     exit /b
 )
@@ -55,15 +56,15 @@ REM 2️⃣ Docker Check
 REM ======================================================
 echo 🐳 Checking Docker...
 docker info >nul 2>&1
-if %errorlevel% neq 0 (
+IF %ERRORLEVEL% NEQ 0 (
     echo 🐳 Docker not running. >> "%LOGFILE%"
-    if /I "%MODE%"=="diagnose" goto checks_continue
+    if "%MODE%"=="diagnose" goto checks_continue
     echo Starting Docker Desktop...
     start "" "C:\Program Files\Docker\Docker\Docker Desktop.exe"
     :waitloop
     timeout /t 5 >nul
     docker info >nul 2>&1
-    if %errorlevel% neq 0 goto waitloop
+    IF %ERRORLEVEL% NEQ 0 goto waitloop
 )
 :checks_continue
 echo ✅ Docker running. >> "%LOGFILE%"
@@ -110,19 +111,20 @@ REM NORMAL RUN MODE
 REM ======================================================
 echo 🚀 Starting Power Trading System in %MODE% mode...
 
-if not exist "%~dp0ai_core" (
+if not exist "%BASEDIR%ai_core" (
     echo ⚠️ ai_core folder missing. Creating...
-    mkdir "%~dp0ai_core"
+    mkdir "%BASEDIR%ai_core"
 )
 
 set "PYTHON_CMD=python"
 where python >nul 2>&1 || set "PYTHON_CMD=python3"
 
 if /I "%MODE%"=="live" (
-    %PYTHON_CMD% "%~dp0ai_core\system_runner.py" --live >> "%LOGFILE%" 2>&1
+    %PYTHON_CMD% "%BASEDIR%backend\ai_core\system_runner.py" --live >> "%LOGFILE%" 2>&1
 ) else (
-    %PYTHON_CMD% "%~dp0ai_core\system_runner.py" >> "%LOGFILE%" 2>&1
+    %PYTHON_CMD% "%BASEDIR%backend\ai_core\system_runner.py" >> "%LOGFILE%" 2>&1
 )
+
 
 echo ============================================= >> "%LOGFILE%"
 echo   ✅ SESSION ENDED CLEANLY - %date% %time%     >> "%LOGFILE%"
