@@ -1,0 +1,24 @@
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: ../Dockerfile.backend
+    container_name: ai_trading_backend
+    ports:
+      - "8000:8000"
+    env_file:
+      - ./.env                 # Root .env file
+    volumes:
+      - ./external_memory:/app/external_memory   # Only persistent data
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: ../Dockerfile.frontend
+    container_name: ai_trading_frontend
+    ports:
+      - "3000:80"               # Serve via Nginx port 80
+    depends_on:
+      - backend
+    restart: unless-stopped

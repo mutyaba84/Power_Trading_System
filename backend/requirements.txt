@@ -1,0 +1,15 @@
+fastapi
+uvicorn
+pandas
+numpy
+scikit-learn
+torch
+ta
+alpaca-trade-api
+requests
+python-dotenv
+sqlalchemy
+joblib
+plotly
+jinja2
+pytest

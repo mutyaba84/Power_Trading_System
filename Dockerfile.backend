@@ -1,0 +1,39 @@
+# Stage 1: Build dependencies
+FROM python:3.11-slim AS builder
+
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+
+WORKDIR /app
+
+# System deps only for building wheels
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends gcc && \
+    rm -rf /var/lib/apt/lists/*
+
+COPY requirements.txt .
+
+RUN pip install --upgrade pip \
+ && pip wheel --no-cache-dir --no-deps -r requirements.txt -w /wheels
+
+# -------------------------------------
+
+# Stage 2: Runtime image
+FROM python:3.11-slim
+
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+
+WORKDIR /app
+
+# Install wheels only (no gcc needed)
+COPY --from=builder /wheels /wheels
+RUN pip install --no-cache /wheels/*
+
+# Copy source code
+COPY . .
+
+EXPOSE 8000
+
+CMD ["python", "backend/system_runner.py", "--mode=live"]
+
