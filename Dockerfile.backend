@@ -1,39 +1,27 @@
-# Stage 1: Build dependencies
-FROM python:3.11-slim AS builder
+FROM python:3.12-slim
 
-ENV PYTHONDONTWRITEBYTECODE=1
-ENV PYTHONUNBUFFERED=1
-
+# Set working directory
 WORKDIR /app
 
-# System deps only for building wheels
+# System dependencies
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends gcc && \
-    rm -rf /var/lib/apt/lists/*
+    apt-get install -y --no-install-recommends \
+    build-essential \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
 
-COPY requirements.txt .
+# Copy requirements first (better caching)
+COPY backend/requirements.txt ./requirements.txt
 
-RUN pip install --upgrade pip \
- && pip wheel --no-cache-dir --no-deps -r requirements.txt -w /wheels
+# Install Python dependencies
+RUN pip install --upgrade pip && \
+    pip install --no-cache-dir -r requirements.txt
 
-# -------------------------------------
-
-# Stage 2: Runtime image
-FROM python:3.11-slim
-
-ENV PYTHONDONTWRITEBYTECODE=1
-ENV PYTHONUNBUFFERED=1
-
-WORKDIR /app
-
-# Install wheels only (no gcc needed)
-COPY --from=builder /wheels /wheels
-RUN pip install --no-cache /wheels/*
-
-# Copy source code
+# Copy full project (backend, utils, ai_core, etc.)
 COPY . .
 
+# Expose backend port
 EXPOSE 8000
 
-CMD ["python", "backend/system_runner.py", "--mode=live"]
-
+# Start FastAPI backend
+CMD ["uvicorn", "backend.main:app", "--host", "0.0.0.0", "--port", "8000"]

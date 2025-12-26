@@ -4,7 +4,7 @@ from alpaca_trade_api.rest import REST, TimeFrame
 
 class AlpacaBroker(BaseBroker):
     def __init__(self):
-        self.api_key = os.getenv("ALPACA_API_KEY")
+        self.api_key = os.getenv("ALPACA_API_KEY"),
         #self.api_key = os.getenv("CK52RCSI3UIOAJZ5FWTG74V7CU")
         self.secret_key = os.getenv("ALPACA_SECRET_KEY")
        # self.secret_key = os.getenv("CKPV7LIKBVTQXIH2A3KN")
