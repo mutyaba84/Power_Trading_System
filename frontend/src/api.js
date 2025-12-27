@@ -1,23 +1,26 @@
-import fs from 'fs';
-import path from 'path';
+const API_BASE = "http://localhost:8000";
 
-const AI_STATE_DIR = 'D:/AI_Trading_Storage/ai_state';
-
-export function readJSON(fileName) {
-  try {
-    const fullPath = path.join(AI_STATE_DIR, fileName);
-    const data = fs.readFileSync(fullPath, 'utf8');
-    return JSON.parse(data);
-  } catch (err) {
-    console.error('Error reading file:', fileName, err);
-    return null;
-  }
+export async function fetchStatus() {
+  const res = await fetch(`${API_BASE}/status`);
+  return res.json();
 }
 
-export function getLatestDecision() {
-  return readJSON('decision_kernel_state.json');
+export async function fetchLogs() {
+  const res = await fetch(`${API_BASE}/logs`);
+  return res.json();
 }
 
-export function getPaperTradingState() {
-  return readJSON('paper_trading_state.json');
+export async function getSentiment() {
+  const res = await fetch(`${API_BASE}/ai/sentiment`);
+  return res.json();
+}
+
+export async function getLatestDecision() {
+  const res = await fetch(`${API_BASE}/ai/decision`);
+  return res.json();
+}
+
+export async function getPaperTradingState() {
+  const res = await fetch(`${API_BASE}/ai/paper-state`);
+  return res.json();
 }

@@ -1,34 +1,79 @@
+import os
+import json
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from ai_core.memory_manager import MemoryManager
-from risk_manager import RiskManager
-import psutil, json
+from backend.ai_core.memory_manager import MemoryManager
 
 app = FastAPI(title="Power Trading System API")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["*"],  # tighten later
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-memory = MemoryManager()
-risk = RiskManager()
+# --------------------------------------------------
+# CONFIG
+# --------------------------------------------------
+AI_STATE_DIR = os.getenv("AI_STORAGE_PATH", "external_memory/ai_state")
 
-@app.get("/status")
-def get_status():
+# ✅ INITIALIZE MEMORY MANAGER (CRITICAL)
+memory = MemoryManager(
+    base_path="external_memory"
+)
+
+# --------------------------------------------------
+# LOGS ENDPOINT
+# --------------------------------------------------
+@app.get("/logs")
+def get_logs(limit: int = 50):
+    """
+    Return latest system events from external memory logs.
+    Safe for frontend consumption.
+    """
+    events = []
+
+    if not memory.external_dir.exists():
+        return {"count": 0, "events": []}
+
+    for f in sorted(memory.external_dir.glob("*.json"), reverse=True):
+        try:
+            content = json.loads(f.read_text())
+
+            if isinstance(content, list):
+                for event in content:
+                    if isinstance(event, dict):
+                        events.append(event)
+
+        except Exception as e:
+            print(f"[LOG READ ERROR] {f.name}: {e}")
+
+        if len(events) >= limit:
+            break
+
     return {
-        "equity": risk.equity,
-        "risk_limit": risk.max_drawdown,
-        "free_memory_gb": psutil.virtual_memory().available / (1024**3)
+        "count": min(len(events), limit),
+        "events": events[:limit]
     }
 
-@app.get("/logs")
-def get_logs():
-    events = []
-    for f in memory.external_dir.glob("*.json"):
-        try:
-            events.extend(json.loads(f.read_text()))
-        except: pass
-    return {"events": events[-50:]}  # latest 50
+# --------------------------------------------------
+# SENTIMENT ENDPOINT
+# --------------------------------------------------
+@app.get("/ai/sentiment")
+def get_sentiment():
+    """
+    Return latest market sentiment snapshot.
+    """
+    path = os.path.join(AI_STATE_DIR, "sentiment_state.json")
+
+    if not os.path.exists(path):
+        return {}
+
+    try:
+        with open(path, "r") as f:
+            data = json.load(f)
+            return data if isinstance(data, dict) else {}
+    except Exception as e:
+        print(f"[SENTIMENT READ ERROR]: {e}")
+        return {}
