@@ -1,93 +1,101 @@
-"""
-Neural Market Sentiment Interface
----------------------------------
-Reads textual market data, converts it into sentiment vectors, and
-writes rolling sentiment indexes into external memory for other
-AI modules to use.
-
-Runs in simulation / research mode only.
-"""
+# File: backend/ai_core/neural_market_sentiment.py
+from __future__ import annotations
 
 import json
 import random
-from datetime import datetime
+import time
 from pathlib import Path
-import numpy as np
+from typing import Any, Dict, Optional
 
-# External persistent storage
-EXTERNAL_MEMORY = Path("/app/external_memory")
-SENTIMENT_CACHE = EXTERNAL_MEMORY / "sentiment_cache"
-LOG_FILE = EXTERNAL_MEMORY / "logs" / "sentiment.log"
 
-SENTIMENT_CACHE.mkdir(parents=True, exist_ok=True)
-LOG_FILE.parent.mkdir(parents=True, exist_ok=True)
+def _project_root() -> Path:
+    return Path(__file__).resolve().parents[2]
+
+
+def _external_memory_root() -> Path:
+    import os
+
+    override = os.getenv("EXTERNAL_MEMORY")
+    if override:
+        return Path(override).expanduser().resolve()
+    return (_project_root() / "external_memory").resolve()
+
+
+def _safe_read_json(path: Path) -> Dict[str, Any]:
+    if not path.exists():
+        return {}
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except Exception:
+        return {}
+
+
+def _safe_write_json(path: Path, payload: Dict[str, Any]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    tmp = path.with_suffix(path.suffix + ".tmp")
+    tmp.write_text(json.dumps(payload, indent=2), encoding="utf-8")
+    tmp.replace(path)
 
 
 class NeuralMarketSentiment:
-    def __init__(self):
-        self.sentiment_history = []
-        self.max_history = 500  # configurable rolling window
-        self.log("Sentiment engine initialized.")
+    """
+    Lightweight sentiment stub (no heavy ML deps) that:
+      - estimates volatility from recent returns if provided
+      - generates a stable mood + confidence output for the UI
 
-    def log(self, msg: str):
-        with LOG_FILE.open("a", encoding="utf-8") as f:
-            f.write(f"[{datetime.utcnow().isoformat()}] {msg}\n")
+    Writes: external_memory/ai_state/sentiment_state.json
+    """
 
-    def _mock_text_feed(self):
-        """Synthetic text feed placeholder."""
-        samples = [
-            "Markets show strong growth potential.",
-            "Investors fear upcoming inflation reports.",
-            "Tech stocks rally as AI adoption expands.",
-            "Recession concerns weigh on consumer sentiment.",
-        ]
-        return random.choice(samples)
+    def __init__(self) -> None:
+        self.root = _external_memory_root()
+        self.ai_state = self.root / "ai_state"
+        self.ai_state.mkdir(parents=True, exist_ok=True)
 
-    def _analyze_text(self, text: str):
-        """Very simple placeholder sentiment model."""
-        pos_words = ["strong", "growth", "rally", "expands", "optimism"]
-        neg_words = ["fear", "recession", "concerns", "inflation", "weigh"]
-        score = sum(w in text.lower() for w in pos_words) - sum(
-            w in text.lower() for w in neg_words
-        )
-        return max(-1.0, min(1.0, score / 3))
+        self.out_path = self.ai_state / "sentiment_state.json"
 
-    def update(self, text: str = None):
-        """Feed new text or generate synthetic one."""
-        text = text or self._mock_text_feed()
-        score = self._analyze_text(text)
-        self.sentiment_history.append(score)
-        if len(self.sentiment_history) > self.max_history:
-            self.sentiment_history.pop(0)
-        self.log(f"Processed text: '{text}' | score={score:+.2f}")
-        self._save_state()
-        return score
+    def infer(
+        self,
+        *,
+        price: Optional[float] = None,
+        prev_price: Optional[float] = None,
+        source: str = "dummy_market_feed",
+    ) -> Dict[str, Any]:
+        # basic return + volatility proxy
+        ret = 0.0
+        if price is not None and prev_price not in (None, 0):
+            try:
+                ret = (float(price) - float(prev_price)) / float(prev_price)
+            except Exception:
+                ret = 0.0
 
-    def _save_state(self):
-        """Persist rolling sentiment history to external memory."""
-        cache_path = SENTIMENT_CACHE / "sentiment_state.json"
-        with cache_path.open("w", encoding="utf-8") as f:
-            json.dump(self.sentiment_history, f)
+        # volatility proxy (bounded)
+        volatility = min(0.99, max(0.0, abs(ret) * 25.0 + random.uniform(0.05, 0.15)))
 
-    def get_index(self):
-        """Return a smoothed sentiment index (-1 bearish, +1 bullish)."""
-        if not self.sentiment_history:
-            return 0.0
-        arr = np.array(self.sentiment_history)
-        return float(np.tanh(arr.mean()))
+        # mood heuristic
+        if ret > 0.0005:
+            mood = "bullish"
+        elif ret < -0.0005:
+            mood = "bearish"
+        else:
+            mood = "neutral"
 
-    def summary(self):
-        index = self.get_index()
-        self.log(f"Sentiment index computed: {index:+.2f}")
-        return {
-            "timestamp": datetime.utcnow().isoformat(),
-            "sentiment_index": index,
-            "samples": len(self.sentiment_history),
+        # confidence heuristic
+        confidence = 0.55
+        if mood != "neutral":
+            confidence = min(0.90, 0.55 + abs(ret) * 120.0)
+        # if volatility too high, confidence drops
+        confidence = max(0.20, confidence * (1.0 - min(0.60, volatility * 0.35)))
+
+        payload = {
+            "timestamp": time.time(),
+            "market_mood": mood,
+            "confidence": round(float(confidence), 4),
+            "volatility": round(float(volatility), 4),
+            "source": source,
         }
 
+        _safe_write_json(self.out_path, payload)
+        return payload
 
-if __name__ == "__main__":
-    engine = NeuralMarketSentiment()
-    for _ in range(10):  # simulate feed updates
-        engine.update()
-    print(engine.summary())
+    def read_last(self) -> Dict[str, Any]:
+        return _safe_read_json(self.out_path)

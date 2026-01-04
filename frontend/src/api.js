@@ -1,26 +1,17 @@
-const API_BASE = "http://localhost:8000";
-
-export async function fetchStatus() {
-  const res = await fetch(`${API_BASE}/status`);
-  return res.json();
+export async function getSystemStatus() {
+  const r = await fetch("/status");
+  if (!r.ok) throw new Error(`status ${r.status}`);
+  return r.json();
 }
 
-export async function fetchLogs() {
-  const res = await fetch(`${API_BASE}/logs`);
-  return res.json();
+export async function getLogs() {
+  const r = await fetch("/logs");
+  if (!r.ok) throw new Error(`logs ${r.status}`);
+  return r.json();
 }
 
 export async function getSentiment() {
-  const res = await fetch(`${API_BASE}/ai/sentiment`);
-  return res.json();
-}
-
-export async function getLatestDecision() {
-  const res = await fetch(`${API_BASE}/ai/decision`);
-  return res.json();
-}
-
-export async function getPaperTradingState() {
-  const res = await fetch(`${API_BASE}/ai/paper-state`);
-  return res.json();
+  const r = await fetch("/ai/sentiment");
+  if (!r.ok) throw new Error(`sentiment ${r.status}`);
+  return r.json();
 }

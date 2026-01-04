@@ -1,12 +1,19 @@
 import React from "react";
 
-export default function Card({ children, className }) {
+export function Card({ className = "", children, ...props }) {
   return (
     <div
-      className={`rounded-2xl bg-gray-800 p-4 shadow-md border border-gray-700 ${className}`}
+      className={className}
+      style={{
+        border: "1px solid #2a2a2a",
+        borderRadius: 12,
+        padding: 16,
+        background: "#111",
+        color: "#fff"
+      }}
+      {...props}
     >
       {children}
     </div>
   );
-dir
 }

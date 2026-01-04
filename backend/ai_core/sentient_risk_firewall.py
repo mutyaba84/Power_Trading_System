@@ -1,71 +1,43 @@
-import json, time, statistics
-from pathlib import Path
+# File: backend/ai_core/sentient_risk_firewall.py
+from __future__ import annotations
+
+from dataclasses import dataclass
+from typing import Any, Dict
+
+
+@dataclass
+class FirewallDecision:
+    action: str = "ALLOW"   # ALLOW | HALT_TRADING | REDUCE_SIZE
+    reason: str = "ok"
+    severity: str = "low"   # low | medium | high
+
 
 class SentientRiskFirewall:
     """
-    Real-time guardian that observes trading health metrics and enforces risk limits.
+    Simple safety gate in front of execution results.
     """
 
-    def __init__(self, external_memory="/app/external_memory", max_drawdown=0.15,
-                 max_trade_loss=0.05, cooldown_period=60):
-        self.root = Path(external_memory)
-        self.firewall_dir = self.root / "firewall"
-        self.firewall_dir.mkdir(parents=True, exist_ok=True)
+    def __init__(self, max_abs_loss: float = 2000.0, max_volatility: float = 0.05, max_size: float = 200000.0):
+        self.max_abs_loss = float(max_abs_loss)
+        self.max_volatility = float(max_volatility)
+        self.max_size = float(max_size)
 
-        self.max_drawdown = max_drawdown
-        self.max_trade_loss = max_trade_loss
-        self.cooldown_period = cooldown_period
+    def check_trade(self, exec_result: Dict[str, Any]) -> Dict[str, Any]:
+        pnl = float(exec_result.get("pnl", 0.0))
+        vol = float(exec_result.get("volatility", 0.0))
+        size = float(exec_result.get("size", 0.0))
 
-        self.last_equity = 100000
-        self.high_watermark = self.last_equity
-        self.active = True
-        self.last_trigger_time = 0
+        if size > self.max_size:
+            d = FirewallDecision(action="REDUCE_SIZE", reason="size_too_large", severity="medium")
+            return {"action": d.action, "reason": d.reason, "severity": d.severity}
 
-    def _record_event(self, event):
-        filename = self.firewall_dir / f"firewall_{int(time.time())}.json"
-        filename.write_text(json.dumps(event, indent=2))
+        if vol > self.max_volatility:
+            d = FirewallDecision(action="HALT_TRADING", reason="volatility_too_high", severity="high")
+            return {"action": d.action, "reason": d.reason, "severity": d.severity}
 
-    def check_trade(self, trade_result):
-        """
-        Evaluates every trade for breach conditions.
-        Returns dict with 'status' and optional 'action'.
-        """
-        equity = trade_result.get("equity", self.last_equity)
-        pnl = trade_result.get("pnl", 0)
-        timestamp = time.time()
+        if pnl < -abs(self.max_abs_loss):
+            d = FirewallDecision(action="HALT_TRADING", reason="loss_limit_breached", severity="high")
+            return {"action": d.action, "reason": d.reason, "severity": d.severity}
 
-        # update drawdown metrics
-        if equity > self.high_watermark:
-            self.high_watermark = equity
-        drawdown = 1 - (equity / self.high_watermark)
-
-        alert = {"timestamp": timestamp, "equity": equity,
-                 "drawdown": round(drawdown,4), "pnl": pnl}
-
-        if drawdown >= self.max_drawdown:
-            alert["action"] = "HALT_TRADING"
-            alert["reason"] = f"Drawdown {drawdown:.2%} exceeds {self.max_drawdown:.2%}"
-            self.active = False
-            self.last_trigger_time = timestamp
-        elif pnl < -abs(self.last_equity * self.max_trade_loss):
-            alert["action"] = "THROTTLE"
-            alert["reason"] = f"Trade loss {pnl:.2f} exceeds limit"
-            self.active = False
-            self.last_trigger_time = timestamp
-        else:
-            alert["action"] = "OK"
-
-        self._record_event(alert)
-        self.last_equity = equity
-        return alert
-
-    def heartbeat(self):
-        """Reactivate system after cooldown."""
-        if not self.active and time.time() - self.last_trigger_time > self.cooldown_period:
-            self.active = True
-            self._record_event({
-                "timestamp": time.time(),
-                "action": "RESUME",
-                "message": "Trading reactivated after cooldown"
-            })
-        return self.active
+        d = FirewallDecision()
+        return {"action": d.action, "reason": d.reason, "severity": d.severity}

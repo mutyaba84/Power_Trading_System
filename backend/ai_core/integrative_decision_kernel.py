@@ -1,98 +1,157 @@
-"""
-Integrative Decision Kernel
----------------------------
-Final action generator for the Power Trading System.
-Merges:
-- Cognitive Orchestrator strategy
-- Quantum Signal Forecaster output
-- Fusion AI output
-- Reinforcement learning adaptiveness
-
-Outputs:
-- action_score (-1 -> +1)
-- scaled_confidence
-- persistent log/state
-"""
+# File: backend/ai_core/integrative_decision_kernel.py
+from __future__ import annotations
 
 import json
-import numpy as np
-from datetime import datetime
+import time
+from dataclasses import dataclass
 from pathlib import Path
+from typing import Any, Dict, Optional
 
-from ai_core.cognitive_orchestrator import CognitiveOrchestrator
-from ai_core.quantum_signal_forecaster import QuantumSignalForecaster
-from ai_core.ai_fusion_core import AIFusionCore
-from ai_core.rl_memory_loop import RLMemoryLoop
 
-EXTERNAL_MEMORY = Path("/app/external_memory")
-AI_STATE_DIR = EXTERNAL_MEMORY / "ai_state"
-LOG_FILE = EXTERNAL_MEMORY / "logs" / "decision_kernel.log"
+def _project_root() -> Path:
+    # backend/ai_core -> backend -> project root
+    return Path(__file__).resolve().parents[2]
 
-AI_STATE_DIR.mkdir(parents=True, exist_ok=True)
-LOG_FILE.parent.mkdir(parents=True, exist_ok=True)
+
+def _external_memory_root() -> Path:
+    # default: <project>/external_memory
+    # allow override if you want later: EXTERNAL_MEMORY=C:\path\to\external_memory
+    env = (Path(str(Path().cwd())) if False else None)  # no-op; keeps lint calm
+    import os
+
+    override = os.getenv("EXTERNAL_MEMORY")
+    if override:
+        return Path(override).expanduser().resolve()
+    return (_project_root() / "external_memory").resolve()
+
+
+def _safe_read_json(path: Path) -> Dict[str, Any]:
+    if not path.exists():
+        return {}
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except Exception:
+        return {}
+
+
+def _safe_write_json(path: Path, payload: Dict[str, Any]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    tmp = path.with_suffix(path.suffix + ".tmp")
+    tmp.write_text(json.dumps(payload, indent=2), encoding="utf-8")
+    tmp.replace(path)
+
+
+@dataclass
+class KernelInputs:
+    micro: Dict[str, Any]
+    macro: Dict[str, Any]
+    crash: Dict[str, Any]
+    sentiment: Dict[str, Any]
 
 
 class IntegrativeDecisionKernel:
-    def __init__(self):
-        self.orchestrator = CognitiveOrchestrator()
-        self.forecaster = QuantumSignalForecaster()
-        self.fusion = AIFusionCore()
-        self.rl = RLMemoryLoop()
-        self.last_decision = {}
-        self.log("Integrative Decision Kernel initialized.")
+    """
+    Combines tier signals + sentiment into one decision for the UI and execution.
 
-    def log(self, msg):
-        with LOG_FILE.open("a", encoding="utf-8") as f:
-            f.write(f"[{datetime.utcnow().isoformat()}] {msg}\n")
+    Writes: external_memory/ai_state/decision_kernel_state.json
+    Reads (if present):
+      - external_memory/ai_state/tier1_micro_state.json
+      - external_memory/ai_state/tier2_macro_state.json
+      - external_memory/ai_state/tier3_crash_state.json
+      - external_memory/ai_state/sentiment_state.json
+    """
 
-    def strategy_to_numeric(self, strategy):
-        mapping = {"AGGRESSIVE": 1.0, "NEUTRAL": 0.0, "DEFENSIVE": -0.5, "PAUSE": 0.0}
-        return mapping.get(strategy, 0.0)
+    def __init__(self) -> None:
+        self.root = _external_memory_root()
+        self.ai_state = self.root / "ai_state"
+        self.ai_state.mkdir(parents=True, exist_ok=True)
 
-    def compute_action(self):
-        # Gather all intelligence signals
-        strategy = self.orchestrator.evaluate()
-        strategy_num = self.strategy_to_numeric(strategy)
+        self.out_path = self.ai_state / "decision_kernel_state.json"
 
-        quantum = self.forecaster.forecast()
-        fusion_val = self.fusion.last_fusion_value
-        adaptiveness = np.mean(self.rl.get_weights())
+        self.micro_path = self.ai_state / "tier1_micro_state.json"
+        self.macro_path = self.ai_state / "tier2_macro_state.json"
+        self.crash_path = self.ai_state / "tier3_crash_state.json"
+        self.sentiment_path = self.ai_state / "sentiment_state.json"
 
-        # Integrative weighted sum
-        weights = np.array([0.4, 0.3, 0.2, 0.1])  # Strategy | Quantum | Fusion | Adaptiveness
-        signals = np.array([strategy_num, quantum["expected"], fusion_val, adaptiveness])
-        action_score = float(np.tanh(np.dot(weights, signals)))
+    def load_inputs(self) -> KernelInputs:
+        return KernelInputs(
+            micro=_safe_read_json(self.micro_path),
+            macro=_safe_read_json(self.macro_path),
+            crash=_safe_read_json(self.crash_path),
+            sentiment=_safe_read_json(self.sentiment_path),
+        )
 
-        # Confidence scaling inversely proportional to quantum uncertainty
-        scaled_confidence = float(np.exp(-quantum["uncertainty"]) * abs(action_score))
+    def decide(self, inputs: Optional[KernelInputs] = None) -> Dict[str, Any]:
+        inputs = inputs or self.load_inputs()
 
-        # Save decision state
-        decision_state = {
-            "timestamp": datetime.utcnow().isoformat(),
+        # Defaults if files don’t exist yet
+        micro_signal = str(inputs.micro.get("signal", "hold")).lower()  # buy/sell/hold
+        micro_conf = float(inputs.micro.get("confidence", 0.55) or 0.55)
+
+        macro_bias = str(inputs.macro.get("bias", "neutral")).lower()  # bullish/bearish/neutral
+        macro_strength = float(inputs.macro.get("strength", 0.5) or 0.5)
+
+        crash_risk = float(inputs.crash.get("crash_risk", inputs.crash.get("risk", 0.0)) or 0.0)  # 0..1
+        crash_risk = max(0.0, min(1.0, crash_risk))
+
+        mood = str(inputs.sentiment.get("market_mood", "neutral")).lower()  # bullish/bearish/neutral
+        sent_conf = float(inputs.sentiment.get("confidence", 0.55) or 0.55)
+
+        # Hard safety override
+        if crash_risk >= 0.80:
+            decision = "sell"
+            confidence = max(0.75, crash_risk)
+            strategy = "crash_override"
+        else:
+            # Convert macro bias to a directional lean
+            macro_dir = 0.0
+            if macro_bias in ("bullish", "up", "long"):
+                macro_dir = +1.0
+            elif macro_bias in ("bearish", "down", "short"):
+                macro_dir = -1.0
+
+            # Convert micro signal to direction
+            micro_dir = 0.0
+            if micro_signal == "buy":
+                micro_dir = +1.0
+            elif micro_signal == "sell":
+                micro_dir = -1.0
+
+            # Convert sentiment to direction
+            sent_dir = 0.0
+            if mood in ("bullish", "positive", "up"):
+                sent_dir = +1.0
+            elif mood in ("bearish", "negative", "down"):
+                sent_dir = -1.0
+
+            # Weighted vote
+            score = (micro_dir * micro_conf * 0.50) + (macro_dir * macro_strength * 0.30) + (sent_dir * sent_conf * 0.20)
+
+            # Apply mild penalty for rising crash risk
+            score *= (1.0 - (crash_risk * 0.35))
+
+            if score >= 0.20:
+                decision = "buy"
+            elif score <= -0.20:
+                decision = "sell"
+            else:
+                decision = "hold"
+
+            confidence = min(0.95, max(0.05, abs(score) + 0.35))
+            strategy = "fusion_vote"
+
+        payload = {
+            "timestamp": time.time(),
+            "decision": decision,
+            "confidence": round(float(confidence), 4),
             "strategy": strategy,
-            "action_score": action_score,
-            "scaled_confidence": scaled_confidence,
-            "fusion_output": fusion_val,
-            "quantum_expected": quantum["expected"],
-            "quantum_uncertainty": quantum["uncertainty"],
-            "adaptiveness": adaptiveness
+            "inputs": {
+                "micro": {"signal": micro_signal, "confidence": micro_conf},
+                "macro": {"bias": macro_bias, "strength": macro_strength},
+                "crash": {"crash_risk": crash_risk},
+                "sentiment": {"market_mood": mood, "confidence": sent_conf},
+            },
         }
 
-        self.last_decision = decision_state
-        self._save_state(decision_state)
-        self.log(f"ActionScore={action_score:+.3f} | Conf={scaled_confidence:.3f} | Strategy={strategy}")
-        return decision_state
-
-    def _save_state(self, decision_state):
-        with (AI_STATE_DIR / "decision_kernel_state.json").open("w", encoding="utf-8") as f:
-            json.dump(decision_state, f, indent=2)
-
-    def summary(self):
-        return self.last_decision
-
-
-if __name__ == "__main__":
-    idk = IntegrativeDecisionKernel()
-    for _ in range(10):
-        decision = idk.compute_action()
-        print(decision)
+        _safe_write_json(self.out_path, payload)
+        return payload
