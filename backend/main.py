@@ -7,6 +7,8 @@ from backend.routes.ai import router as ai_router
 from backend.routes.controller import router as controller_router
 
 from backend.services.controller_runner import start_controller
+from backend.routes.api_adapter import router as api_router
+
 
 
 app = FastAPI(title="Power Trading System")
@@ -22,6 +24,7 @@ app.include_router(system_router)
 app.include_router(logs_router)
 app.include_router(ai_router, prefix="/ai")
 app.include_router(controller_router)
+app.include_router(api_router)
 
 
 @app.on_event("startup")
@@ -35,3 +38,6 @@ def _startup():
 @app.get("/")
 def root():
     return {"status": "Power Trading System ONLINE"}
+
+
+

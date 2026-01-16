@@ -1,17 +1,44 @@
-export async function getSystemStatus() {
-  const r = await fetch("/status");
-  if (!r.ok) throw new Error(`status ${r.status}`);
-  return r.json();
+const BASE_URL = "http://localhost:8000/api";
+
+async function request(path, options = {}) {
+  const res = await fetch(`${BASE_URL}${path}`, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+    ...options,
+  });
+
+  if (!res.ok) {
+    throw new Error(`HTTP ${res.status}`);
+  }
+
+  try {
+    return await res.json();
+  } catch {
+    return null;
+  }
 }
 
-export async function getLogs() {
-  const r = await fetch("/logs");
-  if (!r.ok) throw new Error(`logs ${r.status}`);
-  return r.json();
+export function getStatus() {
+  return request("/status");
 }
 
-export async function getSentiment() {
-  const r = await fetch("/ai/sentiment");
-  if (!r.ok) throw new Error(`sentiment ${r.status}`);
-  return r.json();
+export function getSentiment() {
+  return request("/sentiment");
+}
+
+export function getDecision() {
+  return request("/decision/latest");
+}
+
+export function getTrades() {
+  return request("/trades");
+}
+
+export function startController() {
+  return request("/controller/start", { method: "POST" });
+}
+
+export function stopController() {
+  return request("/controller/stop", { method: "POST" });
 }
