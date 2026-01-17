@@ -1,4 +1,3 @@
-# backend/app/brokers/alpaca_broker.py
 from __future__ import annotations
 
 import logging
@@ -12,20 +11,35 @@ logger.setLevel(logging.INFO)
 
 
 class AlpacaBroker(BaseBroker):
+    """
+    SAFE Alpaca broker adapter.
+
+    MODES:
+      - simulation (default)
+      - paper       (ALLOWED)
+      - live        (HARD BLOCKED)
+
+    This file ONLY knows how to talk to Alpaca.
+    It does NOT decide when trades happen.
+    """
+
     def __init__(self, mode: Optional[str] = None) -> None:
-        """
-        mode: 'paper' or 'live' or 'simulation'
-        - live  => https://api.alpaca.markets
-        - paper/simulation => https://paper-api.alpaca.markets
-        """
         super().__init__(mode=mode or os.getenv("AI_MODE", "simulation"))
+
         self.api_key = os.getenv("APCA_API_KEY_ID")
         self.secret_key = os.getenv("APCA_API_SECRET_KEY")
 
+        # -------------------------------------------------
+        # HARD SAFETY: LIVE TRADING IS BLOCKED
+        # -------------------------------------------------
         if self.mode == "live":
-            self.base_url = "https://api.alpaca.markets"
-        else:
-            self.base_url = "https://paper-api.alpaca.markets"
+            raise RuntimeError(
+                "🚫 LIVE TRADING DISABLED. "
+                "Remove this guard intentionally if you *really* want live trading."
+            )
+
+        # Paper & simulation both use paper endpoint
+        self.base_url = "https://paper-api.alpaca.markets"
 
         self.client: Any = None
 
@@ -33,82 +47,98 @@ class AlpacaBroker(BaseBroker):
         self.kill_switch_file = os.path.join(storage, "KILL_SWITCH")
 
         try:
-            self.max_order_size = float(os.getenv("MAX_ORDER_SIZE", "10000"))
+            self.max_order_size = float(os.getenv("MAX_ORDER_SIZE", "5"))
         except Exception:
-            self.max_order_size = 10000.0
+            self.max_order_size = 5.0
 
-        logger.info(f"AlpacaBroker initialized in {self.mode.upper()} mode.")
+        logger.info(
+            f"🦙 AlpacaBroker initialized | MODE={self.mode.upper()} | MAX_QTY={self.max_order_size}"
+        )
+
+    # ------------------------------------------------------------------
+    # SAFETY
+    # ------------------------------------------------------------------
 
     def is_killed(self) -> bool:
-        """Check if KILL_SWITCH is active."""
+        """Emergency kill switch via file."""
         return os.path.exists(self.kill_switch_file)
+
+    # ------------------------------------------------------------------
+    # CONNECTION
+    # ------------------------------------------------------------------
 
     def connect(self) -> Any:
         if not self.api_key or not self.secret_key:
-            raise ValueError("Alpaca API keys not set in environment!")
+            raise RuntimeError("Alpaca API keys not set in environment.")
 
         try:
             from alpaca_trade_api.rest import REST  # type: ignore
         except Exception as e:
             raise RuntimeError(
-                "alpaca_trade_api is not installed. Install it to use AlpacaBroker."
+                "alpaca_trade_api not installed. Run: pip install alpaca-trade-api"
             ) from e
 
-        self.client = REST(self.api_key, self.secret_key, self.base_url)
+        self.client = REST(
+            key_id=self.api_key,
+            secret_key=self.secret_key,
+            base_url=self.base_url,
+        )
+
         account = self.client.get_account()
-        logger.info(f"✅ Connected to Alpaca | Cash: {getattr(account, 'cash', 'n/a')}")
+
+        logger.info(
+            f"✅ Connected to Alpaca PAPER | "
+            f"Cash={getattr(account, 'cash', 'n/a')} | "
+            f"Equity={getattr(account, 'equity', 'n/a')}"
+        )
+
         return account
 
-    def place_order(self, symbol: str, qty: float, side: str, order_type: str = "market", **kwargs) -> Any:
+    # ------------------------------------------------------------------
+    # ORDER EXECUTION
+    # ------------------------------------------------------------------
+
+    def place_order(
+        self,
+        symbol: str,
+        qty: float,
+        side: str,
+        order_type: str = "market",
+        time_in_force: str = "gtc",
+    ) -> Any:
         if self.client is None:
             raise RuntimeError("Alpaca client not connected.")
 
         if self.is_killed():
-            logger.warning("KILL_SWITCH active — order aborted.")
+            logger.warning("🛑 KILL SWITCH ACTIVE — order blocked")
             return None
 
-        try:
-            qty_f = float(qty)
-        except Exception:
-            logger.warning(f"Invalid qty={qty}. Order aborted.")
-            return None
+        if qty <= 0:
+            raise ValueError("Order quantity must be positive.")
 
-        if qty_f <= 0:
-            logger.warning(f"Non-positive qty={qty_f}. Order aborted.")
-            return None
+        if qty > self.max_order_size:
+            raise ValueError(
+                f"Order size {qty} exceeds MAX_ORDER_SIZE={self.max_order_size}"
+            )
 
-        if qty_f > self.max_order_size:
-            logger.warning(f"Order qty {qty_f} exceeds max limit {self.max_order_size}. Reducing.")
-            qty_f = self.max_order_size
-
-        side = str(side).strip().lower()
-        if side not in ("buy", "sell"):
+        if side not in {"buy", "sell"}:
             raise ValueError("side must be 'buy' or 'sell'")
 
-        order_type = str(order_type).strip().lower()
-        if order_type not in ("market", "limit", "stop", "stop_limit"):
-            # Keep default behavior safe; Alpaca supports more types, but we won’t guess.
-            order_type = "market"
+        logger.info(
+            f"📨 ALPACA ORDER | {side.upper()} {qty} {symbol} [{order_type}]"
+        )
 
-        tif = kwargs.pop("time_in_force", "gtc")
-        limit_price = kwargs.pop("limit_price", None)
-        stop_price = kwargs.pop("stop_price", None)
-
-        submit_kwargs = dict(
+        return self.client.submit_order(
             symbol=symbol,
-            qty=qty_f,
+            qty=qty,
             side=side,
             type=order_type,
-            time_in_force=tif,
+            time_in_force=time_in_force,
         )
-        if limit_price is not None:
-            submit_kwargs["limit_price"] = limit_price
-        if stop_price is not None:
-            submit_kwargs["stop_price"] = stop_price
 
-        order = self.client.submit_order(**submit_kwargs)
-        logger.info(f"Order submitted: {side} {qty_f} {symbol} [{order_type}]")
-        return order
+    # ------------------------------------------------------------------
+    # ACCOUNT / DATA HELPERS
+    # ------------------------------------------------------------------
 
     def get_positions(self) -> Any:
         if self.client is None:
@@ -120,19 +150,20 @@ class AlpacaBroker(BaseBroker):
             raise RuntimeError("Alpaca client not connected.")
         return self.client.get_account()
 
-    def get_bars(self, symbol: str, timeframe: str = "1Min", limit: int = 200) -> Any:
-        """
-        Optional helper. Kept minimal & safe.
-        timeframe examples: "1Min", "5Min", "15Min", "1Hour", "1Day"
-        """
+    def get_bars(
+        self,
+        symbol: str,
+        timeframe: str = "1Min",
+        limit: int = 200,
+    ) -> Any:
         if self.client is None:
             raise RuntimeError("Alpaca client not connected.")
+
         try:
             from alpaca_trade_api.rest import TimeFrame  # type: ignore
         except Exception:
             TimeFrame = None
 
-        # If TimeFrame exists, map common strings. Otherwise just pass string through.
         tf = timeframe
         if TimeFrame is not None:
             mapping = {

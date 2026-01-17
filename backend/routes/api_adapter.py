@@ -162,8 +162,7 @@ def api_logs(limit: int = 50) -> Dict[str, Any]:
 @router.get("/trades")
 def api_trades() -> Dict[str, Any]:
     """
-    Derive a trades list from logs for now (zero-coupling).
-    Looks for BUY/SELL/HOLD in message-like fields.
+    Derive trades from structured log events (trade.registered).
     """
     try:
         data = _logs(limit=500)
@@ -177,33 +176,34 @@ def api_trades() -> Dict[str, Any]:
             return {"trades": []}
 
         trades: List[Dict[str, Any]] = []
+
         for ev in events:
             if not isinstance(ev, dict):
                 continue
 
-            msg = str(ev.get("message") or ev.get("msg") or ev.get("event") or "")
-            up = msg.upper()
-            if not any(k in up for k in ("BUY", "SELL", "HOLD")):
+            # ✅ Only real trade events
+            if ev.get("event") != "trade.registered":
                 continue
 
             action = ev.get("action")
             if not action:
-                action = "BUY" if "BUY" in up else "SELL" if "SELL" in up else "HOLD" if "HOLD" in up else None
+                continue
 
             trades.append(
                 {
-                    "ts": _coerce_ts(ev.get("ts") or ev.get("timestamp") or ev.get("time")),
-                    "action": action,
-                    "size": _coerce_float(ev.get("size") or ev.get("qty") or ev.get("quantity")),
-                    "price": _coerce_float(ev.get("price") or ev.get("px")),
-                    "pnl": _coerce_float(ev.get("pnl") or ev.get("profit") or ev.get("delta_pnl")),
+                    "ts": _coerce_ts(ev.get("ts") or ev.get("timestamp")),
+                    "action": str(action).upper(),
+                    "size": _coerce_float(ev.get("size")),
+                    "price": _coerce_float(ev.get("price")),
+                    "pnl": _coerce_float(ev.get("pnl")),
+                    "equity": _coerce_float(ev.get("equity")),
                 }
             )
 
         return {"trades": trades}
+
     except Exception:
         return {"trades": []}
-
 
 @router.post("/controller/start")
 def api_controller_start() -> Dict[str, Any]:

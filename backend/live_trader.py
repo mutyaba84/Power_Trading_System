@@ -6,10 +6,9 @@ from pathlib import Path
 from typing import Any, Dict, Optional
 
 from backend.utils.logger import get_logger
-
-# Correct package imports
 from backend.ai_core.learning_engine import LearningEngine
 from backend.ai_core.memory_manager import MemoryManager
+from backend.brokers.alpaca_broker import AlpacaBroker
 
 logger = get_logger("LiveTrader")
 
@@ -32,24 +31,26 @@ class LiveTrader:
     def __init__(self, broker: Any = None, mode: Optional[str] = None):
         self.engine = LearningEngine()
         self.memory = MemoryManager()
-        self.broker = broker
 
         # Resolve mode
         self.mode = (mode or os.getenv("AI_MODE", "simulation")).lower()
         self.last_price: Optional[float] = None
 
+        # Broker (lazy-init)
+        self.broker = broker
+        self._broker_initialized = False
+
         # Safety limits
         self.max_order_size = float(os.getenv("MAX_ORDER_SIZE", "10000"))
 
-        # Kill switch file location (default: <project>/external_memory/KILL_SWITCH)
-        backend_dir = Path(__file__).resolve().parents[1]  # .../backend
+        # Kill switch file
+        backend_dir = Path(__file__).resolve().parents[1]
         default_storage = backend_dir.parent / "external_memory"
         storage_base = Path(os.getenv("AI_STORAGE_PATH", str(default_storage)))
         storage_base.mkdir(parents=True, exist_ok=True)
-
         self.kill_switch_file = storage_base / "KILL_SWITCH"
 
-        # Hard safety rule
+        # Hard safety
         if self.mode == "live" and not self.broker:
             raise RuntimeError("LIVE mode requires a broker instance.")
 
@@ -59,7 +60,6 @@ class LiveTrader:
     # ---------------- SAFETY ----------------
 
     def is_killed(self) -> bool:
-        """Check if KILL_SWITCH is activated."""
         return self.kill_switch_file.exists()
 
     def _validate_trade(self, action: str, trade_size: float) -> bool:
@@ -81,56 +81,50 @@ class LiveTrader:
 
         return True
 
-    # ---------------- RL / FEEDBACK ----------------
+    # ---------------- BROKER ----------------
+
+    def _get_broker(self) -> AlpacaBroker:
+        """
+        Lazy broker initialization.
+        Only used for PAPER or LIVE modes.
+        """
+        if self.broker and self._broker_initialized:
+            return self.broker
+
+        self.broker = AlpacaBroker(mode=self.mode)
+        self.broker.connect()
+        self._broker_initialized = True
+        return self.broker
+
+    # ---------------- RL ----------------
 
     def _reinforce_safe(self, key: str, reward: float, context: str = "momentum") -> None:
-        """
-        Call LearningEngine.reinforce in a way that won't break if its signature differs.
-        Tries common patterns in order.
-        """
         try:
-            # Prefer positional (key, reward, context)
             self.engine.reinforce(key, reward, context)
             return
-        except TypeError:
+        except Exception:
             pass
-        except Exception as e:
-            logger.warning(f"LearningEngine reinforce failed: {e}")
-            return
-
         try:
-            # Sometimes (reward, context)
             self.engine.reinforce(reward, context)
             return
-        except TypeError:
+        except Exception:
             pass
-        except Exception as e:
-            logger.warning(f"LearningEngine reinforce failed: {e}")
-            return
-
         try:
-            # Sometimes just (reward)
             self.engine.reinforce(reward)
         except Exception as e:
             logger.warning(f"LearningEngine reinforce failed: {e}")
 
-    # ---------------- DECISION ENGINE ----------------
+    # ---------------- DECISION ----------------
 
     def decide(self, tick: Dict[str, Any]) -> str:
-        """
-        Core decision logic.
-        Currently momentum-based placeholder.
-        Later: replace with strategy engine output.
-        """
         if self.is_killed():
-            logger.warning("KILL_SWITCH active — holding position.")
+            logger.warning("KILL_SWITCH active — holding.")
             return "hold"
 
         price = tick.get("price")
         ts = tick.get("timestamp")
 
         if price is None:
-            logger.warning("Tick missing price — holding.")
             return "hold"
 
         price_f = float(price)
@@ -139,7 +133,7 @@ class LiveTrader:
             self.last_price = price_f
             return "hold"
 
-        diff = price_f - float(self.last_price)
+        diff = price_f - self.last_price
         self.last_price = price_f
 
         if diff > 0.1:
@@ -149,25 +143,17 @@ class LiveTrader:
         else:
             action = "hold"
 
-        # Reinforcement feedback (placeholder reward)
         reward = random.uniform(-1, 1)
-        key = f"{action}_{ts}" if ts is not None else f"{action}_{random.randint(1, 10_000_000)}"
-        self._reinforce_safe(key=key, reward=reward, context="momentum")
+        key = f"{action}_{ts or random.randint(1, 10_000_000)}"
+        self._reinforce_safe(key, reward, "momentum")
 
         return action
 
     # ---------------- EXECUTION ----------------
 
     def execute_trade(self, tick: Dict[str, Any], trade_size: float = 1.0) -> Any:
-        """
-        Execute trade with full safety and mode awareness.
-        Returns action string for simulation/paper, or broker order response for live.
-        """
         if self.is_killed():
-            try:
-                self.memory.log_event("Trade blocked: KILL_SWITCH active.")
-            except Exception:
-                pass
+            self.memory.log_event("Trade blocked: KILL_SWITCH active.")
             return "hold"
 
         action = self.decide(tick)
@@ -177,43 +163,15 @@ class LiveTrader:
 
         trade_size = min(float(trade_size), float(self.max_order_size))
 
-        # Log memory + console
-        try:
-            self.memory.log_event(
-                f"Action={action} Price={tick.get('price')} Size={trade_size} Mode={self.mode}"
-            )
-        except Exception:
-            pass
+        self.memory.log_event(
+            f"Action={action} Price={tick.get('price')} Size={trade_size} Mode={self.mode}"
+        )
 
-        # -------- SIMULATION / PAPER --------
-        if self.mode in ("simulation", "paper"):
+        # -------- SIMULATION --------
+        if self.mode == "simulation":
             logger.info(
-                f"[{self.mode.upper()}] {action.upper()} | Size={trade_size} Price={tick.get('price')}"
+                f"[SIMULATION] {action.upper()} | Size={trade_size} Price={tick.get('price')}"
             )
             return action
 
-        # -------- LIVE EXECUTION --------
-        if self.mode == "live":
-            symbol = tick.get("symbol")
-            if not symbol:
-                logger.error("LIVE mode: tick missing symbol.")
-                return "hold"
-
-            if action == "hold":
-                return "hold"
-
-            logger.warning("LIVE TRADE EXECUTION")
-            return self.broker.place_order(
-                symbol=symbol,
-                qty=trade_size,
-                side=action,
-                order_type="market",
-            )
-
-        return "hold"
-
-    # ---------------- COMPATIBILITY ----------------
-
-    def simulate_trade(self, tick: Dict[str, Any], trade_size: float = 1.0) -> Any:
-        """Backward-compatible entry point used by main_controller."""
-        return self.execute_trade(tick, trade_size)
+        # -------- PAPER (ALPAC
