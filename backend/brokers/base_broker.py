@@ -1,4 +1,4 @@
-# backend/app/brokers/base_broker.py
+# backend/brokers/base_broker.py
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
