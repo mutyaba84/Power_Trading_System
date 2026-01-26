@@ -22,9 +22,9 @@ class LiveTrader:
     Execution-facing trader with:
     - Regime hysteresis
     - Signal hysteresis (confirmation + one-shot)
+    - Position awareness
     - Strategy gating
-    - Position enforcement
-    - Single-source risk & PnL
+    - Centralized risk & PnL
     """
 
     def __init__(self, broker: Any = None, mode: Optional[str] = None):
@@ -60,31 +60,33 @@ class LiveTrader:
         # ---- Signal hysteresis ----
         self.last_action: Optional[str] = None
         self.signal_count: int = 0
-        self.min_signal_confirmations = 3
+        self.min_signal_confirmations: int = 3
         self._signal_fired: bool = False
 
         # ---- Position State ----
-        self.position: str = "flat"   # flat | long | short
+        self.position: str = "flat"  # flat | long | short
 
         # ---- Kill Switch ----
         backend_dir = Path(__file__).resolve().parents[1]
-        storage_base = Path(os.getenv("AI_STORAGE_PATH", backend_dir / "external_memory"))
+        storage_base = Path(
+            os.getenv("AI_STORAGE_PATH", backend_dir / "external_memory")
+        )
         storage_base.mkdir(parents=True, exist_ok=True)
         self.kill_switch_file = storage_base / "KILL_SWITCH"
 
         logger.info(f"LiveTrader started in {self.mode.upper()} mode")
         logger.info(f"Initial equity: {self.equity:.2f}")
 
-    # -------------------------------------------------
+    # =================================================
     # SAFETY
-    # -------------------------------------------------
+    # =================================================
 
     def is_killed(self) -> bool:
         return self.kill_switch_file.exists()
 
-    # -------------------------------------------------
+    # =================================================
     # BROKER
-    # -------------------------------------------------
+    # =================================================
 
     def _get_broker(self) -> AlpacaBroker:
         if self.broker and self._broker_initialized:
@@ -95,9 +97,9 @@ class LiveTrader:
         self._broker_initialized = True
         return self.broker
 
-    # -------------------------------------------------
-    # LEARNING (SAFE)
-    # -------------------------------------------------
+    # =================================================
+    # LEARNING (FAIL-SAFE)
+    # =================================================
 
     def _reinforce_safe(self, key: str, reward: float, context: str):
         for args in [(key, reward, context), (reward, context), (reward,)]:
@@ -107,9 +109,9 @@ class LiveTrader:
             except Exception:
                 continue
 
-    # -------------------------------------------------
-    # DECISION
-    # -------------------------------------------------
+    # =================================================
+    # DECISION PIPELINE
+    # =================================================
 
     def decide(self, tick: Dict[str, Any]) -> str:
         if self.is_killed():
@@ -124,7 +126,6 @@ class LiveTrader:
         # ---- REGIME UPDATE ----
         regime = self.regime.update(price)
 
-        # reset everything on regime change
         if regime != self._last_regime:
             self.signal_count = 0
             self.last_action = None
@@ -151,16 +152,13 @@ class LiveTrader:
             logger.info(f"[GATE] {strategy} blocked in {regime}")
             return "hold"
 
-        # ---- APPLY SIGNAL HYSTERESIS ----
-        action = self._apply_signal_hysteresis(raw_action)
-        if action == "hold":
+        # ---- POSITION CHECK ----
+        if not self._position_allows(raw_action):
             return "hold"
 
-        # ---- POSITION CHECK ----
-        if not self._position_allows(action):
-            logger.info(
-                f"[POSITION] Blocked {action.upper()} (position={self.position})"
-            )
+        # ---- SIGNAL HYSTERESIS ----
+        action = self._apply_signal_hysteresis(raw_action)
+        if action == "hold":
             return "hold"
 
         # ---- LEARNING SIGNAL ----
@@ -173,9 +171,9 @@ class LiveTrader:
 
         return action
 
-    # -------------------------------------------------
+    # =================================================
     # STRATEGIES
-    # -------------------------------------------------
+    # =================================================
 
     def _momentum_decide(self, price: float) -> str:
         if self.last_price is None:
@@ -187,7 +185,7 @@ class LiveTrader:
 
         if diff > 0.1:
             return "buy"
-        elif diff < -0.1:
+        if diff < -0.1:
             return "sell"
         return "hold"
 
@@ -203,15 +201,17 @@ class LiveTrader:
 
         if price < mean_price * 0.995:
             return "buy"
-        elif price > mean_price * 1.005:
+        if price > mean_price * 1.005:
             return "sell"
         return "hold"
 
-    # -------------------------------------------------
-    # POSITION LOGIC
-    # -------------------------------------------------
+    # =================================================
+    # POSITION FILTER
+    # =================================================
 
     def _position_allows(self, action: str) -> bool:
+        if action == "hold":
+            return False
         if self.position == "flat":
             return True
         if self.position == "long" and action == "buy":
@@ -220,9 +220,9 @@ class LiveTrader:
             return False
         return True
 
-    # -------------------------------------------------
-    # SIGNAL HYSTERESIS
-    # -------------------------------------------------
+    # =================================================
+    # SIGNAL HYSTERESIS (CONFIRM + ONE-SHOT)
+    # =================================================
 
     def _apply_signal_hysteresis(self, action: str) -> str:
         if action == "hold":
@@ -251,9 +251,9 @@ class LiveTrader:
         self._signal_fired = True
         return action
 
-    # -------------------------------------------------
+    # =================================================
     # EXECUTION
-    # -------------------------------------------------
+    # =================================================
 
     def execute_trade(self, tick: Dict[str, Any]) -> str:
         action = self.decide(tick)
@@ -289,29 +289,23 @@ class LiveTrader:
             self.equity += pnl
             self.risk.update_after_trade(pnl=pnl, equity=self.equity)
 
-            # ---- POSITION UPDATE ----
-            if action == "buy":
-                self.position = "long"
-            elif action == "sell":
-                self.position = "short"
-
-            # reset signal latch
-            self._signal_fired = False
-            self.signal_count = 0
-            self.last_action = None
-
             self.strategy_performance.record(
                 strategy=self.current_strategy,
                 pnl=pnl,
                 regime=self.current_regime,
             )
 
+            if action == "buy":
+                self.position = "long"
+            elif action == "sell":
+                self.position = "short"
+
             logger.info(
                 f"[SIM] {action.upper()} PnL={pnl:.2f} Equity={self.equity:.2f}"
             )
             return action
 
-        # ---- PAPER / LIVE ----
+        # ---- LIVE / PAPER ----
         broker = self._get_broker()
         broker.place_order(
             symbol=tick.get("symbol", "SPY"),
@@ -322,9 +316,9 @@ class LiveTrader:
 
         return action
 
-    # -------------------------------------------------
+    # =================================================
     # COMPATIBILITY
-    # -------------------------------------------------
+    # =================================================
 
     def simulate_trade(self, tick: Dict[str, Any], trade_size: float = 1.0):
         return self.execute_trade(tick)

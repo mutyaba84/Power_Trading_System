@@ -6,6 +6,8 @@ import TradeTape from "./TradeTape.jsx";
 import EquityCurve from "./EquityCurve.jsx";
 import ControllerControls from "./ControllerControls.jsx";
 
+import TraderStatus from "./TraderStatus";
+
 
 
 
@@ -37,6 +39,7 @@ export default function Dashboard() {
         <ControllerControls />
         <MarketSentiment />
         <AIDecision />
+        <TraderStatus />
         <TradeTape />
         <EquityCurve />
       </div>

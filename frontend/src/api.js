@@ -23,16 +23,9 @@ export function getStatus() {
   return request("/status");
 }
 
-export function getSentiment() {
-  return request("/sentiment");
-}
-
-export function getDecision() {
-  return request("/decision/latest");
-}
-
-export function getTrades() {
-  return request("/trades");
+/* ✅ ACTIVE + VALID */
+export function getTraderState() {
+  return request("/trader/state");
 }
 
 export function startController() {
@@ -42,3 +35,16 @@ export function startController() {
 export function stopController() {
   return request("/controller/stop", { method: "POST" });
 }
+
+/* ❌ DISABLED (backend not exposing yet) */
+// export function getSentiment() {
+//   return request("/sentiment");
+// }
+
+// export function getDecision() {
+//   return request("/decision/latest");
+// }
+
+// export function getTrades() {
+//   return request("/trades");
+// }

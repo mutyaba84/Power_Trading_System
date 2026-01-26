@@ -1,0 +1,10 @@
+@router.get("/trader/state")
+def trader_state():
+    trader = get_trader()
+
+    return {
+        "regime": trader.current_regime,
+        "strategy": trader.current_strategy,
+        "equity": trader.equity,
+        "risk": trader.risk.get_state(),
+    }
