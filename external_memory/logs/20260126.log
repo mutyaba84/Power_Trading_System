@@ -1240,3 +1240,53 @@ OP
 2026-01-26 03:45:35,312 [INFO] [RegimeClassifier] [REGIME] Switching CHOP → TREND
 2026-01-26 03:45:35,313 [INFO] [LiveTrader] [HYSTERESIS] BUY waiting (1/3)
 2026-01-26 03:45:35,516 [INFO] [LiveTrader] [HYSTERESIS] BUY waiting (2/3)
+2026-01-26 03:45:45,333 [INFO] [RiskGovernor] [RISK] strat=momentum conf=0.50 vol=0.00 risk_pct=0.0028
+2026-01-26 03:45:45,362 [INFO] [LiveTrader] [HYSTERESIS] SELL waiting (1/3)
+2026-01-26 03:45:45,380 [INFO] [LiveTrader] [EXEC] BUY strat=momentum size=28.29 equity=10000.42 regime=TREND
+2026-01-26 03:45:45,401 [INFO] [LiveTrader] [SIM] BUY PnL=0.20 Equity=10000.63
+2026-01-26 03:45:45,600 [INFO] [LiveTrader] [HYSTERESIS] SELL waiting (2/3)
+2026-01-26 03:45:45,836 [INFO] [LiveTrader] [HYSTERESIS] SELL waiting (1/3)
+2026-01-26 03:45:45,836 [INFO] [RiskGovernor] [RISK] strat=momentum conf=0.50 vol=0.00 risk_pct=0.0028
+2026-01-26 03:45:45,869 [INFO] [LiveTrader] [EXEC] SELL strat=momentum size=28.28 equity=9999.76 regime=TREND
+2026-01-26 03:45:45,881 [INFO] [LiveTrader] [SIM] SELL PnL=0.01 Equity=9999.77
+2026-01-26 03:45:46,316 [INFO] [LiveTrader] [HYSTERESIS] BUY waiting (1/3)
+2026-01-26 03:45:46,723 [INFO] [LiveTrader] [HYSTERESIS] SELL waiting (2/3)
+2026-01-26 03:45:46,783 [INFO] [RegimeClassifier] [REGIME] Switching TREND → CHOP
+2026-01-26 03:45:47,695 [INFO] [RiskGovernor] [RISK] strat=momentum conf=0.50 vol=0.00 risk_pct=0.0028
+2026-01-26 03:45:47,719 [INFO] [LiveTrader] [EXEC] SELL strat=momentum size=28.29 equity=10000.63 regime=TREND
+2026-01-26 03:45:47,740 [INFO] [LiveTrader] [SIM] SELL PnL=-0.18 Equity=10000.45
+2026-01-26 03:45:48,970 [INFO] [RegimeClassifier] [REGIME] Switching TREND → CHOP
+2026-01-26 03:45:49,426 [INFO] [LiveTrader] [HYSTERESIS] BUY waiting (1/3)
+2026-01-26 03:46:02,814 [INFO] [LiveTrader] [HYSTERESIS] BUY waiting (2/3)
+2026-01-26 03:46:02,856 [INFO] [LiveTrader] [HYSTERESIS] BUY waiting (1/3)
+2026-01-26 03:46:03,074 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.50 vol=0.00 risk_pct=0.0018
+2026-01-26 03:46:03,078 [INFO] [LiveTrader] [EXEC] BUY strat=mean_reversion size=17.68 equity=9999.77 regime=CHOP
+2026-01-26 03:46:03,080 [INFO] [LiveTrader] [SIM] BUY PnL=-0.01 Equity=9999.75
+2026-01-26 03:46:03,095 [INFO] [LiveTrader] [HYSTERESIS] BUY waiting (2/3)
+2026-01-26 03:46:03,286 [INFO] [RegimeClassifier] [REGIME] Switching CHOP → TREND
+2026-01-26 03:46:03,287 [INFO] [LiveTrader] [HYSTERESIS] SELL waiting (1/3)
+2026-01-26 03:46:03,310 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.50 vol=0.00 risk_pct=0.0018
+2026-01-26 03:46:03,315 [INFO] [LiveTrader] [EXEC] BUY strat=mean_reversion size=17.68 equity=10000.45 regime=CHOP
+2026-01-26 03:46:03,324 [INFO] [LiveTrader] [SIM] BUY PnL=-0.00 Equity=10000.45
+2026-01-26 03:46:03,696 [INFO] [LiveTrader] [HYSTERESIS] SELL waiting (2/3)
+2026-01-26 03:46:03,904 [INFO] [RiskGovernor] [RISK] strat=momentum conf=0.50 vol=0.00 risk_pct=0.0028
+2026-01-26 03:46:03,916 [INFO] [LiveTrader] [EXEC] SELL strat=momentum size=28.28 equity=9999.75 regime=TREND
+2026-01-26 03:46:03,926 [INFO] [LiveTrader] [SIM] SELL PnL=-0.24 Equity=9999.51
+2026-01-26 03:46:04,145 [INFO] [LiveTrader] [HYSTERESIS] BUY waiting (1/3)
+2026-01-26 03:46:04,435 [INFO] [RegimeClassifier] [REGIME] Switching CHOP → TREND
+2026-01-26 03:46:04,449 [INFO] [LiveTrader] [HYSTERESIS] SELL waiting (1/3)
+2026-01-26 03:46:04,641 [INFO] [LiveTrader] [HYSTERESIS] BUY waiting (2/3)
+2026-01-26 03:46:04,858 [INFO] [RiskGovernor] [RISK] strat=momentum conf=0.50 vol=0.00 risk_pct=0.0028
+2026-01-26 03:46:04,859 [INFO] [LiveTrader] [EXEC] BUY strat=momentum size=28.28 equity=9999.51 regime=TREND
+2026-01-26 03:46:04,860 [WARNING] [RiskGovernor] [RISK] Loss streak — entering cooldown
+2026-01-26 03:46:04,861 [INFO] [LiveTrader] [SIM] BUY PnL=-0.25 Equity=9999.27
+2026-01-26 03:46:05,426 [INFO] [LiveTrader] [HYSTERESIS] SELL waiting (2/3)
+2026-01-26 03:46:06,085 [INFO] [LiveTrader] [HYSTERESIS] SELL waiting (1/3)
+2026-01-26 03:46:06,106 [INFO] [RiskGovernor] [RISK] strat=momentum conf=0.50 vol=0.00 risk_pct=0.0028
+2026-01-26 03:46:06,118 [INFO] [LiveTrader] [EXEC] SELL strat=momentum size=28.29 equity=10000.45 regime=TREND
+2026-01-26 03:46:06,165 [INFO] [LiveTrader] [SIM] SELL PnL=0.15 Equity=10000.59
+2026-01-26 03:46:06,323 [INFO] [RegimeClassifier] [REGIME] Switching TREND → CHOP
+2026-01-26 03:46:06,337 [INFO] [LiveTrader] [HYSTERESIS] SELL waiting (1/3)
+2026-01-26 03:46:06,421 [INFO] [LiveTrader] [HYSTERESIS] BUY waiting (1/3)
+2026-01-26 03:46:06,544 [INFO] [LiveTrader] [HYSTERESIS] SELL waiting (2/3)
+2026-01-26 03:46:07,059 [INFO] [LiveTrader] [HYSTERESIS] BUY waiting (2/3)
