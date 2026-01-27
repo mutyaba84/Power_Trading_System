@@ -1,49 +1,66 @@
-from __future__ import annotations
+# backend/brokers/alpaca_broker.py
 
-from typing import Optional, List, Dict, Any
+import os
+from typing import List
+
+from alpaca_trade_api import REST
 from backend.utils.logger import get_logger
 
 logger = get_logger("AlpacaBroker")
 
 
 class AlpacaBroker:
-    """
-    Alpaca execution adapter.
-    Safe for reloads, multiprocessing, and simulation mode.
-    """
-
-    def __init__(self, mode: str = "simulation"):
+    def __init__(self, mode: str = "paper"):
         self.mode = mode
-        self.connected = False
-
-    # -------------------------------------------------
-    # CONNECTION
-    # -------------------------------------------------
+        self.client: REST | None = None
 
     def connect(self):
-        if self.connected:
-            return
+        api_key = os.getenv("ALPACA_API_KEY")
+        secret_key = os.getenv("ALPACA_SECRET_KEY")
 
-        logger.info(f"[ALPACA] Connecting (mode={self.mode})")
+        if not api_key or not secret_key:
+            raise RuntimeError("Alpaca API keys missing")
 
-        # NOTE: real Alpaca auth would go here
-        self.connected = True
+        base_url = (
+            "https://paper-api.alpaca.markets"
+            if self.mode != "live"
+            else "https://api.alpaca.markets"
+        )
+
+        self.client = REST(
+            key_id=api_key,
+            secret_key=secret_key,
+            base_url=base_url,
+        )
+
+        logger.info(f"[ALPACA] Connected ({self.mode.upper()})")
 
     # -------------------------------------------------
     # MARKET DATA
     # -------------------------------------------------
 
-    def fetch_bars(self, symbol: str, limit: int = 100) -> List[Dict[str, Any]]:
-        """
-        Fetch historical bars.
-        """
-        logger.info(f"[ALPACA DATA] Fetching bars for {symbol} (limit={limit})")
+    def get_latest_price(self, symbol: str) -> float:
+        assert self.client is not None, "Broker not connected"
 
-        # Placeholder stub (safe for simulation)
-        return []
+        bar = self.client.get_latest_bar(symbol)
+        price = float(bar.c)
+
+        logger.debug(f"[ALPACA DATA] {symbol} price={price}")
+        return price
+
+    def next_tick(self, symbol: str = "SPY") -> dict:
+        """
+        Unified interface so controller can treat Alpaca like DataFeed
+        """
+        price = self.get_latest_price(symbol)
+
+        return {
+            "symbol": symbol,
+            "price": price,
+        }
 
     # -------------------------------------------------
-    # ORDER EXECUTION
+    # EXECUTION
     # -------------------------------------------------
 
     def place_order(
@@ -54,22 +71,16 @@ class AlpacaBroker:
         side: str,
         order_type: str = "market",
     ):
-        """
-        Place an order (paper/live).
-        """
-        if not self.connected:
-            self.connect()
+        assert self.client is not None, "Broker not connected"
 
         logger.info(
-            f"[ALPACA ORDER] {side.upper()} {qty:.2f} {symbol} "
-            f"type={order_type} mode={self.mode}"
+            f"[ALPACA ORDER] {side.upper()} {qty:.2f} {symbol}"
         )
 
-        # Stub for now — real Alpaca call later
-        return {
-            "symbol": symbol,
-            "qty": qty,
-            "side": side,
-            "type": order_type,
-            "status": "filled" if self.mode != "live" else "submitted",
-        }
+        self.client.submit_order(
+            symbol=symbol,
+            qty=round(qty, 2),
+            side=side,
+            type=order_type,
+            time_in_force="day",
+        )
