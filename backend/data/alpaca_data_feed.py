@@ -5,6 +5,7 @@ from typing import Dict, Any
 from backend.brokers.alpaca_broker import AlpacaBroker
 
 
+
 class AlpacaMarketFeed:
     def __init__(self, broker: AlpacaBroker, symbol: str = "SPY"):
         self.broker = broker
@@ -32,4 +33,20 @@ class AlpacaMarketFeed:
             "volatility": volatility,
             "confidence": 0.5,
             "timestamp": time.time(),
+        }
+    
+
+class AlpacaDataFeed:
+    def __init__(self, symbol: str, timeframe: str):
+        self.broker = AlpacaBroker()
+        self.symbol = symbol
+        self.timeframe = timeframe
+
+    def next_tick(self):
+        bar = self.broker.get_latest_bar(self.symbol, self.timeframe)
+        if not bar:
+            return None
+        return {
+            "price": float(bar["close"]),
+            "timestamp": bar["timestamp"],
         }

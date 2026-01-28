@@ -9,6 +9,9 @@ from backend.utils.logger import get_logger
 from backend.live_trader import LiveTrader
 from backend.data_feed import DataFeed
 from backend.risk_manager import RiskManager
+import os
+from backend.brokers.alpaca_broker import AlpacaBroker
+
 
 logger = get_logger("main_controller")
 

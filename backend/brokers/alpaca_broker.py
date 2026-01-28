@@ -1,7 +1,8 @@
-# backend/brokers/alpaca_broker.py
+from __future__ import annotations
 
 import os
-from typing import List
+import time
+from typing import Dict, Optional
 
 from alpaca_trade_api import REST
 from backend.utils.logger import get_logger
@@ -10,77 +11,51 @@ logger = get_logger("AlpacaBroker")
 
 
 class AlpacaBroker:
-    def __init__(self, mode: str = "paper"):
-        self.mode = mode
-        self.client: REST | None = None
+    def __init__(self, symbol: str = "SPY", timeframe: str = "1Min"):
+        self.symbol = symbol
+        self.timeframe = timeframe
 
-    def connect(self):
-        api_key = os.getenv("ALPACA_API_KEY")
-        secret_key = os.getenv("ALPACA_SECRET_KEY")
-
-        if not api_key or not secret_key:
-            raise RuntimeError("Alpaca API keys missing")
-
-        base_url = (
-            "https://paper-api.alpaca.markets"
-            if self.mode != "live"
-            else "https://api.alpaca.markets"
+        self.api = REST(
+            key_id=os.getenv("ALPACA_API_KEY"),
+            secret_key=os.getenv("ALPACA_SECRET_KEY"),
+            base_url="https://paper-api.alpaca.markets"
+            if os.getenv("ALPACA_PAPER", "true").lower() == "true"
+            else "https://api.alpaca.markets",
         )
 
-        self.client = REST(
-            key_id=api_key,
-            secret_key=secret_key,
-            base_url=base_url,
-        )
+        self.last_ts: Optional[int] = None
+        logger.info(f"[ALPACA] Connected | symbol={symbol} tf={timeframe}")
 
-        logger.info(f"[ALPACA] Connected ({self.mode.upper()})")
+    def next_tick(self) -> Optional[Dict]:
+        try:
+            bars = self.api.get_bars(
+                self.symbol,
+                self.timeframe,
+                limit=1,
+            )
 
-    # -------------------------------------------------
-    # MARKET DATA
-    # -------------------------------------------------
+            if not bars:
+                return None
 
-    def get_latest_price(self, symbol: str) -> float:
-        assert self.client is not None, "Broker not connected"
+            bar = bars[0]
+            ts = int(bar.t.timestamp())
 
-        bar = self.client.get_latest_bar(symbol)
-        price = float(bar.c)
+            if self.last_ts and ts <= self.last_ts:
+                return None
 
-        logger.debug(f"[ALPACA DATA] {symbol} price={price}")
-        return price
+            self.last_ts = ts
 
-    def next_tick(self, symbol: str = "SPY") -> dict:
-        """
-        Unified interface so controller can treat Alpaca like DataFeed
-        """
-        price = self.get_latest_price(symbol)
+            return {
+                "price": float(bar.c),
+                "open": float(bar.o),
+                "high": float(bar.h),
+                "low": float(bar.l),
+                "volume": float(bar.v),
+                "ts": ts,
+                "source": "alpaca",
+            }
 
-        return {
-            "symbol": symbol,
-            "price": price,
-        }
-
-    # -------------------------------------------------
-    # EXECUTION
-    # -------------------------------------------------
-
-    def place_order(
-        self,
-        *,
-        symbol: str,
-        qty: float,
-        side: str,
-        order_type: str = "market",
-    ):
-        assert self.client is not None, "Broker not connected"
-
-        logger.info(
-            f"[ALPACA ORDER] {side.upper()} {qty:.2f} {symbol}"
-        )
-
-        self.client.submit_order(
-            symbol=symbol,
-            qty=round(qty, 2),
-            side=side,
-            type=order_type,
-            time_in_force="day",
-        )
+        except Exception as e:
+            logger.error(f"[ALPACA] Data error: {e}")
+            time.sleep(1)
+            return None
