@@ -1,50 +1,51 @@
-const BASE_URL = "http://localhost:8000/api";
+const API_BASE = "http://localhost:8000/api";
 
-async function request(path, options = {}) {
-  const res = await fetch(`${BASE_URL}${path}`, {
-    headers: {
-      "Content-Type": "application/json",
-    },
-    ...options,
-  });
+/* ---------- System ---------- */
 
-  if (!res.ok) {
-    throw new Error(`HTTP ${res.status}`);
-  }
-
-  try {
-    return await res.json();
-  } catch {
-    return null;
-  }
+export async function getStatus() {
+  const r = await fetch(`${API_BASE}/system/status`);
+  return r.json();
 }
 
-export function getStatus() {
-  return request("/status");
+export async function getLogs() {
+  const r = await fetch(`${API_BASE}/system/logs`);
+  return r.json();
 }
 
-/* ✅ ACTIVE + VALID */
-export function getTraderState() {
-  return request("/trader/state");
+/* ---------- Trader ---------- */
+
+export async function getTraderState() {
+  const r = await fetch(`${API_BASE}/trader/state`);
+  return r.json();
 }
 
-export function startController() {
-  return request("/controller/start", { method: "POST" });
+/* ---------- Controller ---------- */
+
+export async function startController() {
+  const r = await fetch(`${API_BASE}/controller/start`, { method: "POST" });
+  return r.json();
 }
 
-export function stopController() {
-  return request("/controller/stop", { method: "POST" });
+export async function stopController() {
+  const r = await fetch(`${API_BASE}/controller/stop`, { method: "POST" });
+  return r.json();
 }
 
-/* ❌ DISABLED (backend not exposing yet) */
-// export function getSentiment() {
-//   return request("/sentiment");
-// }
+/* ---------- AI ---------- */
 
-// export function getDecision() {
-//   return request("/decision/latest");
-// }
+export async function getDecision() {
+  const r = await fetch(`${API_BASE}/ai/decision`);
+  return r.json();
+}
 
-// export function getTrades() {
-//   return request("/trades");
-// }
+export async function getSentiment() {
+  const r = await fetch(`${API_BASE}/ai/sentiment`);
+  return r.json();
+}
+
+/* ---------- Trades ---------- */
+
+export async function getTrades() {
+  const r = await fetch(`${API_BASE}/trades`);
+  return r.json();
+}

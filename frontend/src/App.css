@@ -1,42 +1,172 @@
+/* ===============================
+   GLOBAL RESET / BASE
+================================ */
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+}
+
+body {
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  background-color: #242424;
+  color: rgba(255, 255, 255, 0.87);
+}
+
+/* ===============================
+   APP ROOT
+================================ */
 #root {
   max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
-  text-align: center;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
-
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
-}
-
+/* ===============================
+   CARD BASE
+================================ */
 .card {
-  padding: 2em;
+  background: #020617;
+  border: 1px solid #1f2937;
+  border-radius: 8px;
+  padding: 1rem;
+  text-align: left;
 }
 
-.read-the-docs {
-  color: #888;
+/* ensure nothing inside cards forces column layout */
+.card * {
+  max-width: 100%;
+}
+
+/* ===============================
+   TERMINAL SECTIONS
+================================ */
+.terminal-section {
+  border-bottom: 1px solid #1f2937;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+}
+
+/* ===============================
+   TERMINAL ROW (BULLETPROOF)
+================================ */
+.terminal-row {
+  display: flex !important;
+  flex-direction: row !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  width: 100%;
+  font-size: 0.85rem;
+  margin-top: 4px;
+}
+
+/* FORCE children inline no matter what */
+.terminal-row > * {
+  display: inline-flex !important;
+  align-items: center;
+  white-space: nowrap;
+}
+
+/* ===============================
+   TERMINAL TEXT
+================================ */
+.terminal-label {
+  color: #9ca3af;
+}
+
+.terminal-value {
+  font-family: monospace;
+  color: #e5e7eb;
+}
+
+/* ===============================
+   BADGES
+================================ */
+.badge {
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+
+.badge-green {
+  background: #064e3b;
+  color: #34d399;
+}
+
+.badge-yellow {
+  background: #3f3f46;
+  color: #facc15;
+}
+
+.badge-red {
+  background: #450a0a;
+  color: #f87171;
+}
+
+/* ===============================
+   BUTTONS
+================================ */
+.terminal-buttons {
+  display: flex;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.terminal-btn {
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+}
+
+.btn-start {
+  background: #065f46;
+  color: #ecfdf5;
+}
+
+.btn-stop {
+  background: #7f1d1d;
+  color: #fee2e2;
+}
+
+/* ===============================
+   LINKS / MISC
+================================ */
+a {
+  color: #646cff;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #535bf2;
+}
+
+/* ===============================
+   LIGHT MODE (OPTIONAL)
+================================ */
+@media (prefers-color-scheme: light) {
+  body {
+    background-color: #ffffff;
+    color: #213547;
+  }
+
+  .card {
+    background: #f9fafb;
+    border-color: #e5e7eb;
+  }
+
+  .terminal-label {
+    color: #6b7280;
+  }
+
+  .terminal-value {
+    color: #111827;
+  }
 }

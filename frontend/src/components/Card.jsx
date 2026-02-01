@@ -1,27 +1,22 @@
 export default function Card({ title, children }) {
   return (
     <div
+      className="card"
       style={{
-        border: "1px solid #1f2937",
-        borderRadius: 14,
-        padding: 20,
+        display: "block",
         background: "#0f1620",
-        minWidth: 240,
+        border: "1px solid #1f2937",
+        borderRadius: 12,
+        padding: 16,
+        minHeight: 80,
       }}
     >
       {title && (
-        <div
-          style={{
-            fontWeight: 600,
-            marginBottom: 12,
-            fontSize: 15,
-          }}
-        >
+        <div style={{ fontWeight: 600, marginBottom: 10 }}>
           {title}
         </div>
       )}
-
-      <div style={{ fontSize: 14 }}>{children}</div>
+      {children}
     </div>
   );
 }

@@ -13,8 +13,13 @@ export default function TerminalKpis() {
       try {
         const data = await getStatus();
         if (!alive) return;
+
         setStatus("ONLINE");
-        setEquity(data?.equity ?? null);
+        setEquity(
+          typeof data?.equity === "number"
+            ? data.equity.toFixed(2)
+            : null
+        );
       } catch {
         if (!alive) return;
         setStatus("OFFLINE");
@@ -30,12 +35,27 @@ export default function TerminalKpis() {
     };
   }, []);
 
+  const statusClass =
+    status === "ONLINE"
+      ? "badge badge-green"
+      : status === "OFFLINE"
+      ? "badge badge-red"
+      : "badge badge-yellow";
+
   return (
-    <Card title="Terminal KPIs">
-      <div>Status: {status}</div>
-      <div style={{ marginTop: 6 }}>
-        Equity: {equity ?? "—"}
-      </div>
-    </Card>
-  );
+  <Card title="🧾 Terminal KPIs">
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "space-between",
+        background: "red",
+        padding: 8,
+      }}
+    >
+      <span>Status</span>
+      <span>ONLINE</span>
+    </div>
+  </Card>
+);
+
 }
