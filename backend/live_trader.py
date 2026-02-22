@@ -25,6 +25,7 @@ class LiveTrader:
     - Position awareness
     - Strategy gating
     - Centralized risk & PnL
+    - Rolling volatility calculation (feed independent)
     """
 
     def __init__(self, broker: Any = None, mode: Optional[str] = None):
@@ -47,6 +48,10 @@ class LiveTrader:
         # ---- Market State ----
         self.last_price: Optional[float] = None
         self.price_window: list[float] = []
+
+        # ---- Volatility Tracking ----
+        self.vol_window: list[float] = []
+        self.vol_window_size: int = 30
 
         # ---- Capital & Risk ----
         self.risk = RiskGovernor()
@@ -76,6 +81,33 @@ class LiveTrader:
 
         logger.info(f"LiveTrader started in {self.mode.upper()} mode")
         logger.info(f"Initial equity: {self.equity:.2f}")
+
+    # =================================================
+    # VOLATILITY
+    # =================================================
+
+    def _update_volatility(self, price: float) -> float:
+        self.vol_window.append(price)
+
+        if len(self.vol_window) > self.vol_window_size:
+            self.vol_window.pop(0)
+
+        if len(self.vol_window) < 3:
+            return 0.0
+
+        returns = []
+        for i in range(1, len(self.vol_window)):
+            prev = self.vol_window[i - 1]
+            curr = self.vol_window[i]
+            if prev != 0:
+                returns.append((curr - prev) / prev)
+
+        if not returns:
+            return 0.0
+
+        mean = sum(returns) / len(returns)
+        variance = sum((r - mean) ** 2 for r in returns) / len(returns)
+        return variance ** 0.5
 
     # =================================================
     # SAFETY
@@ -123,6 +155,9 @@ class LiveTrader:
 
         price = float(price)
 
+        # ---- Update volatility ----
+        self._update_volatility(price)
+
         # ---- REGIME UPDATE ----
         regime = self.regime.update(price)
 
@@ -147,21 +182,17 @@ class LiveTrader:
 
         self.current_strategy = strategy
 
-        # ---- STRATEGY GATE ----
         if not self.strategy_gate.allowed(strategy=strategy, regime=regime):
             logger.info(f"[GATE] {strategy} blocked in {regime}")
             return "hold"
 
-        # ---- POSITION CHECK ----
         if not self._position_allows(raw_action):
             return "hold"
 
-        # ---- SIGNAL HYSTERESIS ----
         action = self._apply_signal_hysteresis(raw_action)
         if action == "hold":
             return "hold"
 
-        # ---- LEARNING SIGNAL ----
         reward = random.uniform(-1, 1)
         self._reinforce_safe(
             key=f"{strategy}|{regime}",
@@ -221,7 +252,7 @@ class LiveTrader:
         return True
 
     # =================================================
-    # SIGNAL HYSTERESIS (CONFIRM + ONE-SHOT)
+    # SIGNAL HYSTERESIS
     # =================================================
 
     def _apply_signal_hysteresis(self, action: str) -> str:
@@ -261,7 +292,7 @@ class LiveTrader:
             return "hold"
 
         confidence = float(tick.get("confidence", 0.5))
-        volatility = float(tick.get("volatility", 0.0))
+        volatility = self._update_volatility(float(tick.get("price")))
         ts = tick.get("timestamp")
 
         risk_pct = self.risk.evaluate(
@@ -283,7 +314,6 @@ class LiveTrader:
             f"size={size:.2f} equity={self.equity:.2f} regime={self.current_regime}"
         )
 
-        # ---- SIMULATION ----
         if self.mode == "simulation":
             pnl = random.uniform(-size * 0.01, size * 0.01)
             self.equity += pnl
@@ -305,7 +335,6 @@ class LiveTrader:
             )
             return action
 
-        # ---- LIVE / PAPER ----
         broker = self._get_broker()
         broker.place_order(
             symbol=tick.get("symbol", "SPY"),
@@ -315,10 +344,6 @@ class LiveTrader:
         )
 
         return action
-
-    # =================================================
-    # COMPATIBILITY
-    # =================================================
 
     def simulate_trade(self, tick: Dict[str, Any], trade_size: float = 1.0):
         return self.execute_trade(tick)
