@@ -19,7 +19,7 @@ logger = get_logger("LiveTrader")
 
 class LiveTrader:
     """
-    Execution-facing trader with:
+    Execution-facing trader with:1234
     - Regime hysteresis
     - Signal hysteresis (confirmation + one-shot)
     - Position awareness
