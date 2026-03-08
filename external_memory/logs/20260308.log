@@ -18387,3 +18387,128 @@
 2026-03-08 10:28:04,190 [INFO] [RiskGovernor] [RISK] strat=momentum conf=0.50 vol=0.01 risk_pct=0.0028
 2026-03-08 10:28:04,193 [INFO] [LiveTrader] [EXEC] SELL strat=momentum size=28.10 equity=9997.54 regime=TREND
 2026-03-08 10:28:04,194 [INFO] [LiveTrader] [SIM] SELL PnL=0.21 Equity=9997.76
+2026-03-08 10:28:07,333 [INFO] [LiveTrader] [HYSTERESIS] BUY waiting (1/3)
+2026-03-08 10:28:07,945 [INFO] [LiveTrader] [HYSTERESIS] BUY waiting (2/3)
+2026-03-08 10:28:08,383 [INFO] [RegimeClassifier] [REGIME] Switching TREND → CHOP
+2026-03-08 10:28:08,383 [INFO] [LiveTrader] [GATE] momentum blocked in CHOP
+2026-03-08 10:28:08,585 [INFO] [LiveTrader] [GATE] momentum blocked in CHOP
+2026-03-08 10:28:08,989 [INFO] [LiveTrader] [GATE] momentum blocked in CHOP
+2026-03-08 10:28:09,191 [INFO] [LiveTrader] [GATE] momentum blocked in CHOP
+2026-03-08 10:28:09,393 [INFO] [LiveTrader] [GATE] momentum blocked in CHOP
+2026-03-08 10:28:09,595 [INFO] [LiveTrader] [GATE] momentum blocked in CHOP
+2026-03-08 10:28:09,797 [INFO] [LiveTrader] [GATE] momentum blocked in CHOP
+2026-03-08 10:28:10,000 [INFO] [LiveTrader] [GATE] momentum blocked in CHOP
+2026-03-08 10:28:10,202 [INFO] [LiveTrader] [GATE] momentum blocked in CHOP
+2026-03-08 10:28:10,404 [INFO] [LiveTrader] [GATE] momentum blocked in CHOP
+2026-03-08 10:28:10,606 [INFO] [LiveTrader] [GATE] momentum blocked in CHOP
+2026-03-08 10:28:10,808 [INFO] [LiveTrader] [GATE] momentum blocked in CHOP
+2026-03-08 10:28:11,010 [INFO] [LiveTrader] [GATE] momentum blocked in CHOP
+2026-03-08 10:28:11,213 [INFO] [LiveTrader] [GATE] momentum blocked in CHOP
+2026-03-08 10:28:11,415 [INFO] [LiveTrader] [GATE] momentum blocked in CHOP
+2026-03-08 10:28:11,818 [INFO] [LiveTrader] [GATE] momentum blocked in CHOP
+2026-03-08 10:28:12,020 [INFO] [LiveTrader] [GATE] momentum blocked in CHOP
+2026-03-08 10:28:12,221 [INFO] [LiveTrader] [GATE] momentum blocked in CHOP
+2026-03-08 10:28:12,424 [INFO] [LiveTrader] [GATE] momentum blocked in CHOP
+2026-03-08 10:28:12,626 [INFO] [LiveTrader] [GATE] momentum blocked in CHOP
+2026-03-08 10:28:12,828 [INFO] [LiveTrader] [GATE] momentum blocked in CHOP
+2026-03-08 10:28:13,030 [INFO] [LiveTrader] [GATE] momentum blocked in CHOP
+2026-03-08 10:28:13,232 [INFO] [LiveTrader] [GATE] momentum blocked in CHOP
+2026-03-08 10:28:13,434 [INFO] [LiveTrader] [GATE] momentum blocked in CHOP
+2026-03-08 10:28:13,636 [INFO] [LiveTrader] [GATE] momentum blocked in CHOP
+2026-03-08 10:28:13,838 [INFO] [LiveTrader] [GATE] momentum blocked in CHOP
+2026-03-08 10:28:14,040 [INFO] [LiveTrader] [GATE] momentum blocked in CHOP
+2026-03-08 10:28:14,242 [INFO] [LiveTrader] [GATE] momentum blocked in CHOP
+2026-03-08 10:28:14,444 [INFO] [LiveTrader] [GATE] momentum blocked in CHOP
+2026-03-08 10:28:14,646 [INFO] [LiveTrader] [GATE] momentum blocked in CHOP
+2026-03-08 10:28:14,849 [INFO] [LiveTrader] [GATE] momentum blocked in CHOP
+2026-03-08 10:28:15,051 [INFO] [LiveTrader] [GATE] momentum blocked in CHOP
+2026-03-08 10:28:15,253 [INFO] [LiveTrader] [GATE] momentum blocked in CHOP
+2026-03-08 10:28:15,455 [INFO] [LiveTrader] [GATE] momentum blocked in CHOP
+2026-03-08 10:28:15,658 [INFO] [LiveTrader] [GATE] momentum blocked in CHOP
+2026-03-08 10:28:15,860 [INFO] [LiveTrader] [GATE] momentum blocked in CHOP
+2026-03-08 10:28:16,062 [INFO] [LiveTrader] [GATE] momentum blocked in CHOP
+2026-03-08 10:28:16,264 [INFO] [LiveTrader] [GATE] momentum blocked in CHOP
+2026-03-08 10:28:16,468 [INFO] [LiveTrader] [GATE] momentum blocked in CHOP
+2026-03-08 10:28:16,670 [INFO] [LiveTrader] [GATE] momentum blocked in CHOP
+2026-03-08 10:28:16,872 [INFO] [LiveTrader] [GATE] momentum blocked in CHOP
+2026-03-08 10:28:17,074 [INFO] [LiveTrader] [GATE] momentum blocked in CHOP
+2026-03-08 10:28:17,276 [INFO] [LiveTrader] [GATE] momentum blocked in CHOP
+2026-03-08 10:28:17,478 [INFO] [LiveTrader] [GATE] momentum blocked in CHOP
+2026-03-08 10:28:17,680 [INFO] [LiveTrader] [GATE] momentum blocked in CHOP
+2026-03-08 10:28:17,882 [INFO] [LiveTrader] [GATE] momentum blocked in CHOP
+2026-03-08 10:28:18,085 [INFO] [LiveTrader] [GATE] momentum blocked in CHOP
+2026-03-08 10:28:18,292 [INFO] [LiveTrader] [GATE] momentum blocked in CHOP
+2026-03-08 10:28:18,766 [INFO] [LiveTrader] [GATE] momentum blocked in CHOP
+2026-03-08 10:28:18,967 [INFO] [LiveTrader] [GATE] momentum blocked in CHOP
+2026-03-08 10:28:19,169 [INFO] [LiveTrader] [GATE] momentum blocked in CHOP
+2026-03-08 10:28:19,372 [INFO] [LiveTrader] [GATE] momentum blocked in CHOP
+2026-03-08 10:28:19,574 [INFO] [LiveTrader] [GATE] momentum blocked in CHOP
+2026-03-08 10:28:19,776 [INFO] [LiveTrader] [GATE] momentum blocked in CHOP
+2026-03-08 10:28:19,979 [INFO] [LiveTrader] [GATE] momentum blocked in CHOP
+2026-03-08 10:28:20,185 [INFO] [LiveTrader] [GATE] momentum blocked in CHOP
+2026-03-08 10:28:20,387 [INFO] [LiveTrader] [GATE] momentum blocked in CHOP
+2026-03-08 10:28:20,589 [INFO] [LiveTrader] [GATE] momentum blocked in CHOP
+2026-03-08 10:28:20,791 [INFO] [LiveTrader] [GATE] momentum blocked in CHOP
+2026-03-08 10:28:20,993 [INFO] [RegimeClassifier] [REGIME] Switching CHOP → TREND
+2026-03-08 10:28:20,994 [INFO] [LiveTrader] [HYSTERESIS] BUY waiting (1/3)
+2026-03-08 10:28:21,196 [INFO] [LiveTrader] [HYSTERESIS] BUY waiting (2/3)
+2026-03-08 10:28:21,400 [INFO] [RiskGovernor] [RISK] strat=momentum conf=0.50 vol=0.01 risk_pct=0.0028
+2026-03-08 10:28:21,401 [INFO] [LiveTrader] [EXEC] BUY strat=momentum size=28.10 equity=9997.76 regime=TREND
+2026-03-08 10:28:21,401 [INFO] [LiveTrader] [SIM] BUY PnL=0.20 Equity=9997.96
+2026-03-08 10:28:24,824 [INFO] [LiveTrader] [GATE] mean_reversion blocked in TREND
+2026-03-08 10:28:25,027 [INFO] [LiveTrader] [HYSTERESIS] SELL waiting (1/3)
+2026-03-08 10:28:25,229 [INFO] [LiveTrader] [HYSTERESIS] SELL waiting (2/3)
+2026-03-08 10:28:25,431 [INFO] [LiveTrader] [GATE] mean_reversion blocked in TREND
+2026-03-08 10:28:25,835 [INFO] [RiskGovernor] [RISK] strat=momentum conf=0.50 vol=0.01 risk_pct=0.0028
+2026-03-08 10:28:25,835 [INFO] [LiveTrader] [EXEC] SELL strat=momentum size=28.08 equity=9997.96 regime=TREND
+2026-03-08 10:28:25,836 [INFO] [LiveTrader] [SIM] SELL PnL=-0.02 Equity=9997.94
+2026-03-08 10:28:28,858 [INFO] [LiveTrader] [HYSTERESIS] BUY waiting (1/3)
+2026-03-08 10:28:30,068 [INFO] [LiveTrader] [GATE] mean_reversion blocked in TREND
+2026-03-08 10:28:30,277 [INFO] [LiveTrader] [HYSTERESIS] BUY waiting (2/3)
+2026-03-08 10:28:31,308 [INFO] [RiskGovernor] [RISK] strat=momentum conf=0.50 vol=0.01 risk_pct=0.0028
+2026-03-08 10:28:31,310 [INFO] [LiveTrader] [EXEC] BUY strat=momentum size=28.01 equity=9997.94 regime=TREND
+2026-03-08 10:28:31,310 [INFO] [LiveTrader] [SIM] BUY PnL=-0.08 Equity=9997.87
+2026-03-08 10:28:34,533 [INFO] [LiveTrader] [GATE] mean_reversion blocked in TREND
+2026-03-08 10:28:34,735 [INFO] [LiveTrader] [HYSTERESIS] SELL waiting (1/3)
+2026-03-08 10:28:35,340 [INFO] [LiveTrader] [HYSTERESIS] SELL waiting (2/3)
+2026-03-08 10:28:36,146 [INFO] [RiskGovernor] [RISK] strat=momentum conf=0.50 vol=0.01 risk_pct=0.0028
+2026-03-08 10:28:36,152 [INFO] [LiveTrader] [EXEC] SELL strat=momentum size=28.08 equity=9997.87 regime=TREND
+2026-03-08 10:28:36,152 [WARNING] [RiskGovernor] [RISK] Loss streak — entering cooldown
+2026-03-08 10:28:36,153 [INFO] [LiveTrader] [SIM] SELL PnL=-0.05 Equity=9997.82
+2026-03-08 10:28:39,163 [INFO] [LiveTrader] [HYSTERESIS] BUY waiting (1/3)
+2026-03-08 10:28:39,366 [INFO] [LiveTrader] [HYSTERESIS] BUY waiting (2/3)
+2026-03-08 10:28:39,570 [INFO] [RiskGovernor] [RISK] strat=momentum conf=0.50 vol=0.01 risk_pct=0.0028
+2026-03-08 10:28:39,571 [INFO] [LiveTrader] [EXEC] BUY strat=momentum size=28.06 equity=9997.82 regime=TREND
+2026-03-08 10:28:39,572 [INFO] [RiskGovernor] [RISK] Cooldown complete — resetting loss streak
+2026-03-08 10:28:39,573 [INFO] [LiveTrader] [SIM] BUY PnL=0.16 Equity=9997.98
+2026-03-08 10:28:43,631 [INFO] [LiveTrader] [HYSTERESIS] SELL waiting (1/3)
+2026-03-08 10:28:43,885 [INFO] [LiveTrader] [HYSTERESIS] SELL waiting (2/3)
+2026-03-08 10:28:44,423 [INFO] [RiskGovernor] [RISK] strat=momentum conf=0.50 vol=0.01 risk_pct=0.0028
+2026-03-08 10:28:44,426 [INFO] [LiveTrader] [EXEC] SELL strat=momentum size=28.06 equity=9997.98 regime=TREND
+2026-03-08 10:28:44,428 [INFO] [LiveTrader] [SIM] SELL PnL=0.12 Equity=9998.10
+2026-03-08 10:28:47,609 [INFO] [LiveTrader] [HYSTERESIS] BUY waiting (1/3)
+2026-03-08 10:28:48,425 [INFO] [LiveTrader] [GATE] mean_reversion blocked in TREND
+2026-03-08 10:28:48,627 [INFO] [LiveTrader] [HYSTERESIS] BUY waiting (2/3)
+2026-03-08 10:28:50,240 [INFO] [RegimeClassifier] [REGIME] Switching TREND → CHOP
+2026-03-08 10:28:50,241 [INFO] [LiveTrader] [GATE] momentum blocked in CHOP
+2026-03-08 10:28:50,443 [INFO] [LiveTrader] [GATE] momentum blocked in CHOP
+2026-03-08 10:28:50,645 [INFO] [LiveTrader] [GATE] momentum blocked in CHOP
+2026-03-08 10:28:50,847 [INFO] [LiveTrader] [GATE] momentum blocked in CHOP
+2026-03-08 10:28:51,253 [INFO] [LiveTrader] [GATE] momentum blocked in CHOP
+2026-03-08 10:28:51,456 [INFO] [LiveTrader] [GATE] momentum blocked in CHOP
+2026-03-08 10:28:51,657 [INFO] [LiveTrader] [GATE] momentum blocked in CHOP
+2026-03-08 10:28:51,860 [INFO] [LiveTrader] [GATE] momentum blocked in CHOP
+2026-03-08 10:28:52,062 [INFO] [LiveTrader] [GATE] momentum blocked in CHOP
+2026-03-08 10:28:52,292 [INFO] [LiveTrader] [GATE] momentum blocked in CHOP
+2026-03-08 10:28:52,503 [INFO] [LiveTrader] [GATE] momentum blocked in CHOP
+2026-03-08 10:28:52,706 [INFO] [LiveTrader] [GATE] momentum blocked in CHOP
+2026-03-08 10:28:52,908 [INFO] [LiveTrader] [GATE] momentum blocked in CHOP
+2026-03-08 10:28:53,110 [INFO] [LiveTrader] [GATE] momentum blocked in CHOP
+2026-03-08 10:28:53,313 [INFO] [LiveTrader] [GATE] momentum blocked in CHOP
+2026-03-08 10:28:53,522 [INFO] [RegimeClassifier] [REGIME] Switching CHOP → TREND
+2026-03-08 10:28:53,553 [INFO] [LiveTrader] [HYSTERESIS] BUY waiting (1/3)
+2026-03-08 10:28:53,825 [INFO] [LiveTrader] [HYSTERESIS] BUY waiting (2/3)
+2026-03-08 10:28:54,291 [INFO] [LiveTrader] [GATE] mean_reversion blocked in TREND
+2026-03-08 10:28:54,591 [INFO] [RiskGovernor] [RISK] strat=momentum conf=0.50 vol=0.01 risk_pct=0.0028
+2026-03-08 10:28:54,609 [INFO] [LiveTrader] [EXEC] BUY strat=momentum size=28.14 equity=9998.10 regime=TREND
+2026-03-08 10:28:54,656 [INFO] [LiveTrader] [SIM] BUY PnL=-0.14 Equity=9997.96
