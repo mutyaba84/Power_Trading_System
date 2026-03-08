@@ -6,7 +6,7 @@ from typing import Any, Dict, List
 import time
 
 # Existing route handlers in your backend
-from backend.routes.system import status as _status
+from backend.routes.system import system_status as _status
 from backend.routes.logs import logs as _logs
 from backend.routes.ai import get_sentiment as _get_sentiment, get_decision as _get_decision
 from backend.routes.controller import controller_start as _controller_start, controller_stop as _controller_stop

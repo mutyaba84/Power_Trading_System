@@ -6,14 +6,15 @@ from fastapi import APIRouter
 
 from backend.utils.event_log import log_event
 
-router = APIRouter()
+# FIX: add router prefix
+router = APIRouter(prefix="/system", tags=["system"])
 
 
 def _get_free_memory_gb() -> float | None:
     """
     Best-effort free memory in GB.
-    - On Windows: uses CIM via PowerShell (no extra deps).
-    - On non-Windows: returns None (we can add psutil later if you want).
+    - On Windows: uses CIM via PowerShell
+    - On non-Windows: returns None
     """
     try:
         if platform.system().lower() != "windows":
@@ -25,31 +26,34 @@ def _get_free_memory_gb() -> float | None:
             "-Command",
             "(Get-CimInstance Win32_OperatingSystem).FreePhysicalMemory",
         ]
+
         out = subprocess.check_output(cmd, text=True, stderr=subprocess.DEVNULL).strip()
 
-        # FreePhysicalMemory is in KB
         free_kb = float(out)
+
         return round(free_kb / (1024 * 1024), 2)
+
     except Exception:
         return None
 
 
 @router.get("/status")
-def status():
+def system_status():
+
     equity = float(os.getenv("PAPER_EQUITY", "10000.0"))
     risk_limit = float(os.getenv("RISK_LIMIT", "0.02"))
 
     payload = {
         "status": "ONLINE",
+        "engine": "live",
+        "mode": "simulation",
         "timestamp": time.time(),
         "free_memory_gb": _get_free_memory_gb(),
         "equity": equity,
         "risk_limit": risk_limit,
     }
 
-    # IMPORTANT: don't spam logs on every poll.
-    # (Your dashboard calls /status repeatedly.)
-    # If you want, we can add a separate /heartbeat endpoint for frequent polling.
+    # Avoid log spam (dashboard polls frequently)
     # log_event("system.status", **payload)
 
     return payload
@@ -58,7 +62,7 @@ def status():
 @router.get("/info")
 def info():
     """
-    Developer-friendly: quick environment/system info (safe, non-secret).
+    Developer-friendly system information.
     """
     return {
         "app": "Power Trading System",

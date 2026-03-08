@@ -7,8 +7,13 @@ from backend.routes.ai import router as ai_router
 from backend.routes.controller import router as controller_router
 from backend.routes.api_adapter import router as api_router
 from backend.routes import trader
+from backend.routes import analytics
 
 from backend.services.controller_runner import start_controller
+
+from backend.routes.trades import router as trades_router
+
+
 
 app = FastAPI(title="Power Trading System")
 
@@ -31,8 +36,15 @@ app.include_router(ai_router, prefix="/api/ai")
 app.include_router(controller_router, prefix="/api")
 app.include_router(api_router, prefix="/api")
 
-# ✅ FIX: trader routes MUST be under /api
+# trader routes
 app.include_router(trader.router, prefix="/api")
+
+# analytics routes
+app.include_router(analytics.router, prefix="/api")
+
+# trades routes
+app.include_router(trades_router, prefix="/api")
+
 
 # --------------------
 # STARTUP
