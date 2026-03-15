@@ -1,0 +1,56 @@
+2026-03-11 13:27:40,098 [INFO] [KnowledgeGraph] KnowledgeGraph initialized (runtime-safe).
+2026-03-11 13:27:40,098 [INFO] [LearningEngine] KnowledgeGraph loaded.
+2026-03-11 13:27:40,101 [INFO] [MemoryManager] MemoryManager initialized (runtime-safe).
+2026-03-11 13:27:40,101 [INFO] [LearningEngine] MemoryManager loaded.
+2026-03-11 13:27:40,418 [INFO] [LearningEngine] LearningEngine ready. ai_state_dir=C:\Users\dennis\Power_Trading_System\external_memory\ai_state read_only=True
+2026-03-11 13:27:40,422 [INFO] [MemoryManager] MemoryManager initialized (runtime-safe).
+2026-03-11 13:27:40,423 [INFO] [LiveTrader] LiveTrader started in LIVE mode
+2026-03-11 13:27:40,424 [INFO] [LiveTrader] Initial equity: 10000.00
+2026-03-11 13:27:40,517 [INFO] [KnowledgeGraph] KnowledgeGraph initialized (runtime-safe).
+2026-03-11 13:27:40,518 [INFO] [LearningEngine] KnowledgeGraph loaded.
+2026-03-11 13:27:40,521 [INFO] [MemoryManager] MemoryManager initialized (runtime-safe).
+2026-03-11 13:27:40,521 [INFO] [LearningEngine] MemoryManager loaded.
+2026-03-11 13:27:40,818 [INFO] [LearningEngine] LearningEngine ready. ai_state_dir=C:\Users\dennis\Power_Trading_System\external_memory\ai_state read_only=True
+2026-03-11 13:27:40,822 [INFO] [MemoryManager] MemoryManager initialized (runtime-safe).
+2026-03-11 13:27:40,824 [INFO] [LiveTrader] LiveTrader started in LIVE mode
+2026-03-11 13:27:40,825 [INFO] [LiveTrader] Initial equity: 10000.00
+2026-03-11 13:27:49,481 [INFO] [KnowledgeGraph] KnowledgeGraph initialized (runtime-safe).
+2026-03-11 13:27:49,482 [INFO] [LearningEngine] KnowledgeGraph loaded.
+2026-03-11 13:27:49,488 [INFO] [MemoryManager] MemoryManager initialized (runtime-safe).
+2026-03-11 13:27:49,496 [INFO] [LearningEngine] MemoryManager loaded.
+2026-03-11 13:27:49,777 [INFO] [LearningEngine] LearningEngine ready. ai_state_dir=C:\Users\dennis\Power_Trading_System\external_memory\ai_state read_only=True
+2026-03-11 13:27:49,782 [INFO] [MemoryManager] MemoryManager initialized (runtime-safe).
+2026-03-11 13:27:49,784 [INFO] [LiveTrader] LiveTrader started in LIVE mode
+2026-03-11 13:27:49,785 [INFO] [LiveTrader] Initial equity: 10000.00
+2026-03-11 13:27:49,786 [INFO] [main_controller] [CONTROLLER] AlpacaLiveFeed initialized for SPY
+2026-03-11 13:27:49,787 [INFO] [main_controller] [CONTROLLER] Using AlpacaLiveFeed for live data
+2026-03-11 13:27:49,791 [INFO] [main_controller] [CONTROLLER] TradingController initialized
+2026-03-11 13:30:00,865 [INFO] [LiveTrader] [VOL FILTER] Market too quiet
+2026-03-12 12:11:41,833 [WARNING] [main_controller] [CONTROLLER] Alpaca feed error: ('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None))
+2026-03-12 12:11:48,213 [INFO] [LiveTrader] [VOL FILTER] Volatility normal — trading enabled
+2026-03-12 12:11:48,314 [INFO] [LiveTrader] [GATE] momentum blocked in UNKNOWN
+2026-03-12 12:11:48,670 [INFO] [LiveTrader] [GATE] momentum blocked in UNKNOWN
+2026-03-12 12:11:49,106 [INFO] [LiveTrader] [GATE] momentum blocked in UNKNOWN
+2026-03-12 12:11:49,519 [INFO] [LiveTrader] [GATE] momentum blocked in UNKNOWN
+2026-03-12 12:11:49,889 [INFO] [LiveTrader] [GATE] momentum blocked in UNKNOWN
+2026-03-12 12:11:50,246 [INFO] [LiveTrader] [GATE] momentum blocked in UNKNOWN
+2026-03-12 12:11:50,613 [INFO] [LiveTrader] [GATE] momentum blocked in UNKNOWN
+2026-03-12 12:11:50,930 [INFO] [LiveTrader] [GATE] momentum blocked in UNKNOWN
+2026-03-12 12:11:51,316 [INFO] [LiveTrader] [GATE] momentum blocked in UNKNOWN
+2026-03-12 12:11:51,697 [INFO] [LiveTrader] [GATE] momentum blocked in UNKNOWN
+2026-03-12 12:11:52,004 [INFO] [LiveTrader] [GATE] momentum blocked in UNKNOWN
+2026-03-12 12:11:52,347 [INFO] [LiveTrader] [GATE] momentum blocked in UNKNOWN
+2026-03-12 12:11:52,688 [INFO] [LiveTrader] [GATE] momentum blocked in UNKNOWN
+2026-03-12 12:11:52,998 [INFO] [LiveTrader] [GATE] momentum blocked in UNKNOWN
+2026-03-12 12:11:53,308 [INFO] [LiveTrader] [GATE] momentum blocked in UNKNOWN
+2026-03-12 12:11:53,605 [INFO] [LiveTrader] [GATE] momentum blocked in UNKNOWN
+2026-03-12 12:11:53,936 [INFO] [LiveTrader] [GATE] momentum blocked in UNKNOWN
+2026-03-12 12:11:54,233 [INFO] [LiveTrader] [GATE] momentum blocked in UNKNOWN
+2026-03-12 12:11:54,562 [INFO] [LiveTrader] [GATE] momentum blocked in UNKNOWN
+2026-03-12 12:11:54,869 [INFO] [LiveTrader] [GATE] momentum blocked in UNKNOWN
+2026-03-12 12:11:55,256 [INFO] [LiveTrader] [GATE] momentum blocked in UNKNOWN
+2026-03-12 12:11:55,562 [INFO] [LiveTrader] [GATE] momentum blocked in UNKNOWN
+2026-03-12 12:11:55,968 [INFO] [LiveTrader] [GATE] momentum blocked in UNKNOWN
+2026-03-12 12:11:56,322 [INFO] [RegimeClassifier] [REGIME] Switching UNKNOWN → CHOP
+2026-03-12 12:11:57,648 [INFO] [LiveTrader] [GATE] momentum blocked in CHOP
+2026-03-12 12:13:39,475 [INFO] [LiveTrader] [VOL FILTER] Market too quiet

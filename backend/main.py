@@ -1,3 +1,6 @@
+from dotenv import load_dotenv
+load_dotenv()
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -6,14 +9,11 @@ from backend.routes.logs import router as logs_router
 from backend.routes.ai import router as ai_router
 from backend.routes.controller import router as controller_router
 from backend.routes.api_adapter import router as api_router
-from backend.routes import trader
+from backend.routes.trader import router as trader_router
 from backend.routes import analytics
-
-from backend.services.controller_runner import start_controller
-
 from backend.routes.trades import router as trades_router
 
-
+from backend.services.controller_runner import start_controller
 
 app = FastAPI(title="Power Trading System")
 
@@ -37,7 +37,7 @@ app.include_router(controller_router, prefix="/api")
 app.include_router(api_router, prefix="/api")
 
 # trader routes
-app.include_router(trader.router, prefix="/api")
+app.include_router(trader_router, prefix="/api")
 
 # analytics routes
 app.include_router(analytics.router, prefix="/api")

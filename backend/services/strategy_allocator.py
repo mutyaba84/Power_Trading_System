@@ -1,30 +1,26 @@
-import random
+from __future__ import annotations
 
 
 class StrategyAllocator:
+    """
+    Deterministic regime -> strategy mapping.
 
-    def __init__(self, tracker):
+    This keeps the architecture simple and avoids conflicts between:
+    - regime classifier
+    - allocator
+    - gate
+    """
 
-        self.tracker = tracker
-        self.exploration_rate = 0.1
+    def __init__(self, strategy_tracker=None):
+        self.strategy_tracker = strategy_tracker
 
-    def choose(self, regime):
+    def choose(self, regime: str) -> str:
+        regime = (regime or "").upper()
 
-        strategies = {
-            "TREND": ["momentum", "mean_reversion"],
-            "CHOP": ["mean_reversion", "momentum"]
-        }
+        if regime == "CHOP":
+            return "mean_reversion"
 
-        candidates = strategies.get(regime, ["momentum"])
+        if regime == "TREND":
+            return "momentum"
 
-        # exploration (try other strategy sometimes)
-        if random.random() < self.exploration_rate:
-            return random.choice(candidates)
-
-        # exploitation (choose best)
-        scores = {
-            s: self.tracker.score(s)
-            for s in candidates
-        }
-
-        return max(scores, key=scores.get)
+        return "none"

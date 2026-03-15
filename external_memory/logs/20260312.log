@@ -1,0 +1,82 @@
+2026-03-12 12:44:27,724 [INFO] [KnowledgeGraph] KnowledgeGraph initialized (runtime-safe).
+2026-03-12 12:44:27,724 [INFO] [LearningEngine] KnowledgeGraph loaded.
+2026-03-12 12:44:27,726 [INFO] [MemoryManager] MemoryManager initialized (runtime-safe).
+2026-03-12 12:44:27,727 [INFO] [LearningEngine] MemoryManager loaded.
+2026-03-12 12:44:27,835 [INFO] [LearningEngine] LearningEngine ready. ai_state_dir=C:\Users\dennis\Power_Trading_System\external_memory\ai_state read_only=True
+2026-03-12 12:44:27,839 [INFO] [MemoryManager] MemoryManager initialized (runtime-safe).
+2026-03-12 12:44:27,840 [INFO] [LiveTrader] LiveTrader started in LIVE mode
+2026-03-12 12:44:27,840 [INFO] [LiveTrader] Initial equity: 10000.00
+2026-03-12 12:44:27,980 [INFO] [KnowledgeGraph] KnowledgeGraph initialized (runtime-safe).
+2026-03-12 12:44:27,980 [INFO] [LearningEngine] KnowledgeGraph loaded.
+2026-03-12 12:44:27,982 [INFO] [MemoryManager] MemoryManager initialized (runtime-safe).
+2026-03-12 12:44:27,983 [INFO] [LearningEngine] MemoryManager loaded.
+2026-03-12 12:44:28,141 [INFO] [LearningEngine] LearningEngine ready. ai_state_dir=C:\Users\dennis\Power_Trading_System\external_memory\ai_state read_only=True
+2026-03-12 12:44:28,145 [INFO] [MemoryManager] MemoryManager initialized (runtime-safe).
+2026-03-12 12:44:28,147 [INFO] [LiveTrader] LiveTrader started in LIVE mode
+2026-03-12 12:44:28,147 [INFO] [LiveTrader] Initial equity: 10000.00
+2026-03-12 12:44:30,917 [INFO] [KnowledgeGraph] KnowledgeGraph initialized (runtime-safe).
+2026-03-12 12:44:30,918 [INFO] [LearningEngine] KnowledgeGraph loaded.
+2026-03-12 12:44:30,921 [INFO] [MemoryManager] MemoryManager initialized (runtime-safe).
+2026-03-12 12:44:30,922 [INFO] [LearningEngine] MemoryManager loaded.
+2026-03-12 12:44:31,050 [INFO] [LearningEngine] LearningEngine ready. ai_state_dir=C:\Users\dennis\Power_Trading_System\external_memory\ai_state read_only=True
+2026-03-12 12:44:31,054 [INFO] [MemoryManager] MemoryManager initialized (runtime-safe).
+2026-03-12 12:44:31,056 [INFO] [LiveTrader] LiveTrader started in LIVE mode
+2026-03-12 12:44:31,056 [INFO] [LiveTrader] Initial equity: 10000.00
+2026-03-12 12:44:31,057 [INFO] [main_controller] [CONTROLLER] AlpacaLiveFeed initialized for SPY
+2026-03-12 12:44:31,058 [INFO] [main_controller] [CONTROLLER] Using AlpacaLiveFeed for live data
+2026-03-12 12:44:31,060 [INFO] [main_controller] [CONTROLLER] TradingController initialized
+2026-03-12 12:54:44,154 [INFO] [KnowledgeGraph] KnowledgeGraph initialized (runtime-safe).
+2026-03-12 12:54:44,156 [INFO] [LearningEngine] KnowledgeGraph loaded.
+2026-03-12 12:54:44,160 [INFO] [MemoryManager] MemoryManager initialized (runtime-safe).
+2026-03-12 12:54:44,164 [INFO] [LearningEngine] MemoryManager loaded.
+2026-03-12 12:54:44,291 [INFO] [LearningEngine] LearningEngine ready. ai_state_dir=C:\Users\dennis\Power_Trading_System\external_memory\ai_state read_only=True
+2026-03-12 12:54:44,375 [INFO] [MemoryManager] MemoryManager initialized (runtime-safe).
+2026-03-12 12:54:44,389 [INFO] [LiveTrader] LiveTrader started in LIVE mode
+2026-03-12 12:54:44,389 [INFO] [LiveTrader] Initial equity: 10000.00
+2026-03-12 12:54:44,441 [INFO] [KnowledgeGraph] KnowledgeGraph initialized (runtime-safe).
+2026-03-12 12:54:44,442 [INFO] [LearningEngine] KnowledgeGraph loaded.
+2026-03-12 12:54:44,446 [INFO] [MemoryManager] MemoryManager initialized (runtime-safe).
+2026-03-12 12:54:44,447 [INFO] [LearningEngine] MemoryManager loaded.
+2026-03-12 12:54:44,530 [INFO] [LearningEngine] LearningEngine ready. ai_state_dir=C:\Users\dennis\Power_Trading_System\external_memory\ai_state read_only=True
+2026-03-12 12:54:44,534 [INFO] [MemoryManager] MemoryManager initialized (runtime-safe).
+2026-03-12 12:54:44,536 [INFO] [LiveTrader] LiveTrader started in LIVE mode
+2026-03-12 12:54:44,536 [INFO] [LiveTrader] Initial equity: 10000.00
+2026-03-12 12:54:45,218 [INFO] [KnowledgeGraph] KnowledgeGraph initialized (runtime-safe).
+2026-03-12 12:54:45,219 [INFO] [LearningEngine] KnowledgeGraph loaded.
+2026-03-12 12:54:45,222 [INFO] [MemoryManager] MemoryManager initialized (runtime-safe).
+2026-03-12 12:54:45,223 [INFO] [LearningEngine] MemoryManager loaded.
+2026-03-12 12:54:45,347 [INFO] [LearningEngine] LearningEngine ready. ai_state_dir=C:\Users\dennis\Power_Trading_System\external_memory\ai_state read_only=True
+2026-03-12 12:54:45,351 [INFO] [MemoryManager] MemoryManager initialized (runtime-safe).
+2026-03-12 12:54:45,352 [INFO] [LiveTrader] LiveTrader started in LIVE mode
+2026-03-12 12:54:45,353 [INFO] [LiveTrader] Initial equity: 10000.00
+2026-03-12 12:54:45,354 [INFO] [main_controller] [CONTROLLER] AlpacaLiveFeed initialized for SPY
+2026-03-12 12:54:45,355 [INFO] [main_controller] [CONTROLLER] Using AlpacaLiveFeed for live data
+2026-03-12 12:54:45,358 [INFO] [main_controller] [CONTROLLER] TradingController initialized
+2026-03-12 12:56:20,176 [INFO] [KnowledgeGraph] KnowledgeGraph initialized (runtime-safe).
+2026-03-12 12:56:20,177 [INFO] [LearningEngine] KnowledgeGraph loaded.
+2026-03-12 12:56:20,179 [INFO] [MemoryManager] MemoryManager initialized (runtime-safe).
+2026-03-12 12:56:20,180 [INFO] [LearningEngine] MemoryManager loaded.
+2026-03-12 12:56:20,260 [INFO] [LearningEngine] LearningEngine ready. ai_state_dir=C:\Users\dennis\Power_Trading_System\external_memory\ai_state read_only=True
+2026-03-12 12:56:20,263 [INFO] [MemoryManager] MemoryManager initialized (runtime-safe).
+2026-03-12 12:56:20,264 [INFO] [LiveTrader] LiveTrader started in LIVE mode
+2026-03-12 12:56:20,265 [INFO] [LiveTrader] Initial equity: 10000.00
+2026-03-12 12:56:20,291 [INFO] [KnowledgeGraph] KnowledgeGraph initialized (runtime-safe).
+2026-03-12 12:56:20,292 [INFO] [LearningEngine] KnowledgeGraph loaded.
+2026-03-12 12:56:20,296 [INFO] [MemoryManager] MemoryManager initialized (runtime-safe).
+2026-03-12 12:56:20,297 [INFO] [LearningEngine] MemoryManager loaded.
+2026-03-12 12:56:20,376 [INFO] [LearningEngine] LearningEngine ready. ai_state_dir=C:\Users\dennis\Power_Trading_System\external_memory\ai_state read_only=True
+2026-03-12 12:56:20,379 [INFO] [MemoryManager] MemoryManager initialized (runtime-safe).
+2026-03-12 12:56:20,381 [INFO] [LiveTrader] LiveTrader started in LIVE mode
+2026-03-12 12:56:20,381 [INFO] [LiveTrader] Initial equity: 10000.00
+2026-03-12 12:56:20,917 [INFO] [KnowledgeGraph] KnowledgeGraph initialized (runtime-safe).
+2026-03-12 12:56:20,918 [INFO] [LearningEngine] KnowledgeGraph loaded.
+2026-03-12 12:56:20,921 [INFO] [MemoryManager] MemoryManager initialized (runtime-safe).
+2026-03-12 12:56:20,929 [INFO] [LearningEngine] MemoryManager loaded.
+2026-03-12 12:56:21,045 [INFO] [LearningEngine] LearningEngine ready. ai_state_dir=C:\Users\dennis\Power_Trading_System\external_memory\ai_state read_only=True
+2026-03-12 12:56:21,050 [INFO] [MemoryManager] MemoryManager initialized (runtime-safe).
+2026-03-12 12:56:21,052 [INFO] [LiveTrader] LiveTrader started in LIVE mode
+2026-03-12 12:56:21,052 [INFO] [LiveTrader] Initial equity: 10000.00
+2026-03-12 12:56:21,055 [INFO] [main_controller] [CONTROLLER] AlpacaLiveFeed initialized for SPY
+2026-03-12 12:56:21,056 [INFO] [main_controller] [CONTROLLER] Using AlpacaLiveFeed for live data
+2026-03-12 12:56:21,060 [INFO] [main_controller] [CONTROLLER] TradingController initialized
+2026-03-12 13:10:02,603 [INFO] [LiveTrader] [VOL FILTER] Market too quiet
