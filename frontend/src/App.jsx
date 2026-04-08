@@ -1,5 +1,7 @@
-import Dashboard from "./components/Dashboard.jsx";
+import Dashboard from "./components/Dashboard";
 
-export default function App() {
+function App() {
   return <Dashboard />;
 }
+
+export default App;

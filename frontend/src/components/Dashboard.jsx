@@ -1,47 +1,53 @@
-import TerminalKpis from "./TerminalKpis.jsx";
-import MarketSentiment from "./MarketSentiment.jsx";
-import Card from "./Card.jsx";
-import AIDecision from "./AIDecision.jsx";
-import TradeTape from "./TradeTape.jsx";
-import EquityCurve from "./EquityCurve.jsx";
-import ControllerControls from "./ControllerControls.jsx";
-
-import TraderStatus from "./TraderStatus";
-
-
-
-
+import { useEffect, useState } from "react";
+import { getStatus } from "../api";
 
 export default function Dashboard() {
-  return (
-    <div
-      style={{
-        minHeight: "100vh",
-        background: "#0b0f14",
-        color: "#e5e7eb",
-        padding: 32,
-        fontFamily: "system-ui, sans-serif",
-      }}
-    >
-      <h1 style={{ fontSize: 28, marginBottom: 24 }}>
-        ⚡ Power Trading System
-      </h1>
+  const [data, setData] = useState({});
+  const [connected, setConnected] = useState(false);
 
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-          gap: 20,
-          alignItems: "start",
-        }}
-      >
-        <TerminalKpis />
-        <ControllerControls />
-        <MarketSentiment />
-        <AIDecision />
-        <TraderStatus />
-        <TradeTape />
-        <EquityCurve />
+  useEffect(() => {
+    const fetchData = async () => {
+      const res = await getStatus();
+
+      if (res && res.price !== undefined) {
+        setConnected(true);
+        setData(res);
+      } else {
+        setConnected(false);
+      }
+    };
+
+    fetchData();
+    const interval = setInterval(fetchData, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <div style={{ padding: "20px", fontFamily: "Arial" }}>
+      <h1>⚡ Power Trading System</h1>
+
+      <p>Status: {connected ? "🟢 ONLINE" : "🔴 OFFLINE"}</p>
+
+      <hr />
+
+      <h2>📊 Market</h2>
+      <p>Price: {data.price?.toFixed?.(2)}</p>
+
+      <h2>🤖 Trading</h2>
+      <p>Action: {data.last_action}</p>
+      <p>Position: {data.position}</p>
+
+      <h2>💰 Account</h2>
+      <p>Equity: {data.equity?.toFixed?.(2)}</p>
+
+      <h2>🧾 Logs</h2>
+      <div style={{ maxHeight: "200px", overflowY: "auto" }}>
+        <ul>
+          {(data.logs || []).slice(-15).map((log, i) => (
+            <li key={i}>{log}</li>
+          ))}
+        </ul>
       </div>
     </div>
   );

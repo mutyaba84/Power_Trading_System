@@ -1,28 +1,38 @@
-from alpaca_trade_api.rest import REST, TimeFrame
-from backend.brokers.alpaca_config import get_alpaca_config
+from backend.brokers.config import get_alpaca_config
+import yfinance as yf
+import random
+
+
 
 class AlpacaClient:
     def __init__(self):
-        cfg = get_alpaca_config()
+        config = get_alpaca_config()
+        self.symbol = config["symbol"]
+        print(f"[DATA FEED] Using symbol: {self.symbol}")
 
-        self.api = REST(
-            key_id=cfg["key_id"],
-            secret_key=cfg["secret_key"],
-            base_url=cfg["base_url"],
-            api_version="v2",
-        )
+    def get_latest_price(self):
+        print("🔥 USING YAHOO DATA")
 
-        self.symbol = cfg["symbol"]
-        self.timeframe = TimeFrame.Minute
+        try:
+            ticker = yf.Ticker(self.symbol)
+            data = ticker.history(period="1d", interval="1m")
 
-    def ping(self):
-        """Hard proof that authentication works"""
-        return self.api.get_account()
+            if data.empty:
+                print("[YAHOO] No data returned")
+                return None
 
-    def get_latest_bar(self):
-        bars = self.api.get_bars(
-            self.symbol,
-            self.timeframe,
-            limit=1
-        )
-        return bars[0] if bars else None
+            base_price = float(data["Close"].iloc[-1])
+            noise = random.uniform(-0.02, 0.02)
+
+            return round(base_price + noise, 4)
+
+        except Exception as e:
+            print(f"[YAHOO ERROR] {e}")
+            return None
+
+    def get_safe_price(self):
+        try:
+            return self.get_latest_price()
+        except Exception as e:
+            print(f"[YAHOO SAFE ERROR] {e}")
+            return None

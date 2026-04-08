@@ -1,7 +1,7 @@
 {
-  "market_mood": "bullish",
-  "confidence": 0.77,
-  "volatility": 0.48,
-  "source": "bootstrap",
-  "timestamp": 1773525814.0121388
+  "timestamp": 1775649652.4471443,
+  "market_mood": "neutral",
+  "confidence": 0.5372,
+  "volatility": 0.0665,
+  "source": "dummy_market_feed"
 }

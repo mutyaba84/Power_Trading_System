@@ -1,22 +1,21 @@
-from __future__ import annotations
-
-
 class StrategyGate:
-    """
-    Single source of truth for which strategy is valid in which regime.
-    """
 
     def __init__(self):
+
         self.allowed_map = {
             "CHOP": {"mean_reversion"},
             "TREND": {"momentum"},
+            "UNKNOWN": {"mean_reversion"},
         }
 
     def allowed(self, strategy: str, regime: str) -> bool:
+
         strategy = (strategy or "").lower()
         regime = (regime or "").upper()
 
-        if regime not in self.allowed_map:
+        allowed = self.allowed_map.get(regime)
+
+        if not allowed:
             return False
 
-        return strategy in self.allowed_map[regime]
+        return strategy in allowed

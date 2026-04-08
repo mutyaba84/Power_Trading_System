@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import json
 import os
+import random
 import time
 from pathlib import Path
 from typing import Any, Dict, Optional
@@ -164,12 +165,12 @@ class LearningEngine:
         conf = _to_float(sentiment.get("confidence"), 0.7)
         mood = str(sentiment.get("market_mood", "neutral"))
 
-        if conf >= 0.78 and mood == "bullish":
+        if conf >= 0.65 and mood == "bullish":
             decision = "buy"
-        elif conf >= 0.78 and mood == "bearish":
+        elif conf >= 0.65 and mood == "bearish":
             decision = "sell"
         else:
-            decision = "hold"
+            decision = random.choice(["hold", "buy", "sell"])
 
         out = {
             "decision": decision,
