@@ -5,6 +5,7 @@ from backend.core.state import state
 from backend.live_trader import LiveTrader
 from backend.brokers.alpaca_broker import AlpacaBroker
 from backend.brokers.config import get_alpaca_config
+from backend.ai_core.reward_policy import RewardPolicy
 
 
 class TradingController:
@@ -25,7 +26,8 @@ class TradingController:
         self.last_trade_time = 0
         self.cooldown = 2
         self.order_in_flight = False
-        self.last_account_log = 0
+
+        self.reward = RewardPolicy()
 
     # ------------------------
     def start(self):
@@ -46,23 +48,11 @@ class TradingController:
                     time.sleep(1)
                     continue
 
-                # -------------------------
-                # SYNC
-                # -------------------------
                 self._sync_account()
                 self._sync_position()
 
+                state["prev_equity"] = state.get("equity")
                 state["can_trade"] = state["buying_power"] > 50
-
-                # -------------------------
-                # UNREALIZED PnL
-                # -------------------------
-                if state["position"] == "long" and state["entry_price"]:
-                    state["unrealized_pnl"] = (
-                        (price - state["entry_price"]) * state["qty"]
-                    )
-                else:
-                    state["unrealized_pnl"] = 0.0
 
                 # -------------------------
                 # AI DECISION
@@ -70,47 +60,13 @@ class TradingController:
                 action, strategy, regime = self.ai.decide_action(
                     price, state["equity"]
                 )
-                # -------------------------
-                # 🔥 RISK MANAGEMENT (EXIT LOGIC)
-                # -------------------------
 
-                if state ["position"] == "long" and state["entry_price"]:
-                    entry = state["entry_price"]
-                    pnl_pct = (price - entry) / entry
-
-                    # ----STOP LOSS:  ----
-                    
-                    if pnl_pct < -0.02:  # 2% stop loss
-                        action = "SELL"
-                        state["logs"].append(
-                            f"[RISK] Stop loss triggered")
-
-
-                    # ----TAKE PROFIT:  ----
-                    elif pnl_pct > 0.02:  # 2% take profit   
-                        action = "SELL"
-                        state["logs"].append( "[RISK] Take profit triggered"  ) 
-
-
-                    # ----TRAILER LOCKC(light):  ----
-                    elif pnl_pct > 0.01:  # lock profits if price falls back sligthly 
-                       if price < entry * 1.05:  # if price retraces more than 0.5% from peak
-                            action = "SELL"
-                            state["logs"].append(
-                                f"[RISK] Trailer lock triggered")
-
-
-
-                if action == "SELL" and state["qty"] == 0:
-                    action = "HOLD"
-
-                if action == "BUY" and not state["can_trade"]:
-                    action = "HOLD"
+                state["strategy"] = strategy
 
                 # -------------------------
                 # EXECUTE
                 # -------------------------
-                self._execute(action, price)
+                self._execute(action, price, strategy)
 
                 state["logs"].append(
                     f"[AI] regime={regime} strat={strategy} action={action}"
@@ -130,10 +86,8 @@ class TradingController:
                 state["qty"] = int(float(pos["qty"]))
                 state["position"] = "long"
             else:
-                # prevent immediate flip during broker delay
-                if state["position"] != "long":
-                    state["qty"] = 0
-                    state["position"] = "flat"
+                state["qty"] = 0
+                state["position"] = "flat"
 
         except Exception:
             pass
@@ -147,36 +101,24 @@ class TradingController:
             eq = float(account.equity)
             cash = float(account.cash)
 
-            if bp == 0 and cash > 0:
-                bp = cash
+            deploy_pct = state.get("deploy_pct", 0.25)
+            deployable = eq * deploy_pct
 
-            state["buying_power"] = bp
-            state["equity"] = eq
+            state["total_equity"] = eq
+            state["deployable_equity"] = deployable
+            state["equity"] = deployable
+            state["buying_power"] = min(bp, deployable)
             state["cash"] = cash
-
-            if time.time() - self.last_account_log > 5:
-                state["logs"].append(f"[ACCOUNT] BP={bp:.2f}")
-                self.last_account_log = time.time()
 
         except Exception as e:
             state["buying_power"] = 0
             state["logs"].append(f"[ACCOUNT ERROR] {e}")
 
     # ------------------------
-    def _execute(self, action, price):
+    def _execute(self, action, price, strategy):
         try:
             now = time.time()
 
-            buying_power = state["buying_power"]
-            qty_held = state["qty"]
-
-            state["logs"].append(
-                f"[EXEC DEBUG] action={action} qty={qty_held} bp={buying_power:.2f}"
-            )
-
-            # ------------------------
-            # BASIC GUARDS
-            # ------------------------
             if self.order_in_flight:
                 return
 
@@ -186,51 +128,72 @@ class TradingController:
             if action == "HOLD":
                 return
 
-            if action == "SELL" and qty_held == 0:
+            qty_held = state["qty"]
+
+            # ------------------------
+            # RISK
+            # ------------------------
+            risk_pct = self.ai.risk.evaluate(
+                action=action,
+                confidence=0.7,
+                equity=state["equity"],
+                volatility=0.1,
+                strategy=strategy,
+                regime="TREND",
+                performance=self.ai.meta_learning.get_state()
+            )
+
+            # ------------------------
+            # STRATEGY WEIGHTING (UPDATED 🔥)
+            # ------------------------
+            weights = self.ai.strategy_evo.normalize()
+
+            strategy_weight = weights.get(strategy, 0.5)
+            strategy_weight = max(0.2, min(strategy_weight, 1.5))
+
+            # smoothing (prevents jumps)
+            prev_weight = state.get("last_weight", 1.0)
+            strategy_weight = 0.7 * prev_weight + 0.3 * strategy_weight
+            state["last_weight"] = strategy_weight
+
+            trade_value = state["deployable_equity"] * risk_pct * strategy_weight
+
+            # ------------------------
+            # EXPOSURE LIMIT
+            # ------------------------
+            MAX_TOTAL_EXPOSURE = state["deployable_equity"]
+            current_exposure = qty_held * price
+
+            if action == "BUY" and (current_exposure + trade_value) > MAX_TOTAL_EXPOSURE:
+                state["logs"].append("[BLOCK] max exposure reached")
                 return
 
-            if action == "BUY" and not state["can_trade"]:
-                return
-
-            # ------------------------
-            # POSITION CONTROL
-            # ------------------------
-            MAX_POSITION_SIZE = 500
-
-            if action == "BUY":
-                if state["position"] == "long":
-                    state["logs"].append("[BLOCK] already in position")
-                    return
-
-                if qty_held >= MAX_POSITION_SIZE:
-                    state["logs"].append("[BLOCK] max position reached")
-                    return
-
-            # ------------------------
-            # RISK CONTROL
-            # ------------------------
-            risk_pct = 0.01  # 🔥 1% per trade
-
-            trade_value = buying_power * risk_pct
             trade_qty = max(1, int(trade_value // price))
 
-            trade_qty = min(trade_qty, MAX_POSITION_SIZE)
+            if trade_qty <= 0:
+                return
 
-            # ------------------------
-            # EXECUTE ORDER
-            # ------------------------
             self.order_in_flight = True
 
+            # ------------------------
+            # BUY
+            # ------------------------
             if action == "BUY":
                 self.broker.place_order("SPY", trade_qty, "buy")
                 state["entry_price"] = price
                 state["position"] = "long"
 
+            # ------------------------
+            # SELL
+            # ------------------------
             elif action == "SELL":
                 self.broker.place_order("SPY", qty_held, "sell")
 
+                pnl = 0.0
+
                 if state["entry_price"]:
                     pnl = (price - state["entry_price"]) * qty_held
+
                     state["realized_pnl"] += pnl
                     state["trade_count"] += 1
 
@@ -246,6 +209,28 @@ class TradingController:
                         "pnl": pnl,
                         "timestamp": time.time()
                     })
+
+                    # ------------------------
+                    # REWARD SYSTEM
+                    # ------------------------
+                    reward, _ = self.reward.compute_from_dict({
+                        "equity": state["equity"],
+                        "prev_equity": state.get("prev_equity"),
+                        "realized_pnl": pnl,
+                        "position_qty": qty_held,
+                        "price": price,
+                        "trade_count": 1,
+                        "ts": time.time()
+                    })
+
+                    # ------------------------
+                    # LEARNING LOOP
+                    # ------------------------
+                    self.ai.scorer.update_performance(reward)
+                    self.ai.meta_learning.update(reward)
+                    self.ai.strategy_evo.update(strategy, reward)
+
+                    state["logs"].append(f"[REWARD] total={reward:.4f}")
 
                 state["entry_price"] = None
                 state["position"] = "flat"

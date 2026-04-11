@@ -7,50 +7,68 @@ from backend.ai_core.meta_reasoner import MetaReasoner
 from backend.risk.risk_governor import RiskGovernor
 from backend.ai_core.strategy_performance import StrategyPerformance
 from backend.services.strategy_tracker import StrategyTracker
+from backend.ai_core.trade_scorer import TradeScorer
+from backend.ai_core.meta_learning import MetaLearning
+from backend.ai_core.strategy_evolution import StrategyEvolution
 
 
 class LiveTrader:
 
     def __init__(self):
+        # Core systems
         self.regime = RegimeClassifier()
         self.tracker = StrategyTracker()
         self.allocator = StrategyAllocator(self.tracker)
         self.gate = StrategyGate()
         self.performance = StrategyPerformance()
 
+        # AI systems
         self.engine = LearningEngine()
         self.sentiment = NeuralMarketSentiment()
-        self.meta = MetaReasoner()
 
+        # 🔥 BOTH meta systems (fixed)
+        self.meta_reasoner = MetaReasoner()
+        self.meta_learning = MetaLearning()
+
+        # Decision + risk
+        self.scorer = TradeScorer()
         self.risk = RiskGovernor()
 
         self.prev_price = None
+        self.strategy_evo = StrategyEvolution()
 
     def decide_action(self, price: float, equity: float):
 
         try:
             # -------------------------
-            # REGIME
+            # REGIME DETECTION
             # -------------------------
             regime = self.regime.update(price)
-
-            # 🔥 FIX 1: Ensure tradable regime
             if regime == "UNKNOWN":
                 regime = "CHOP"
 
             # -------------------------
-            # STRATEGY
+            # STRATEGY SELECTION
             # -------------------------
             strategy = self.allocator.select(regime)
 
             # -------------------------
-            # GATE
+            # STRATEGY GATE
             # -------------------------
             if not self.gate.allowed(strategy, regime):
                 return "HOLD", strategy, regime
 
+
+
+            #--------------------------
+            # STRATEGY FILTER (NEW)
+            #--------------------------
+            if not self.strategy_evo.should_trade(strategy):
+                print(f"[STRATEGY BLOCKED] {strategy} blocked by evolution")
+                return "HOLD", strategy, regime
+
             # -------------------------
-            # SENTIMENT
+            # MARKET SENTIMENT
             # -------------------------
             sentiment = self.sentiment.infer(
                 price=price,
@@ -60,7 +78,7 @@ class LiveTrader:
             volatility = sentiment.get("volatility", 0.1)
 
             # -------------------------
-            # AI DECISION
+            # AI DECISION ENGINE
             # -------------------------
             decision_data = self.engine.decide({
                 "price": price,
@@ -71,30 +89,65 @@ class LiveTrader:
             confidence = decision_data.get("confidence", 0.5)
 
             # -------------------------
-            # 🔥 FIX 2: Break HOLD deadlock
+            # CONFIDENCE FILTER
             # -------------------------
-            if action == "HOLD" and confidence > 0.55:
-                action = "BUY"
+            MIN_CONFIDENCE = 0.6 if regime != "CHOP" else 0.65
 
-            # -------------------------
-            # 🔥 FIX 3: FALLBACK TRADING LOGIC (CRITICAL)
-            # -------------------------
-            if action == "HOLD" and self.prev_price is not None:
-                delta = price - self.prev_price
-
-                if delta < -0.05:
-                    action = "BUY"
-                elif delta > 0.05:
-                    action = "SELL"
-
-            # -------------------------
-            # 🔥 FIX 4: Prevent invalid outputs
-            # -------------------------
-            if action not in ["BUY", "SELL", "HOLD"]:
+            if confidence < MIN_CONFIDENCE:
                 action = "HOLD"
 
             # -------------------------
-            # RISK
+            # VOLATILITY FILTER
+            # -------------------------
+            if volatility < 0.08:
+                return "HOLD", strategy, regime
+
+            # -------------------------
+            # MOMENTUM FILTER
+            # -------------------------
+            momentum = 0.0
+            momentum_pct = 0.0
+
+            if self.prev_price is not None:
+                momentum = price - self.prev_price
+
+                if price != 0:
+                    momentum_pct = momentum / price
+
+                if action == "BUY" and momentum_pct <= 0:
+                    action = "HOLD"
+
+                if action == "SELL" and momentum_pct >= 0:
+                    action = "HOLD"
+
+            # -------------------------
+            # VALIDATE ACTION
+            # -------------------------
+            if action not in ["BUY", "SELL"]:
+                self.prev_price = price
+                return "HOLD", strategy, regime
+
+            # -------------------------
+            # 🚀 TRADE SCORING
+            # -------------------------
+            score = self.scorer.score(
+                confidence=confidence,
+                momentum=momentum,
+                volatility=volatility,
+                regime=regime,
+                price=price
+            )
+
+            # 🔥 META PERFORMANCE STATE
+            performance_state = self.meta_learning.get_state()
+
+            if not self.scorer.allow_trade(score, regime, performance_state):
+                print(f"[FILTER] rejected | score={score:.2f} perf={performance_state}")
+                self.prev_price = price
+                return "HOLD", strategy, regime
+
+            # -------------------------
+            # 💰 RISK EVALUATION
             # -------------------------
             risk_pct = self.risk.evaluate(
                 action=action,
@@ -102,29 +155,31 @@ class LiveTrader:
                 equity=equity,
                 volatility=volatility,
                 strategy=strategy,
+                regime=regime,
+                performance=performance_state
             )
 
-            # 🔥 FIX 5: Soften risk blocking
             if risk_pct <= 0:
-                if not (action == "BUY" and confidence > 0.6):
-                    return "HOLD", strategy, regime
+                self.prev_price = price
+                return "HOLD", strategy, regime
 
             # -------------------------
-            # META (optional)
+            # META REASONER (optional intelligence)
             # -------------------------
-            _ = self.meta.analyze(10)
+            _ = self.meta_reasoner.analyze(10)
 
             # -------------------------
-            # DEBUG LOGGING
+            # DEBUG OUTPUT
             # -------------------------
             print(
-                f"[AI DEBUG] regime={regime} "
-                f"strat={strategy} action={action} "
-                f"conf={confidence:.2f} vol={volatility:.2f}"
+                f"[AI DEBUG] regime={regime} strat={strategy} action={action} "
+                f"conf={confidence:.2f} vol={volatility:.2f} "
+                f"mom={momentum_pct:.5f} score={score:.2f} "
+                f"risk={risk_pct:.4f} perf={performance_state}"
             )
 
             # -------------------------
-            # UPDATE PRICE MEMORY (IMPORTANT)
+            # MEMORY UPDATE
             # -------------------------
             self.prev_price = price
 
