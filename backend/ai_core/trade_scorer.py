@@ -1,23 +1,26 @@
 class TradeScorer:
-    """
-    Scores trade quality from 0 → 1
-
-    Features:
-    - Confidence + momentum + volatility + regime scoring
-    - Adaptive threshold via performance bias
-    - Meta-learning integration (hot / cold system state)
-    - Learns from REWARD (not just pnl)
-    """
 
     def __init__(self):
-        self.base_threshold = 0.62
+        # 🔥 LOWER BASELINE (more trades)
+        self.base_threshold = 0.58
 
-        # 🔥 adaptive bias (learns over time)
         self.performance_bias = 0.0
 
-        # 🔥 smoothing (prevents overreaction)
-        self.learning_rate_win = 0.003
-        self.learning_rate_loss = 0.008
+        self.learning_rate_win = 0.002
+        self.learning_rate_loss = 0.006
+
+    # -------------------------------------------------
+    # 🔥 DYNAMIC THRESHOLD (LESS RESTRICTIVE)
+    # -------------------------------------------------
+    def get_dynamic_threshold(self, regime: str) -> float:
+        if regime == "CHOP":
+            base = 0.60   # 🔥 was 0.65 → too strict
+        else:
+            base = 0.58
+
+        threshold = base + self.performance_bias
+
+        return max(0.50, min(0.70, threshold))
 
     # -------------------------
     # SCORE
@@ -32,55 +35,46 @@ class TradeScorer:
         price: float,
     ) -> float:
 
-        # -------------------------
-        # 1. CONFIDENCE
-        # -------------------------
         conf = max(0.0, min(confidence, 1.0))
 
-        # -------------------------
-        # 2. MOMENTUM (normalized)
-        # -------------------------
+        # 🔥 MOMENTUM (LESS AGGRESSIVE NORMALIZATION)
         if price != 0:
             mom_raw = momentum / price
         else:
             mom_raw = 0.0
 
-        # amplify small moves
-        mom_raw *= 1000
+        mom_raw *= 500   # 🔥 reduced from 1000
 
         mom = (mom_raw + 1) / 2
         mom = max(0.0, min(mom, 1.0))
 
         # -------------------------
-        # 3. VOLATILITY QUALITY
+        # VOLATILITY QUALITY (RELAXED)
         # -------------------------
         vol = max(0.0, volatility)
 
-        if vol < 0.05:
-            vol_score = 0.2
-        elif vol < 0.15:
-            vol_score = 1.0
-        elif vol < 0.30:
-            vol_score = 0.7
-        else:
+        if vol < 0.04:
             vol_score = 0.4
+        elif vol < 0.12:
+            vol_score = 1.0
+        elif vol < 0.25:
+            vol_score = 0.8
+        else:
+            vol_score = 0.5
 
         # -------------------------
-        # 4. REGIME ALIGNMENT
+        # REGIME
         # -------------------------
         if regime == "TREND":
             regime_score = 1.0
         elif regime == "CHOP":
-            regime_score = 0.5
+            regime_score = 0.7   # 🔥 increased from 0.5
         else:
-            regime_score = 0.7
+            regime_score = 0.8
 
-        # -------------------------
-        # FINAL SCORE
-        # -------------------------
         score = (
-            0.4 * conf +
-            0.3 * mom +
+            0.45 * conf +
+            0.25 * mom +
             0.2 * vol_score +
             0.1 * regime_score
         )
@@ -88,64 +82,72 @@ class TradeScorer:
         return round(score, 4)
 
     # -------------------------
-    # ADAPTIVE DECISION
+    # ALLOW TRADE (SMART FILTER)
     # -------------------------
     def allow_trade(
         self,
         score: float,
         regime: str,
-        performance: str,  # 🔥 meta-learning input
+        performance,
     ) -> bool:
 
-        # -------------------------
-        # BASE THRESHOLD
-        # -------------------------
         if regime == "CHOP":
-            base = 0.63
+            base = 0.60
         else:
             base = self.base_threshold
 
+        perf_state = "neutral"
+        margin_pressure = 0.0
+
+        if isinstance(performance, dict):
+            perf_state = performance.get("state", "neutral")
+            margin_pressure = performance.get("margin_pressure", 0.0)
+        elif isinstance(performance, str):
+            perf_state = performance
+
         # -------------------------
-        # META LEARNING ADJUSTMENT
+        # META LEARNING
         # -------------------------
-        if performance == "cold":
-            meta_adjustment = 0.03   # stricter
-        elif performance == "hot":
-            meta_adjustment = -0.02  # more aggressive
+        if perf_state == "cold":
+            meta_adjustment = 0.04
+        elif perf_state == "hot":
+            meta_adjustment = -0.03
         else:
             meta_adjustment = 0.0
 
         # -------------------------
-        # FINAL THRESHOLD
+        # MARGIN CONTROL
         # -------------------------
-        threshold = base + self.performance_bias + meta_adjustment
+        margin_adjustment = margin_pressure * 0.04
 
-        # clamp safety
-        threshold = max(0.55, min(0.75, threshold))
+        threshold = (
+            base +
+            self.performance_bias +
+            meta_adjustment +
+            margin_adjustment
+        )
+
+        threshold = max(0.50, min(0.70, threshold))
+
+        print(
+            f"[SCORER] score={score:.3f} thr={threshold:.3f} "
+            f"perf={perf_state} margin={margin_pressure:.2f}"
+        )
 
         return score >= threshold
 
     # -------------------------
-    # 🔥 PERFORMANCE FEEDBACK (REWARD-BASED)
+    # PERFORMANCE LEARNING
     # -------------------------
     def update_performance(self, reward: float):
-        """
-        Adaptive learning from reward (NOT raw pnl)
-        """
 
         if reward < 0:
-            # losing → tighten system
             self.performance_bias += self.learning_rate_loss
         else:
-            # winning → loosen slightly
             self.performance_bias -= self.learning_rate_win
 
-        # clamp to safe range
         self.performance_bias = max(-0.05, min(0.05, self.performance_bias))
 
-        # -------------------------
-        # DEBUG (VERY USEFUL)
-        # -------------------------
         print(
             f"[SCORER] reward={reward:.3f} "
             f"bias={self.performance_bias:.3f}"

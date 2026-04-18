@@ -10,106 +10,92 @@ logger = get_logger("RiskGovernor")
 
 
 class RiskGovernor:
-    """
-    Advanced adaptive risk controller with:
-
-    - Confidence scaling (non-linear)
-    - Volatility dampening (exponential)
-    - Regime awareness (TREND / CHOP)
-    - Meta-learning awareness (hot / cold system)
-    - Loss streak protection
-    - Cooldown system
-    - Capital efficiency boost (unused capital)
-    - Safe risk clamping
-    """
 
     def __init__(self):
         self.loss_streak: int = 0
         self.cooldown_until: Optional[float] = None
 
-        # Base risk per strategy (fraction of equity)
         self.base_risk = {
             "momentum": 0.004,
             "mean_reversion": 0.0025,
         }
 
         self.max_loss_streak = 3
-        self.cooldown_seconds = 2.5
+        self.cooldown_seconds = 5  # 🔥 slightly longer cooldown
 
-        # Risk boundaries
-        self.min_risk = 0.001   # 0.1%
-        self.max_risk = 0.025   # 2.5%
+        self.min_risk = 0.001
+        self.max_risk = 0.025
 
-    # -------------------------------------------------
-    # RISK EVALUATION
-    # -------------------------------------------------
+    # -------------------------
+    # MAIN ENTRY (STANDARDIZED)
+    # -------------------------
+    def get_risk(self, **kwargs) -> float:
+        return self.evaluate(**kwargs)
 
+    # -------------------------
+    # CORE LOGIC
+    # -------------------------
     def evaluate(
         self,
         *,
         action: str,
         confidence: float,
-        equity: float,
+        equity: float,              # 🔥 MUST BE TOTAL EQUITY
         volatility: float,
         strategy: str,
         regime: str = "NEUTRAL",
-        performance: Union[str, dict] = "neutral",  # 🔥 supports dict or string
+        performance: Union[str, dict] = "neutral",
         deploy_pct: float = 0.25,
         ts: Optional[float] = None,
     ) -> float:
-        """
-        Returns fraction of equity allowed to risk.
-        """
 
         now = ts or time.time()
 
         # -------------------------
-        # COOLDOWN GUARD
+        # HARD SAFETY
         # -------------------------
-        if self.cooldown_until and now < self.cooldown_until:
-            logger.warning("[RISK] Cooldown active — trade blocked")
+        if equity <= 0:
             return 0.0
 
+        action = action.lower()
         if action not in ("buy", "sell"):
+            return 0.0
+
+        if self.cooldown_until and now < self.cooldown_until:
+            logger.info("[RISK] cooldown active → no trading")
+            return 0.0
+
+        # 🔥 extreme volatility stop
+        if volatility > 0.6:
+            logger.warning("[RISK] volatility too high → blocked")
             return 0.0
 
         base = self.base_risk.get(strategy, 0.002)
 
         # -------------------------
-        # 1. CONFIDENCE FACTOR
+        # FACTORS
         # -------------------------
         conf = max(0.0, min(confidence, 1.0))
-        confidence_factor = 0.5 + (conf ** 1.5)
+        confidence_factor = 0.6 + (conf ** 1.3)
 
-        # -------------------------
-        # 2. VOLATILITY FACTOR
-        # -------------------------
         vol = max(0.0, volatility)
-        vol_factor = math.exp(-vol)
+        vol_factor = math.exp(-vol * 0.8)
 
-        # -------------------------
-        # 3. REGIME FACTOR
-        # -------------------------
         if regime == "TREND":
-            regime_factor = 1.25
+            regime_factor = 1.3
         elif regime == "CHOP":
-            regime_factor = 0.6
+            regime_factor = 0.55
         else:
             regime_factor = 1.0
 
-        # -------------------------
-        # 4. LOSS STREAK FACTOR
-        # -------------------------
         drawdown_factor = max(0.4, 1 - (self.loss_streak * 0.2))
 
-        # -------------------------
-        # 5. META PERFORMANCE FACTOR
-        # -------------------------
         perf_state = "neutral"
+        margin_pressure = 0.0
 
         if isinstance(performance, dict):
-            # future-proof: if meta returns structured data
             perf_state = performance.get("state", "neutral")
+            margin_pressure = performance.get("margin_pressure", 0.0)
         elif isinstance(performance, str):
             perf_state = performance
 
@@ -120,12 +106,11 @@ class RiskGovernor:
         else:
             perf_factor = 1.0
 
-        # -------------------------
-        # 6. CAPITAL EFFICIENCY BOOST 🔥
-        # -------------------------
-        # lower deploy_pct → slightly higher aggression
-        deploy_pct = max(0.01, min(deploy_pct, 1.0))
+        # 🔥 margin safety
+        margin_factor = max(0.3, 1 - margin_pressure)
 
+        # 🔥 deploy scaling
+        deploy_pct = max(0.01, min(deploy_pct, 1.0))
         unused_capital_factor = 1 + (1 - deploy_pct) * 0.5
         unused_capital_factor = min(unused_capital_factor, 1.5)
 
@@ -139,54 +124,51 @@ class RiskGovernor:
             regime_factor *
             drawdown_factor *
             perf_factor *
-            unused_capital_factor
+            unused_capital_factor *
+            margin_factor
         )
 
-        # Clamp to safe bounds
         risk_pct = max(self.min_risk, min(self.max_risk, risk_pct))
 
         logger.info(
             f"[RISK] strat={strategy} conf={conf:.2f} vol={vol:.2f} "
-            f"regime={regime} perf={perf_state} ls={self.loss_streak} "
-            f"deploy={deploy_pct:.2f} risk={risk_pct:.4f}"
+            f"regime={regime} perf={perf_state} margin={margin_pressure:.2f} "
+            f"risk={risk_pct:.4f}"
         )
 
         return risk_pct
 
-    # -------------------------------------------------
-    # POST-TRADE UPDATE
-    # -------------------------------------------------
-
+    # -------------------------
+    # POST-TRADE LEARNING
+    # -------------------------
     def update_after_trade(self, *, pnl: float, equity: float):
         now = time.time()
 
         if pnl < 0:
             self.loss_streak += 1
+            logger.warning(f"[RISK] loss streak increased → {self.loss_streak}")
 
             if self.loss_streak >= self.max_loss_streak:
                 self.cooldown_until = now + self.cooldown_seconds
-                logger.warning("[RISK] Loss streak — entering cooldown")
+                logger.warning("[RISK] cooldown triggered")
 
         else:
             if self.loss_streak > 0:
                 self.loss_streak -= 1
 
-        # cooldown expiry
         if self.cooldown_until and now >= self.cooldown_until:
-            logger.info("[RISK] Cooldown complete — resetting loss streak")
             self.cooldown_until = None
             self.loss_streak = 0
+            logger.info("[RISK] cooldown reset")
 
-    # -------------------------------------------------
-    # STATE (UI / API SAFE)
-    # -------------------------------------------------
-
+    # -------------------------
+    # STATE INSPECTION
+    # -------------------------
     def get_state(self):
         now = time.time()
-        cooldown_active = bool(self.cooldown_until and now < self.cooldown_until)
 
         return {
-            "cooldown": cooldown_active,
+            "cooldown": bool(self.cooldown_until and now < self.cooldown_until),
             "loss_streak": self.loss_streak,
             "max_loss_streak": self.max_loss_streak,
         }

@@ -11,37 +11,49 @@ from backend.ai_core.trade_scorer import TradeScorer
 from backend.ai_core.meta_learning import MetaLearning
 from backend.ai_core.strategy_evolution import StrategyEvolution
 
+from backend.core.state import state
+
 
 class LiveTrader:
 
     def __init__(self):
-        # Core systems
         self.regime = RegimeClassifier()
         self.tracker = StrategyTracker()
-        self.allocator = StrategyAllocator(self.tracker)
-        self.gate = StrategyGate()
-        self.performance = StrategyPerformance()
 
-        # AI systems
+        self.allocator = StrategyAllocator(self.tracker)
+        self.performance = StrategyPerformance()
+        self.gate = StrategyGate()
+
         self.engine = LearningEngine()
         self.sentiment = NeuralMarketSentiment()
 
-        # 🔥 BOTH meta systems (fixed)
         self.meta_reasoner = MetaReasoner()
         self.meta_learning = MetaLearning()
 
-        # Decision + risk
         self.scorer = TradeScorer()
         self.risk = RiskGovernor()
 
         self.prev_price = None
         self.strategy_evo = StrategyEvolution()
 
+        # 🔥 NEW: anti-spam memory
+        self.last_action = None
+
+    # -----------------------------------
+    # MAIN DECISION ENGINE
+    # -----------------------------------
     def decide_action(self, price: float, equity: float):
 
         try:
             # -------------------------
-            # REGIME DETECTION
+            # 🔥 HARD BLOCK: execution state
+            # -------------------------
+            if state.get("execution_state") in ["PENDING", "COOLDOWN"]:
+                print("[BLOCK] Execution busy")
+                return "HOLD", "none", "UNKNOWN", 0.0, 0.0
+
+            # -------------------------
+            # REGIME
             # -------------------------
             regime = self.regime.update(price)
             if regime == "UNKNOWN":
@@ -50,25 +62,30 @@ class LiveTrader:
             # -------------------------
             # STRATEGY SELECTION
             # -------------------------
-            strategy = self.allocator.select(regime)
+            strategy = self.allocator.select(regime) or "mean_reversion"
 
             # -------------------------
-            # STRATEGY GATE
+            # MARGIN SAFETY
+            # -------------------------
+            margin_pressure = state.get("margin_pressure", 0)
+
+            if margin_pressure > 0.9 and state["position"] == "long":
+                return "SELL", strategy, regime, 1.0, 0.5
+
+            if margin_pressure > 0.8 and state["position"] == "long":
+                return "SELL", strategy, regime, 0.9, 0.4
+
+            # -------------------------
+            # STRATEGY GATING
             # -------------------------
             if not self.gate.allowed(strategy, regime):
-                return "HOLD", strategy, regime
+                return "HOLD", strategy, regime, 0.0, 0.0
 
-
-
-            #--------------------------
-            # STRATEGY FILTER (NEW)
-            #--------------------------
             if not self.strategy_evo.should_trade(strategy):
-                print(f"[STRATEGY BLOCKED] {strategy} blocked by evolution")
-                return "HOLD", strategy, regime
+                return "HOLD", strategy, regime, 0.0, 0.0
 
             # -------------------------
-            # MARKET SENTIMENT
+            # SENTIMENT
             # -------------------------
             sentiment = self.sentiment.infer(
                 price=price,
@@ -78,7 +95,7 @@ class LiveTrader:
             volatility = sentiment.get("volatility", 0.1)
 
             # -------------------------
-            # AI DECISION ENGINE
+            # AI CORE DECISION
             # -------------------------
             decision_data = self.engine.decide({
                 "price": price,
@@ -91,100 +108,61 @@ class LiveTrader:
             # -------------------------
             # CONFIDENCE FILTER
             # -------------------------
-            MIN_CONFIDENCE = 0.6 if regime != "CHOP" else 0.65
+            MIN_CONFIDENCE = self.scorer.get_dynamic_threshold(regime)
 
             if confidence < MIN_CONFIDENCE:
                 action = "HOLD"
 
             # -------------------------
-            # VOLATILITY FILTER
+            # LOW VOL FILTER
             # -------------------------
             if volatility < 0.08:
-                return "HOLD", strategy, regime
+                return "HOLD", strategy, regime, 0.0, volatility
 
             # -------------------------
             # MOMENTUM FILTER
             # -------------------------
             momentum = 0.0
-            momentum_pct = 0.0
 
             if self.prev_price is not None:
                 momentum = price - self.prev_price
 
-                if price != 0:
-                    momentum_pct = momentum / price
-
-                if action == "BUY" and momentum_pct <= 0:
+                if action == "BUY" and momentum <= 0:
                     action = "HOLD"
 
-                if action == "SELL" and momentum_pct >= 0:
+                if action == "SELL" and momentum >= 0:
                     action = "HOLD"
 
             # -------------------------
-            # VALIDATE ACTION
+            # 🔥 POSITION-AWARE FILTER
+            # -------------------------
+            if state["position"] == "long" and action == "BUY":
+                action = "HOLD"
+
+            if state["position"] == "flat" and action == "SELL":
+                action = "HOLD"
+
+            # -------------------------
+            # 🔥 ANTI-SPAM FILTER
+            # -------------------------
+            if action == self.last_action:
+                return "HOLD", strategy, regime, 0.0, volatility
+
+            # -------------------------
+            # FINAL VALIDATION
             # -------------------------
             if action not in ["BUY", "SELL"]:
                 self.prev_price = price
-                return "HOLD", strategy, regime
+                return "HOLD", strategy, regime, 0.0, volatility
 
             # -------------------------
-            # 🚀 TRADE SCORING
-            # -------------------------
-            score = self.scorer.score(
-                confidence=confidence,
-                momentum=momentum,
-                volatility=volatility,
-                regime=regime,
-                price=price
-            )
-
-            # 🔥 META PERFORMANCE STATE
-            performance_state = self.meta_learning.get_state()
-
-            if not self.scorer.allow_trade(score, regime, performance_state):
-                print(f"[FILTER] rejected | score={score:.2f} perf={performance_state}")
-                self.prev_price = price
-                return "HOLD", strategy, regime
-
-            # -------------------------
-            # 💰 RISK EVALUATION
-            # -------------------------
-            risk_pct = self.risk.evaluate(
-                action=action,
-                confidence=confidence,
-                equity=equity,
-                volatility=volatility,
-                strategy=strategy,
-                regime=regime,
-                performance=performance_state
-            )
-
-            if risk_pct <= 0:
-                self.prev_price = price
-                return "HOLD", strategy, regime
-
-            # -------------------------
-            # META REASONER (optional intelligence)
-            # -------------------------
-            _ = self.meta_reasoner.analyze(10)
-
-            # -------------------------
-            # DEBUG OUTPUT
-            # -------------------------
-            print(
-                f"[AI DEBUG] regime={regime} strat={strategy} action={action} "
-                f"conf={confidence:.2f} vol={volatility:.2f} "
-                f"mom={momentum_pct:.5f} score={score:.2f} "
-                f"risk={risk_pct:.4f} perf={performance_state}"
-            )
-
-            # -------------------------
-            # MEMORY UPDATE
+            # STORE STATE
             # -------------------------
             self.prev_price = price
+            self.last_action = action
 
-            return action, strategy, regime
+            return action, strategy, regime, confidence, volatility
 
         except Exception as e:
             print(f"[AI ERROR] {e}")
-            return "HOLD", "none", "UNKNOWN"
+            return "HOLD", "mean_reversion", "CHOP", 0.0, 0.0

@@ -1,0 +1,380 @@
+2026-04-12 00:08:07,641 [INFO] [KnowledgeGraph] KnowledgeGraph initialized (runtime-safe).
+2026-04-12 00:08:07,642 [INFO] [LearningEngine] KnowledgeGraph loaded.
+2026-04-12 00:08:07,658 [INFO] [MemoryManager] MemoryManager initialized (runtime-safe).
+2026-04-12 00:08:07,659 [INFO] [LearningEngine] MemoryManager loaded.
+2026-04-12 00:08:07,746 [INFO] [LearningEngine] LearningEngine ready. ai_state_dir=C:\Users\dennis\Power_Trading_System\external_memory\ai_state read_only=True
+2026-04-12 00:08:46,824 [INFO] [RegimeClassifier] [REGIME] UNKNOWN → CHOP
+2026-04-12 00:22:49,897 [INFO] [KnowledgeGraph] KnowledgeGraph initialized (runtime-safe).
+2026-04-12 00:22:49,898 [INFO] [LearningEngine] KnowledgeGraph loaded.
+2026-04-12 00:22:49,906 [INFO] [MemoryManager] MemoryManager initialized (runtime-safe).
+2026-04-12 00:22:49,907 [INFO] [LearningEngine] MemoryManager loaded.
+2026-04-12 00:22:50,009 [INFO] [LearningEngine] LearningEngine ready. ai_state_dir=C:\Users\dennis\Power_Trading_System\external_memory\ai_state read_only=True
+2026-04-12 00:23:18,710 [INFO] [RegimeClassifier] [REGIME] UNKNOWN → CHOP
+2026-04-12 00:23:52,236 [INFO] [KnowledgeGraph] KnowledgeGraph initialized (runtime-safe).
+2026-04-12 00:23:52,248 [INFO] [LearningEngine] KnowledgeGraph loaded.
+2026-04-12 00:23:52,265 [INFO] [MemoryManager] MemoryManager initialized (runtime-safe).
+2026-04-12 00:23:52,344 [INFO] [LearningEngine] MemoryManager loaded.
+2026-04-12 00:23:52,427 [INFO] [LearningEngine] LearningEngine ready. ai_state_dir=C:\Users\dennis\Power_Trading_System\external_memory\ai_state read_only=True
+2026-04-12 00:24:13,580 [INFO] [KnowledgeGraph] KnowledgeGraph initialized (runtime-safe).
+2026-04-12 00:24:13,581 [INFO] [LearningEngine] KnowledgeGraph loaded.
+2026-04-12 00:24:13,589 [INFO] [MemoryManager] MemoryManager initialized (runtime-safe).
+2026-04-12 00:24:13,590 [INFO] [LearningEngine] MemoryManager loaded.
+2026-04-12 00:24:13,669 [INFO] [LearningEngine] LearningEngine ready. ai_state_dir=C:\Users\dennis\Power_Trading_System\external_memory\ai_state read_only=True
+2026-04-12 00:30:14,910 [INFO] [KnowledgeGraph] KnowledgeGraph initialized (runtime-safe).
+2026-04-12 00:30:14,924 [INFO] [LearningEngine] KnowledgeGraph loaded.
+2026-04-12 00:30:14,936 [INFO] [MemoryManager] MemoryManager initialized (runtime-safe).
+2026-04-12 00:30:14,974 [INFO] [LearningEngine] MemoryManager loaded.
+2026-04-12 00:30:15,181 [INFO] [LearningEngine] LearningEngine ready. ai_state_dir=C:\Users\dennis\Power_Trading_System\external_memory\ai_state read_only=True
+2026-04-12 00:32:53,152 [INFO] [KnowledgeGraph] KnowledgeGraph initialized (runtime-safe).
+2026-04-12 00:32:53,159 [INFO] [LearningEngine] KnowledgeGraph loaded.
+2026-04-12 00:32:53,184 [INFO] [MemoryManager] MemoryManager initialized (runtime-safe).
+2026-04-12 00:32:53,193 [INFO] [LearningEngine] MemoryManager loaded.
+2026-04-12 00:32:53,288 [INFO] [LearningEngine] LearningEngine ready. ai_state_dir=C:\Users\dennis\Power_Trading_System\external_memory\ai_state read_only=True
+2026-04-12 00:36:40,075 [INFO] [KnowledgeGraph] KnowledgeGraph initialized (runtime-safe).
+2026-04-12 00:36:40,077 [INFO] [LearningEngine] KnowledgeGraph loaded.
+2026-04-12 00:36:40,084 [INFO] [MemoryManager] MemoryManager initialized (runtime-safe).
+2026-04-12 00:36:40,087 [INFO] [LearningEngine] MemoryManager loaded.
+2026-04-12 00:36:40,176 [INFO] [LearningEngine] LearningEngine ready. ai_state_dir=C:\Users\dennis\Power_Trading_System\external_memory\ai_state read_only=True
+2026-04-12 00:37:08,257 [INFO] [RegimeClassifier] [REGIME] UNKNOWN → CHOP
+2026-04-12 00:41:59,090 [INFO] [KnowledgeGraph] KnowledgeGraph initialized (runtime-safe).
+2026-04-12 00:41:59,090 [INFO] [LearningEngine] KnowledgeGraph loaded.
+2026-04-12 00:41:59,097 [INFO] [MemoryManager] MemoryManager initialized (runtime-safe).
+2026-04-12 00:41:59,098 [INFO] [LearningEngine] MemoryManager loaded.
+2026-04-12 00:41:59,174 [INFO] [LearningEngine] LearningEngine ready. ai_state_dir=C:\Users\dennis\Power_Trading_System\external_memory\ai_state read_only=True
+2026-04-12 00:42:29,801 [INFO] [RegimeClassifier] [REGIME] UNKNOWN → CHOP
+2026-04-12 00:42:50,898 [INFO] [KnowledgeGraph] KnowledgeGraph initialized (runtime-safe).
+2026-04-12 00:42:50,917 [INFO] [LearningEngine] KnowledgeGraph loaded.
+2026-04-12 00:42:50,925 [INFO] [MemoryManager] MemoryManager initialized (runtime-safe).
+2026-04-12 00:42:50,929 [INFO] [LearningEngine] MemoryManager loaded.
+2026-04-12 00:42:51,037 [INFO] [LearningEngine] LearningEngine ready. ai_state_dir=C:\Users\dennis\Power_Trading_System\external_memory\ai_state read_only=True
+2026-04-12 00:43:19,137 [INFO] [RegimeClassifier] [REGIME] UNKNOWN → CHOP
+2026-04-12 00:47:45,967 [INFO] [KnowledgeGraph] KnowledgeGraph initialized (runtime-safe).
+2026-04-12 00:47:45,969 [INFO] [LearningEngine] KnowledgeGraph loaded.
+2026-04-12 00:47:45,985 [INFO] [MemoryManager] MemoryManager initialized (runtime-safe).
+2026-04-12 00:47:45,987 [INFO] [LearningEngine] MemoryManager loaded.
+2026-04-12 00:47:46,071 [INFO] [LearningEngine] LearningEngine ready. ai_state_dir=C:\Users\dennis\Power_Trading_System\external_memory\ai_state read_only=True
+2026-04-12 00:48:15,107 [INFO] [RegimeClassifier] [REGIME] UNKNOWN → CHOP
+2026-04-12 00:51:10,874 [INFO] [KnowledgeGraph] KnowledgeGraph initialized (runtime-safe).
+2026-04-12 00:51:10,875 [INFO] [LearningEngine] KnowledgeGraph loaded.
+2026-04-12 00:51:10,887 [INFO] [MemoryManager] MemoryManager initialized (runtime-safe).
+2026-04-12 00:51:10,889 [INFO] [LearningEngine] MemoryManager loaded.
+2026-04-12 00:51:10,986 [INFO] [LearningEngine] LearningEngine ready. ai_state_dir=C:\Users\dennis\Power_Trading_System\external_memory\ai_state read_only=True
+2026-04-12 00:51:39,547 [INFO] [RegimeClassifier] [REGIME] UNKNOWN → CHOP
+2026-04-12 00:58:06,374 [INFO] [KnowledgeGraph] KnowledgeGraph initialized (runtime-safe).
+2026-04-12 00:58:06,375 [INFO] [LearningEngine] KnowledgeGraph loaded.
+2026-04-12 00:58:06,386 [INFO] [MemoryManager] MemoryManager initialized (runtime-safe).
+2026-04-12 00:58:06,387 [INFO] [LearningEngine] MemoryManager loaded.
+2026-04-12 00:58:06,490 [INFO] [LearningEngine] LearningEngine ready. ai_state_dir=C:\Users\dennis\Power_Trading_System\external_memory\ai_state read_only=True
+2026-04-12 00:58:10,232 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=neutral margin=0.00 risk=0.0021
+2026-04-12 00:58:12,963 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 00:58:15,621 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 00:58:18,282 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 00:58:20,994 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 00:58:23,654 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 00:58:26,378 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 00:58:29,040 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 00:58:31,772 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 00:58:34,428 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 00:58:37,102 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 00:58:38,622 [INFO] [RegimeClassifier] [REGIME] UNKNOWN → CHOP
+2026-04-12 00:58:39,812 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 00:58:43,046 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 00:58:45,820 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 00:58:48,486 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 00:58:51,174 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 00:58:53,830 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 00:58:56,493 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 00:58:59,200 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 00:59:01,859 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 00:59:04,531 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 00:59:07,458 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 00:59:10,494 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 00:59:13,237 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 00:59:15,940 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 00:59:18,640 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 00:59:21,348 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 00:59:24,004 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 00:59:26,715 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 00:59:29,373 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 00:59:32,046 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 00:59:34,718 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 00:59:37,393 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 00:59:40,120 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 00:59:42,789 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 00:59:45,445 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 00:59:48,123 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 00:59:50,828 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 00:59:53,524 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 00:59:56,176 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 00:59:58,828 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:00:01,523 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:00:04,188 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:00:06,896 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:00:09,563 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:00:12,232 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:00:14,887 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:00:17,553 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:00:20,247 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:00:22,905 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:00:25,564 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:00:28,225 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:00:30,947 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:00:33,625 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:00:36,312 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:00:38,978 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:00:41,640 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:00:44,311 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:00:46,968 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:00:49,657 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:00:52,311 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:00:55,085 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:00:57,759 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:01:00,456 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:01:03,193 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:01:05,847 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:01:08,527 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:01:11,195 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:01:13,856 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:01:16,564 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:01:19,270 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:01:21,938 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:01:24,645 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:01:27,312 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:01:29,984 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:01:32,645 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:01:35,354 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:01:38,074 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:01:40,732 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:01:43,417 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:01:46,076 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:01:48,873 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:01:51,531 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:01:54,220 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:01:56,913 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:01:59,573 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:02:02,252 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:02:04,914 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:02:07,620 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:02:10,278 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:02:12,983 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:02:15,638 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:02:18,287 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:02:20,956 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:02:23,625 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:02:26,328 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:02:28,985 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:02:31,678 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:02:34,332 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:02:37,025 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:02:39,879 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:02:42,534 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:02:45,238 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:02:47,894 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:02:50,568 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:02:53,225 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:02:55,884 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:02:58,544 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:03:01,219 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:03:03,883 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:03:06,605 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:03:09,271 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:03:11,982 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:03:14,648 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:03:17,338 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:03:20,131 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:03:22,788 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:03:25,455 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:03:28,110 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:03:30,768 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:03:33,513 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:03:36,214 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:03:38,969 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:03:41,629 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:03:44,288 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:03:46,964 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:03:50,025 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:03:52,682 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:03:55,365 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:03:58,070 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:04:00,743 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:04:03,431 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:04:06,100 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:04:08,761 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:04:11,492 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:04:14,160 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:04:16,822 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:04:19,497 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:04:22,166 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:04:24,923 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:04:27,586 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:04:30,280 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:04:32,937 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:04:36,213 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:04:38,890 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:04:41,573 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:04:44,253 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:04:47,019 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:04:49,935 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:04:52,650 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:04:55,315 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:04:58,317 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:05:01,003 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:05:03,709 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:05:06,374 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:05:09,083 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:05:11,775 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:05:14,482 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:05:17,145 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:05:19,815 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:05:22,513 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:05:25,175 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:05:27,839 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:05:30,495 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:05:33,163 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:05:35,831 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:05:38,506 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:05:41,185 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:05:43,898 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:05:46,664 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:05:49,352 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:05:52,028 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:05:54,731 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:05:57,391 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:06:00,117 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:06:03,008 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:06:05,747 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:06:08,706 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:06:11,392 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:06:14,053 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:06:16,742 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:06:19,548 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:06:22,583 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:06:25,863 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:06:28,067 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:06:31,088 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:06:34,037 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:06:36,734 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:06:39,429 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:06:42,098 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:06:44,967 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:06:47,851 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:06:50,803 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:06:53,644 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:06:56,379 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:06:58,454 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:07:01,548 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:07:10,540 [INFO] [KnowledgeGraph] KnowledgeGraph initialized (runtime-safe).
+2026-04-12 01:07:10,542 [INFO] [LearningEngine] KnowledgeGraph loaded.
+2026-04-12 01:07:10,563 [INFO] [MemoryManager] MemoryManager initialized (runtime-safe).
+2026-04-12 01:07:10,567 [INFO] [LearningEngine] MemoryManager loaded.
+2026-04-12 01:07:10,669 [INFO] [LearningEngine] LearningEngine ready. ai_state_dir=C:\Users\dennis\Power_Trading_System\external_memory\ai_state read_only=True
+2026-04-12 01:07:14,821 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=neutral margin=0.00 risk=0.0021
+2026-04-12 01:07:17,529 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:07:20,198 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:07:23,032 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:07:25,744 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:07:28,555 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:07:31,230 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:07:33,891 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:07:36,669 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:07:39,330 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:07:42,034 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:07:43,511 [INFO] [RegimeClassifier] [REGIME] UNKNOWN → CHOP
+2026-04-12 01:07:44,710 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:07:47,372 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:07:50,035 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:07:52,767 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:07:55,426 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:07:58,109 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:08:00,775 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:08:03,444 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:08:06,279 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:08:09,095 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:08:11,832 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:08:14,541 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:08:17,702 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:08:19,705 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:08:22,404 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:08:25,102 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:08:27,784 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:08:30,452 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:08:33,114 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:08:35,782 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:08:38,566 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:08:41,266 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:08:43,926 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:08:46,610 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:08:49,271 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:08:52,014 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:08:54,703 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:08:57,491 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:09:00,161 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:09:03,290 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:09:06,201 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:09:09,032 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:09:11,733 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:09:14,776 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:09:17,701 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.70 vol=0.10 regime=CHOP perf=hot margin=0.00 risk=0.0026
+2026-04-12 01:09:35,751 [INFO] [KnowledgeGraph] KnowledgeGraph initialized (runtime-safe).
+2026-04-12 01:09:35,752 [INFO] [LearningEngine] KnowledgeGraph loaded.
+2026-04-12 01:09:35,761 [INFO] [MemoryManager] MemoryManager initialized (runtime-safe).
+2026-04-12 01:09:35,763 [INFO] [LearningEngine] MemoryManager loaded.
+2026-04-12 01:09:35,840 [INFO] [LearningEngine] LearningEngine ready. ai_state_dir=C:\Users\dennis\Power_Trading_System\external_memory\ai_state read_only=True
+2026-04-12 01:09:55,396 [INFO] [KnowledgeGraph] KnowledgeGraph initialized (runtime-safe).
+2026-04-12 01:09:55,398 [INFO] [LearningEngine] KnowledgeGraph loaded.
+2026-04-12 01:09:55,405 [INFO] [MemoryManager] MemoryManager initialized (runtime-safe).
+2026-04-12 01:09:55,406 [INFO] [LearningEngine] MemoryManager loaded.
+2026-04-12 01:09:55,494 [INFO] [LearningEngine] LearningEngine ready. ai_state_dir=C:\Users\dennis\Power_Trading_System\external_memory\ai_state read_only=True
+2026-04-12 01:10:33,090 [INFO] [RegimeClassifier] [REGIME] UNKNOWN → CHOP
+2026-04-12 01:20:06,360 [INFO] [KnowledgeGraph] KnowledgeGraph initialized (runtime-safe).
+2026-04-12 01:20:06,361 [INFO] [LearningEngine] KnowledgeGraph loaded.
+2026-04-12 01:20:06,375 [INFO] [MemoryManager] MemoryManager initialized (runtime-safe).
+2026-04-12 01:20:06,377 [INFO] [LearningEngine] MemoryManager loaded.
+2026-04-12 01:20:06,492 [INFO] [LearningEngine] LearningEngine ready. ai_state_dir=C:\Users\dennis\Power_Trading_System\external_memory\ai_state read_only=True
+2026-04-12 01:20:37,510 [INFO] [RegimeClassifier] [REGIME] UNKNOWN → CHOP
+2026-04-12 01:26:42,069 [INFO] [KnowledgeGraph] KnowledgeGraph initialized (runtime-safe).
+2026-04-12 01:26:42,073 [INFO] [LearningEngine] KnowledgeGraph loaded.
+2026-04-12 01:26:42,092 [INFO] [MemoryManager] MemoryManager initialized (runtime-safe).
+2026-04-12 01:26:42,104 [INFO] [LearningEngine] MemoryManager loaded.
+2026-04-12 01:26:42,217 [INFO] [LearningEngine] LearningEngine ready. ai_state_dir=C:\Users\dennis\Power_Trading_System\external_memory\ai_state read_only=True
+2026-04-12 01:32:20,255 [INFO] [RegimeClassifier] [REGIME] UNKNOWN → CHOP
+2026-04-12 01:34:40,677 [INFO] [KnowledgeGraph] KnowledgeGraph initialized (runtime-safe).
+2026-04-12 01:34:40,681 [INFO] [LearningEngine] KnowledgeGraph loaded.
+2026-04-12 01:34:40,688 [INFO] [MemoryManager] MemoryManager initialized (runtime-safe).
+2026-04-12 01:34:40,689 [INFO] [LearningEngine] MemoryManager loaded.
+2026-04-12 01:34:40,792 [INFO] [LearningEngine] LearningEngine ready. ai_state_dir=C:\Users\dennis\Power_Trading_System\external_memory\ai_state read_only=True
+2026-04-12 01:36:52,190 [INFO] [KnowledgeGraph] KnowledgeGraph initialized (runtime-safe).
+2026-04-12 01:36:52,191 [INFO] [LearningEngine] KnowledgeGraph loaded.
+2026-04-12 01:36:52,201 [INFO] [MemoryManager] MemoryManager initialized (runtime-safe).
+2026-04-12 01:36:52,207 [INFO] [LearningEngine] MemoryManager loaded.
+2026-04-12 01:36:52,275 [INFO] [LearningEngine] LearningEngine ready. ai_state_dir=C:\Users\dennis\Power_Trading_System\external_memory\ai_state read_only=True
+2026-04-12 01:37:24,759 [INFO] [RegimeClassifier] [REGIME] UNKNOWN → CHOP
+2026-04-12 01:41:16,868 [INFO] [KnowledgeGraph] KnowledgeGraph initialized (runtime-safe).
+2026-04-12 01:41:16,869 [INFO] [LearningEngine] KnowledgeGraph loaded.
+2026-04-12 01:41:16,885 [INFO] [MemoryManager] MemoryManager initialized (runtime-safe).
+2026-04-12 01:41:16,885 [INFO] [LearningEngine] MemoryManager loaded.
+2026-04-12 01:41:16,978 [INFO] [LearningEngine] LearningEngine ready. ai_state_dir=C:\Users\dennis\Power_Trading_System\external_memory\ai_state read_only=True
+2026-04-12 01:41:48,139 [INFO] [RegimeClassifier] [REGIME] UNKNOWN → CHOP
+2026-04-12 01:44:30,312 [INFO] [KnowledgeGraph] KnowledgeGraph initialized (runtime-safe).
+2026-04-12 01:44:30,315 [INFO] [LearningEngine] KnowledgeGraph loaded.
+2026-04-12 01:44:30,326 [INFO] [MemoryManager] MemoryManager initialized (runtime-safe).
+2026-04-12 01:44:30,327 [INFO] [LearningEngine] MemoryManager loaded.
+2026-04-12 01:44:30,417 [INFO] [LearningEngine] LearningEngine ready. ai_state_dir=C:\Users\dennis\Power_Trading_System\external_memory\ai_state read_only=True
+2026-04-12 01:45:04,872 [INFO] [RegimeClassifier] [REGIME] UNKNOWN → CHOP
+2026-04-12 01:51:12,106 [INFO] [KnowledgeGraph] KnowledgeGraph initialized (runtime-safe).
+2026-04-12 01:51:12,110 [INFO] [LearningEngine] KnowledgeGraph loaded.
+2026-04-12 01:51:12,119 [INFO] [MemoryManager] MemoryManager initialized (runtime-safe).
+2026-04-12 01:51:12,122 [INFO] [LearningEngine] MemoryManager loaded.
+2026-04-12 01:51:12,195 [INFO] [LearningEngine] LearningEngine ready. ai_state_dir=C:\Users\dennis\Power_Trading_System\external_memory\ai_state read_only=True
+2026-04-12 01:51:34,984 [INFO] [KnowledgeGraph] KnowledgeGraph initialized (runtime-safe).
+2026-04-12 01:51:34,985 [INFO] [LearningEngine] KnowledgeGraph loaded.
+2026-04-12 01:51:34,991 [INFO] [MemoryManager] MemoryManager initialized (runtime-safe).
+2026-04-12 01:51:34,992 [INFO] [LearningEngine] MemoryManager loaded.
+2026-04-12 01:51:35,081 [INFO] [LearningEngine] LearningEngine ready. ai_state_dir=C:\Users\dennis\Power_Trading_System\external_memory\ai_state read_only=True
+2026-04-12 01:52:04,119 [INFO] [RegimeClassifier] [REGIME] UNKNOWN → CHOP
+2026-04-12 01:54:58,922 [INFO] [KnowledgeGraph] KnowledgeGraph initialized (runtime-safe).
+2026-04-12 01:54:58,923 [INFO] [LearningEngine] KnowledgeGraph loaded.
+2026-04-12 01:54:58,932 [INFO] [MemoryManager] MemoryManager initialized (runtime-safe).
+2026-04-12 01:54:58,933 [INFO] [LearningEngine] MemoryManager loaded.
+2026-04-12 01:54:59,023 [INFO] [LearningEngine] LearningEngine ready. ai_state_dir=C:\Users\dennis\Power_Trading_System\external_memory\ai_state read_only=True
+2026-04-12 01:55:28,007 [INFO] [RegimeClassifier] [REGIME] UNKNOWN → CHOP
