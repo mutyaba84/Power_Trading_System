@@ -12,36 +12,55 @@ class AlpacaBroker:
             paper=paper,
         )
 
-    # -----------------------------------
+    # =========================================================
     # ACCOUNT
-    # -----------------------------------
+    # =========================================================
     def get_account(self):
         try:
-            return self.client.get_account()
+            account = self.client.get_account()
+            return account if account else None
         except Exception as e:
             print(f"[BROKER ERROR] get_account failed: {e}")
             return None
 
     def get_equity(self):
         try:
-            account = self.client.get_account()
-            return float(account.equity)
+            account = self.get_account()
+            if not account:
+                return None
+
+            equity = getattr(account, "equity", None)
+            return float(equity) if equity is not None else None
+
         except Exception as e:
             print(f"[BROKER ERROR] get_equity failed: {e}")
             return None
 
-    # -----------------------------------
+    # =========================================================
     # POSITION
-    # -----------------------------------
+    # =========================================================
     def get_position(self, symbol):
         try:
             pos = self.client.get_open_position(symbol)
+
+            if not pos:
+                return None
+
+            qty = float(getattr(pos, "qty", 0) or 0)
+            qty_available = float(getattr(pos, "qty_available", 0) or 0)
+            avg_price = float(getattr(pos, "avg_entry_price", 0) or 0)
+
+            if qty == 0:
+                return None
+
             return {
-                "qty": float(pos.qty),
-                "qty_available": float(pos.qty_available),
-                "avg_price": float(pos.avg_entry_price),
+                "qty": qty,
+                "qty_available": qty_available,
+                "avg_price": avg_price,
             }
+
         except Exception:
+            # Normal case when no position exists
             return None
 
     def close_position(self, symbol):
@@ -52,9 +71,9 @@ class AlpacaBroker:
             print(f"[BROKER ERROR] close_position failed: {e}")
             return None
 
-    # -----------------------------------
-    # ORDER HELPERS
-    # -----------------------------------
+    # =========================================================
+    # POSITION SIZING
+    # =========================================================
     def calculate_qty(self, price, risk_pct):
         equity = self.get_equity()
 
@@ -66,15 +85,19 @@ class AlpacaBroker:
 
         return max(0, int(qty))
 
-    # -----------------------------------
+    # =========================================================
     # PLACE ORDER
-    # -----------------------------------
+    # =========================================================
     def place_order(self, symbol, qty, side):
         try:
             qty = int(qty)
 
             if qty <= 0:
                 print("[BROKER] Skipping order: qty <= 0")
+                return False
+
+            if not symbol:
+                print("[BROKER ERROR] Missing symbol")
                 return False
 
             side = side.lower()
@@ -90,48 +113,40 @@ class AlpacaBroker:
             )
 
             print(f"[BROKER] Placing {side.upper()} {qty} {symbol}")
-            self.client.submit_order(order)
+
+            response = self.client.submit_order(order)
+
+            if not response:
+                print("[BROKER ERROR] Empty order response")
+                return False
+
             return True
 
         except Exception as e:
             print(f"[BROKER ERROR] order failed: {e}")
             return False
 
-    # -----------------------------------
+    # =========================================================
     # ORDER VISIBILITY
-    # -----------------------------------
+    # =========================================================
     def list_orders(self):
         try:
             request = GetOrdersRequest(status=QueryOrderStatus.OPEN)
             orders = self.client.get_orders(filter=request)
 
-            return [
-                {
-                    "id": str(o.id),
-                    "status": str(o.status).lower(),
-                    "symbol": str(o.symbol),
-                    "qty": float(o.qty),
-                    "filled_qty": float(getattr(o, "filled_qty", 0) or 0),
-                }
-                for o in orders
-            ]
+            if not orders:
+                return []
+
+            return [self._normalize_order(o) for o in orders]
 
         except TypeError:
-            # fallback for SDK variants that use positional request
+            # SDK fallback
             try:
                 request = GetOrdersRequest(status=QueryOrderStatus.OPEN)
                 orders = self.client.get_orders(request)
 
-                return [
-                    {
-                        "id": str(o.id),
-                        "status": str(o.status).lower(),
-                        "symbol": str(o.symbol),
-                        "qty": float(o.qty),
-                        "filled_qty": float(getattr(o, "filled_qty", 0) or 0),
-                    }
-                    for o in orders
-                ]
+                return [self._normalize_order(o) for o in orders] if orders else []
+
             except Exception as e:
                 print(f"[BROKER ERROR] list_orders failed: {e}")
                 return []
@@ -143,25 +158,32 @@ class AlpacaBroker:
     def get_order(self, order_id):
         try:
             o = self.client.get_order_by_id(order_id)
-            return {
-                "id": str(o.id),
-                "status": str(o.status).lower(),
-                "symbol": str(o.symbol),
-                "qty": float(o.qty),
-                "filled_qty": float(getattr(o, "filled_qty", 0) or 0),
-            }
+            return self._normalize_order(o) if o else None
         except Exception as e:
             print(f"[BROKER ERROR] get_order failed: {e}")
             return None
 
-    # -----------------------------------
+    def _normalize_order(self, o):
+        return {
+            "id": str(getattr(o, "id", "")),
+            "status": str(getattr(o, "status", "")).lower(),
+            "symbol": str(getattr(o, "symbol", "")),
+            "qty": float(getattr(o, "qty", 0) or 0),
+            "filled_qty": float(getattr(o, "filled_qty", 0) or 0),
+        }
+
+    # =========================================================
     # ORDER CANCELLATION
-    # -----------------------------------
+    # =========================================================
     def cancel_order(self, order_id):
         try:
+            if not order_id:
+                return False
+
             self.client.cancel_order_by_id(order_id)
             print(f"[BROKER] Cancelled order {order_id}")
             return True
+
         except Exception as e:
             print(f"[BROKER ERROR] cancel_order failed: {e}")
             return False
@@ -171,7 +193,6 @@ class AlpacaBroker:
             orders = self.list_orders()
 
             if not orders:
-                print("[BROKER] No open orders to cancel")
                 return True
 
             for order in orders:

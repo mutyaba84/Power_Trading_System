@@ -26,3 +26,9 @@
 2026-04-18 22:44:37,607 [INFO] [MemoryManager] MemoryManager initialized (runtime-safe).
 2026-04-18 22:44:37,607 [INFO] [LearningEngine] MemoryManager loaded.
 2026-04-18 22:44:37,697 [INFO] [LearningEngine] LearningEngine ready. ai_state_dir=C:\Users\dennis\Power_Trading_System\external_memory\ai_state read_only=True
+2026-04-20 14:30:01,009 [INFO] [RiskGovernor] [RISK] strat=risk_exit conf=1.00 vol=0.00 regime=N/A perf=neutral margin=0.00 risk=0.0044
+2026-04-20 14:30:02,844 [INFO] [RiskGovernor] [RISK] strat=risk_exit conf=1.00 vol=0.00 regime=N/A perf=neutral margin=0.00 risk=0.0044
+2026-04-20 14:30:08,402 [INFO] [RiskGovernor] [RISK] strat=risk_exit conf=1.00 vol=0.00 regime=N/A perf=neutral margin=0.00 risk=0.0044
+2026-04-20 14:36:19,944 [INFO] [RiskGovernor] [RISK] strat=risk_exit conf=1.00 vol=0.00 regime=N/A perf=neutral margin=0.00 risk=0.0044
+2026-04-20 14:36:21,470 [INFO] [RiskGovernor] [RISK] strat=risk_exit conf=1.00 vol=0.00 regime=N/A perf=neutral margin=0.00 risk=0.0044
+2026-04-20 14:36:26,630 [INFO] [RiskGovernor] [RISK] strat=risk_exit conf=1.00 vol=0.00 regime=N/A perf=neutral margin=0.00 risk=0.0044

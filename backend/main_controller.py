@@ -25,12 +25,14 @@ class TradingController:
         self._last_qty = 0
         self._last_entry = None
 
-        self._position_lock = False
-        self._position_lock_time = 0.0
-
-        # 🔥 NEW: trade lifecycle tracking
+        # Trade lifecycle
         self._peak_price = None
         self._entry_time = None
+
+        # Filters
+        self._last_price = None
+        self._last_trade_time = 0
+        self._last_entry_price = None  # 🔥 IMPORTANT (prevents attribute errors)
 
         self._clear_stale_orders()
 
@@ -50,16 +52,27 @@ class TradingController:
                     time.sleep(1)
                     continue
 
+                # -------------------------
+                # SYNC
+                # -------------------------
                 sync_with_broker(state, self.broker)
                 update_pnl(state)
 
-                # 🔥 Detect closed trades
+                if not state.get("sync_ok", True):
+                    print("[BLOCK] Sync unstable -> trading paused")
+                    time.sleep(1)
+                    continue
+
+                # -------------------------
+                # TRADE CLOSE DETECTION
+                # -------------------------
                 self._detect_trade_close(price)
 
-                # 🔥 Smart exit management BEFORE AI
+                # -------------------------
+                # POSITION MANAGEMENT
+                # -------------------------
                 exit_signal = self._manage_position(price)
                 if exit_signal:
-                    print(f"[EXIT] {exit_signal}")
                     self._execute(
                         action="SELL",
                         price=price,
@@ -71,18 +84,15 @@ class TradingController:
                     time.sleep(1)
                     continue
 
-                # Stability guard
-                recent_logs = "".join(state["logs"][-3:])
-                if "[SYNC ERROR]" in recent_logs:
-                    print("[BLOCK] Sync unstable -> trading paused")
-                    time.sleep(2)
-                    continue
-
-                # AI decision
+                # -------------------------
+                # AI DECISION
+                # -------------------------
                 action, strategy, regime, confidence, volatility = self.ai.decide_action(
                     price,
                     state["equity"],
                 )
+
+                print(f"[AI] action={action} conf={confidence:.2f}")
 
                 self._execute(
                     action=action,
@@ -98,7 +108,7 @@ class TradingController:
 
             time.sleep(1)
 
-    def _market_open(self) -> bool:
+    def _market_open(self):
         now = datetime.datetime.utcnow()
 
         if now.weekday() >= 5:
@@ -110,16 +120,18 @@ class TradingController:
         return open_time <= now <= close_time
 
     # =========================================================
-    # 🔥 POSITION MANAGEMENT (NEW)
+    # POSITION MANAGEMENT
     # =========================================================
-    def _manage_position(self, price: float):
+    def _manage_position(self, price):
         if state["position"] == "flat":
             return None
 
         entry = state["entry_price"]
+        if not entry:
+            return None
+
         pnl_pct = (price - entry) / entry
 
-        # Track peak (for trailing stop)
         if self._peak_price is None:
             self._peak_price = price
         else:
@@ -127,67 +139,47 @@ class TradingController:
 
         drawdown = (self._peak_price - price) / self._peak_price
 
-        # Stop loss
         if pnl_pct <= -0.01:
+            print(f"[EXIT] STOP_LOSS | pnl={pnl_pct:.4f}")
             return "STOP_LOSS"
 
-        # Take profit
         if pnl_pct >= 0.02:
+            print(f"[EXIT] TAKE_PROFIT | pnl={pnl_pct:.4f}")
             return "TAKE_PROFIT"
 
-        # Trailing stop
         if pnl_pct > 0.01 and drawdown > 0.005:
+            print(f"[EXIT] TRAILING_STOP | pnl={pnl_pct:.4f}")
             return "TRAILING_STOP"
 
         return None
 
     # =========================================================
-    # 🔥 TRADE CLOSE DETECTION (UPGRADED)
+    # TRADE CLOSE DETECTION
     # =========================================================
-    def _detect_trade_close(self, price: float):
+    def _detect_trade_close(self, price):
         current_position = state["position"]
 
         if self._last_position != "flat" and current_position == "flat":
             pnl = 0.0
 
-            if self._last_position == "long" and self._last_entry is not None:
+            if self._last_entry:
                 pnl = (price - self._last_entry) * self._last_qty
-            elif self._last_position == "short" and self._last_entry is not None:
-                pnl = (self._last_entry - price) * self._last_qty
 
             print(f"[TRADE CLOSED] PnL: {pnl:.2f}")
 
-            # ✅ Realized PnL
             state["realized_pnl"] += pnl
 
-            # ✅ Trade log
             state["trades"].append({
                 "entry": self._last_entry,
                 "exit": price,
                 "qty": self._last_qty,
                 "pnl": pnl,
-                "duration": time.time() - self._entry_time if self._entry_time else None
+                "duration": time.time() - self._entry_time if self._entry_time else 0
             })
 
-            # AI updates
-            self.ai.performance.record(
-                strategy="mean_reversion",
-                regime="CHOP",
-                pnl=pnl,
-            )
-
-            self.ai.meta_learning.update(pnl)
-            self.ai.risk.update_after_trade(
-                pnl=pnl,
-                equity=state["total_equity"],
-            )
-
-            # Reset lifecycle
-            self._position_lock = False
             self._peak_price = None
             self._entry_time = None
 
-            state["active_order_id"] = None
             state["execution_state"] = "IDLE"
             state["order_pending"] = False
 
@@ -196,144 +188,86 @@ class TradingController:
         self._last_entry = state["entry_price"]
 
     # =========================================================
-    # 🔥 EXECUTION ENGINE
+    # EXECUTION ENGINE
     # =========================================================
     def _execute(self, action, price, strategy, regime, confidence, volatility):
         try:
             now = time.time()
 
             if not self._market_open():
-                print("[BLOCK] Market closed")
                 return
 
-            if state["execution_state"] == "COOLDOWN":
-                if now - state["last_order_time"] < 5:
+            if state["execution_state"] == "PENDING":
+                if now - state["last_order_time"] < 15:
                     return
                 state["execution_state"] = "IDLE"
-
-            if state["execution_state"] == "PENDING":
-                if now - state["last_order_time"] > 15:
-                    state["execution_state"] = "COOLDOWN"
-                    state["last_order_time"] = now
-                    state["active_order_id"] = None
-                    state["order_pending"] = False
-                    self._position_lock = False
-                else:
-                    return
 
             if action == "HOLD":
                 return
 
-            # Prevent duplicate orders
-            orders = self.broker.list_orders()
-            active_orders = [
-                o for o in orders
-                if str(o.get("status", "")).lower() in {"new", "accepted", "pending_new", "partially_filled"}
-            ]
-            if active_orders:
+            # -------------------------
+            # NOISE FILTER
+            # -------------------------
+            if self._last_price:
+                move = abs(price - self._last_price) / self._last_price
+                if move < 0.0005:
+                    print("[FILTER] Noise")
+                    return
+
+            self._last_price = price
+
+            # -------------------------
+            # CONFIDENCE FILTER
+            # -------------------------
+            if confidence < 0.6:
+                print("[FILTER] Low confidence")
                 return
 
-            # Risk sizing
-            if state["position"] != "flat":
-                deployable = 0.0
-            else:
-                deployable = state["equity"]
-
-            risk_pct = self.ai.risk.evaluate(
-                action=action,
-                confidence=confidence,
-                equity=state["total_equity"],
-                volatility=volatility,
-                strategy=strategy,
-                regime=regime,
-                performance={
-                    "state": "neutral",
-                    "margin_pressure": state.get("margin_pressure", 0.0),
-                },
-                deploy_pct=state.get("deploy_pct", 0.25),
-            )
-
-            if risk_pct <= 0:
+            # -------------------------
+            # COOLDOWN (STRONG)
+            # -------------------------
+            if now - self._last_trade_time < 30:
+                print("[FILTER] Cooldown")
                 return
 
-            max_exposure = state["total_equity"] * state.get("max_exposure_pct", 0.25)
-            current_exposure = state["qty"] * price
-
-            # ======================
-            # BUY
-            # ======================
-            if action == "BUY":
-                if state["position"] != "flat":
+            # -------------------------
+            # PRICE ZONE FILTER
+            # -------------------------
+            if self._last_entry_price:
+                zone = abs(price - self._last_entry_price) / self._last_entry_price
+                if zone < 0.001:
+                    print("[FILTER] Same zone")
                     return
 
-                if current_exposure >= max_exposure:
-                    return
+            # -------------------------
+            # EXECUTION
+            # -------------------------
+            if action == "BUY" and state["position"] == "flat":
+                qty = max(1, int(state["equity"] * 0.01 // price))
 
-                position_value = deployable * risk_pct
-                qty = max(1, int(position_value // price))
-
-                max_affordable = int(state["buying_power"] // price)
-                qty = min(qty, max_affordable)
-
-                if qty <= 0:
-                    return
-
-                success = self.broker.place_order("SPY", qty, "buy")
-
-                if success:
+                if self.broker.place_order("SPY", qty, "buy"):
                     self._entry_time = now
                     self._peak_price = price
+                    self._last_trade_time = now
+                    self._last_entry_price = price
 
                     state["execution_state"] = "PENDING"
-                    state["last_order_time"] = now
-                    state["last_order_side"] = "BUY"
-                    state["order_pending"] = True
-                    state["order_timestamp"] = now
                     state["last_action"] = "BUY"
 
-            # ======================
-            # SELL
-            # ======================
-            elif action == "SELL":
-                pos = self.broker.get_position("SPY")
-                if not pos:
-                    return
+            elif action == "SELL" and state["position"] != "flat":
+                if self.broker.place_order("SPY", state["qty"], "sell"):
+                    self._last_trade_time = now
 
-                available_qty = int(float(pos.get("qty_available", 0) or 0))
-                if available_qty <= 0:
-                    self._cleanup_orders()
-                    state["execution_state"] = "COOLDOWN"
-                    state["last_order_time"] = now
-                    return
-
-                exit_qty = available_qty  # 🔥 FULL EXIT (important)
-
-                success = self.broker.place_order("SPY", exit_qty, "sell")
-
-                if success:
                     state["execution_state"] = "PENDING"
-                    state["last_order_time"] = now
-                    state["last_order_side"] = "SELL"
-                    state["order_pending"] = True
-                    state["order_timestamp"] = now
                     state["last_action"] = "SELL"
 
         except Exception as e:
             state["logs"].append(f"[EXEC ERROR] {e}")
 
-    # =========================================================
-    def _cleanup_orders(self):
-        try:
-            orders = self.broker.list_orders()
-            for order in orders:
-                self.broker.cancel_order(order["id"])
-        except Exception:
-            pass
-
     def _clear_stale_orders(self):
         try:
             orders = self.broker.list_orders()
-            for order in orders:
-                self.broker.cancel_order(order["id"])
+            for o in orders:
+                self.broker.cancel_order(o["id"])
         except Exception:
             pass

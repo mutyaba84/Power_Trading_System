@@ -1,0 +1,118 @@
+2026-04-21 13:00:29,477 [INFO] [KnowledgeGraph] KnowledgeGraph initialized (runtime-safe).
+2026-04-21 13:00:29,478 [INFO] [LearningEngine] KnowledgeGraph loaded.
+2026-04-21 13:00:29,592 [INFO] [MemoryManager] MemoryManager initialized (runtime-safe).
+2026-04-21 13:00:29,593 [INFO] [LearningEngine] MemoryManager loaded.
+2026-04-21 13:00:29,817 [INFO] [LearningEngine] LearningEngine ready. ai_state_dir=C:\Users\dennis\Power_Trading_System\external_memory\ai_state read_only=True
+2026-04-21 13:04:46,967 [INFO] [KnowledgeGraph] KnowledgeGraph initialized (runtime-safe).
+2026-04-21 13:04:46,967 [INFO] [LearningEngine] KnowledgeGraph loaded.
+2026-04-21 13:04:46,973 [INFO] [MemoryManager] MemoryManager initialized (runtime-safe).
+2026-04-21 13:04:46,974 [INFO] [LearningEngine] MemoryManager loaded.
+2026-04-21 13:04:47,081 [INFO] [LearningEngine] LearningEngine ready. ai_state_dir=C:\Users\dennis\Power_Trading_System\external_memory\ai_state read_only=True
+2026-04-21 13:05:16,026 [INFO] [RegimeClassifier] [REGIME] UNKNOWN → CHOP
+2026-04-21 13:06:44,869 [INFO] [KnowledgeGraph] KnowledgeGraph initialized (runtime-safe).
+2026-04-21 13:06:44,869 [INFO] [LearningEngine] KnowledgeGraph loaded.
+2026-04-21 13:06:44,882 [INFO] [MemoryManager] MemoryManager initialized (runtime-safe).
+2026-04-21 13:06:44,882 [INFO] [LearningEngine] MemoryManager loaded.
+2026-04-21 13:06:44,951 [INFO] [LearningEngine] LearningEngine ready. ai_state_dir=C:\Users\dennis\Power_Trading_System\external_memory\ai_state read_only=True
+2026-04-21 13:07:12,572 [INFO] [RegimeClassifier] [REGIME] UNKNOWN → CHOP
+2026-04-21 13:10:07,937 [INFO] [KnowledgeGraph] KnowledgeGraph initialized (runtime-safe).
+2026-04-21 13:10:07,941 [INFO] [LearningEngine] KnowledgeGraph loaded.
+2026-04-21 13:10:07,947 [INFO] [MemoryManager] MemoryManager initialized (runtime-safe).
+2026-04-21 13:10:07,948 [INFO] [LearningEngine] MemoryManager loaded.
+2026-04-21 13:10:08,090 [INFO] [LearningEngine] LearningEngine ready. ai_state_dir=C:\Users\dennis\Power_Trading_System\external_memory\ai_state read_only=True
+2026-04-21 13:10:36,371 [INFO] [RegimeClassifier] [REGIME] UNKNOWN → CHOP
+2026-04-21 19:30:02,716 [INFO] [KnowledgeGraph] KnowledgeGraph initialized (runtime-safe).
+2026-04-21 19:30:02,721 [INFO] [LearningEngine] KnowledgeGraph loaded.
+2026-04-21 19:30:02,776 [INFO] [MemoryManager] MemoryManager initialized (runtime-safe).
+2026-04-21 19:30:02,784 [INFO] [LearningEngine] MemoryManager loaded.
+2026-04-21 19:30:02,974 [INFO] [LearningEngine] LearningEngine ready. ai_state_dir=C:\Users\dennis\Power_Trading_System\external_memory\ai_state read_only=True
+2026-04-21 19:30:26,822 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.60 vol=0.13 regime=CHOP perf=neutral margin=0.00 risk=0.0019
+2026-04-21 19:30:28,252 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.60 vol=0.11 regime=CHOP perf=neutral margin=0.00 risk=0.0019
+2026-04-21 19:30:30,911 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.61 vol=0.09 regime=CHOP perf=neutral margin=0.00 risk=0.0020
+2026-04-21 19:30:33,526 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.64 vol=0.08 regime=CHOP perf=neutral margin=0.00 risk=0.0021
+2026-04-21 19:30:34,910 [WARNING] [RiskGovernor] [RISK] loss streak increased → 1
+2026-04-21 19:30:39,742 [INFO] [RegimeClassifier] [REGIME] UNKNOWN → CHOP
+2026-04-21 19:30:44,721 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.60 vol=0.11 regime=CHOP perf=neutral margin=0.00 risk=0.0015
+2026-04-21 19:30:46,155 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.60 vol=0.14 regime=CHOP perf=neutral margin=0.00 risk=0.0015
+2026-04-21 19:30:47,567 [WARNING] [RiskGovernor] [RISK] loss streak increased → 2
+2026-04-21 19:31:03,183 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.60 vol=0.10 regime=CHOP perf=neutral margin=0.00 risk=0.0012
+2026-04-21 19:31:05,766 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.60 vol=0.15 regime=CHOP perf=neutral margin=0.00 risk=0.0011
+2026-04-21 19:31:12,090 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.61 vol=0.09 regime=CHOP perf=neutral margin=0.00 risk=0.0016
+2026-04-21 19:31:24,196 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.60 vol=0.12 regime=CHOP perf=neutral margin=0.00 risk=0.0015
+2026-04-21 19:31:25,584 [WARNING] [RiskGovernor] [RISK] loss streak increased → 2
+2026-04-21 19:31:31,638 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.64 vol=0.08 regime=CHOP perf=neutral margin=0.00 risk=0.0012
+2026-04-21 19:31:33,081 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.62 vol=0.09 regime=CHOP perf=neutral margin=0.00 risk=0.0012
+2026-04-21 19:31:34,695 [WARNING] [RiskGovernor] [RISK] loss streak increased → 3
+2026-04-21 19:31:34,730 [WARNING] [RiskGovernor] [RISK] cooldown triggered
+2026-04-21 19:31:40,785 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.60 vol=0.15 regime=CHOP perf=neutral margin=0.00 risk=0.0010
+2026-04-21 19:31:44,568 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.60 vol=0.12 regime=CHOP perf=neutral margin=0.00 risk=0.0010
+2026-04-21 19:31:45,957 [WARNING] [RiskGovernor] [RISK] loss streak increased → 4
+2026-04-21 19:31:45,958 [WARNING] [RiskGovernor] [RISK] cooldown triggered
+2026-04-21 19:32:02,713 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.60 vol=0.15 regime=CHOP perf=neutral margin=0.00 risk=0.0010
+2026-04-21 19:32:30,421 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.60 vol=0.13 regime=CHOP perf=neutral margin=0.00 risk=0.0010
+2026-04-21 19:32:31,794 [INFO] [RiskGovernor] [RISK] cooldown reset
+2026-04-21 19:32:36,673 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.60 vol=0.14 regime=CHOP perf=neutral margin=0.00 risk=0.0019
+2026-04-21 19:32:39,247 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.60 vol=0.11 regime=CHOP perf=neutral margin=0.00 risk=0.0019
+2026-04-21 19:32:40,628 [WARNING] [RiskGovernor] [RISK] loss streak increased → 1
+2026-04-21 19:32:55,057 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.60 vol=0.11 regime=CHOP perf=neutral margin=0.00 risk=0.0015
+2026-04-21 19:33:00,124 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.62 vol=0.09 regime=CHOP perf=neutral margin=0.00 risk=0.0016
+2026-04-21 19:33:01,548 [WARNING] [RiskGovernor] [RISK] loss streak increased → 2
+2026-04-21 19:33:11,243 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.64 vol=0.08 regime=CHOP perf=neutral margin=0.00 risk=0.0012
+2026-04-21 19:33:16,231 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.60 vol=0.10 regime=CHOP perf=neutral margin=0.00 risk=0.0012
+2026-04-21 19:33:22,488 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.63 vol=0.09 regime=CHOP perf=neutral margin=0.00 risk=0.0016
+2026-04-21 19:33:31,054 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.60 vol=0.14 regime=CHOP perf=neutral margin=0.00 risk=0.0015
+2026-04-21 19:33:33,715 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.60 vol=0.11 regime=CHOP perf=neutral margin=0.00 risk=0.0019
+2026-04-21 19:33:36,303 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.60 vol=0.10 regime=CHOP perf=neutral margin=0.00 risk=0.0019
+2026-04-21 19:33:37,672 [WARNING] [RiskGovernor] [RISK] loss streak increased → 1
+2026-04-21 19:33:37,768 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.63 vol=0.09 regime=CHOP perf=neutral margin=0.00 risk=0.0016
+2026-04-21 19:33:49,906 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.61 vol=0.10 regime=CHOP perf=neutral margin=0.00 risk=0.0016
+2026-04-21 19:33:51,424 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.60 vol=0.11 regime=CHOP perf=neutral margin=0.00 risk=0.0019
+2026-04-21 19:34:07,171 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.62 vol=0.09 regime=CHOP perf=neutral margin=0.00 risk=0.0020
+2026-04-21 19:34:13,848 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.62 vol=0.09 regime=CHOP perf=neutral margin=0.00 risk=0.0020
+2026-04-21 19:34:24,869 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.64 vol=0.08 regime=CHOP perf=neutral margin=0.00 risk=0.0021
+2026-04-21 19:34:34,700 [INFO] [KnowledgeGraph] KnowledgeGraph initialized (runtime-safe).
+2026-04-21 19:34:34,700 [INFO] [LearningEngine] KnowledgeGraph loaded.
+2026-04-21 19:34:34,709 [INFO] [MemoryManager] MemoryManager initialized (runtime-safe).
+2026-04-21 19:34:34,710 [INFO] [LearningEngine] MemoryManager loaded.
+2026-04-21 19:34:34,807 [INFO] [LearningEngine] LearningEngine ready. ai_state_dir=C:\Users\dennis\Power_Trading_System\external_memory\ai_state read_only=True
+2026-04-21 19:34:39,275 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.60 vol=0.12 regime=CHOP perf=neutral margin=0.00 risk=0.0019
+2026-04-21 19:34:49,337 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.60 vol=0.14 regime=CHOP perf=neutral margin=0.00 risk=0.0019
+2026-04-21 19:34:50,712 [WARNING] [RiskGovernor] [RISK] loss streak increased → 1
+2026-04-21 19:34:53,204 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.60 vol=0.11 regime=CHOP perf=neutral margin=0.00 risk=0.0015
+2026-04-21 19:35:04,444 [INFO] [RegimeClassifier] [REGIME] UNKNOWN → CHOP
+2026-04-21 19:35:30,067 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.60 vol=0.12 regime=CHOP perf=neutral margin=0.00 risk=0.0015
+2026-04-21 19:35:36,315 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.60 vol=0.12 regime=CHOP perf=neutral margin=0.00 risk=0.0019
+2026-04-21 19:35:49,602 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.61 vol=0.09 regime=CHOP perf=neutral margin=0.00 risk=0.0020
+2026-04-21 19:36:10,507 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.63 vol=0.08 regime=CHOP perf=neutral margin=0.00 risk=0.0020
+2026-04-21 19:36:18,206 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.60 vol=0.12 regime=CHOP perf=neutral margin=0.00 risk=0.0019
+2026-04-21 19:36:20,193 [WARNING] [RiskGovernor] [RISK] loss streak increased → 1
+2026-04-21 19:36:26,244 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.60 vol=0.15 regime=CHOP perf=neutral margin=0.00 risk=0.0015
+2026-04-21 19:36:31,222 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.60 vol=0.14 regime=CHOP perf=neutral margin=0.00 risk=0.0015
+2026-04-21 19:36:32,877 [WARNING] [RiskGovernor] [RISK] loss streak increased → 2
+2026-04-21 19:36:34,189 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.60 vol=0.11 regime=CHOP perf=neutral margin=0.00 risk=0.0012
+2026-04-21 19:36:49,920 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.60 vol=0.13 regime=CHOP perf=neutral margin=0.00 risk=0.0011
+2026-04-21 19:36:51,662 [WARNING] [RiskGovernor] [RISK] loss streak increased → 3
+2026-04-21 19:36:51,662 [WARNING] [RiskGovernor] [RISK] cooldown triggered
+2026-04-21 19:36:57,117 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.60 vol=0.12 regime=CHOP perf=neutral margin=0.00 risk=0.0010
+2026-04-21 19:37:02,172 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.60 vol=0.15 regime=CHOP perf=neutral margin=0.00 risk=0.0010
+2026-04-21 19:37:03,565 [WARNING] [RiskGovernor] [RISK] loss streak increased → 4
+2026-04-21 19:37:03,567 [WARNING] [RiskGovernor] [RISK] cooldown triggered
+2026-04-21 19:37:13,271 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.60 vol=0.14 regime=CHOP perf=neutral margin=0.00 risk=0.0010
+2026-04-21 19:37:16,998 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.64 vol=0.08 regime=CHOP perf=neutral margin=0.00 risk=0.0010
+2026-04-21 19:37:18,424 [WARNING] [RiskGovernor] [RISK] loss streak increased → 5
+2026-04-21 19:37:18,425 [WARNING] [RiskGovernor] [RISK] cooldown triggered
+2026-04-21 19:37:22,091 [INFO] [RiskGovernor] [RISK] cooldown active → no trading
+2026-04-21 19:45:48,837 [INFO] [KnowledgeGraph] KnowledgeGraph initialized (runtime-safe).
+2026-04-21 19:45:48,837 [INFO] [LearningEngine] KnowledgeGraph loaded.
+2026-04-21 19:45:48,845 [INFO] [MemoryManager] MemoryManager initialized (runtime-safe).
+2026-04-21 19:45:48,846 [INFO] [LearningEngine] MemoryManager loaded.
+2026-04-21 19:45:48,937 [INFO] [LearningEngine] LearningEngine ready. ai_state_dir=C:\Users\dennis\Power_Trading_System\external_memory\ai_state read_only=True
+2026-04-21 19:45:56,038 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.60 vol=0.12 regime=CHOP perf=neutral margin=0.00 risk=0.0019
+2026-04-21 19:46:20,288 [INFO] [RegimeClassifier] [REGIME] UNKNOWN → CHOP
+2026-04-21 19:55:00,522 [INFO] [KnowledgeGraph] KnowledgeGraph initialized (runtime-safe).
+2026-04-21 19:55:00,523 [INFO] [LearningEngine] KnowledgeGraph loaded.
+2026-04-21 19:55:00,529 [INFO] [MemoryManager] MemoryManager initialized (runtime-safe).
+2026-04-21 19:55:00,530 [INFO] [LearningEngine] MemoryManager loaded.
+2026-04-21 19:55:00,649 [INFO] [LearningEngine] LearningEngine ready. ai_state_dir=C:\Users\dennis\Power_Trading_System\external_memory\ai_state read_only=True
+2026-04-21 19:55:22,841 [INFO] [RiskGovernor] [RISK] strat=mean_reversion conf=0.60 vol=0.14 regime=CHOP perf=neutral margin=0.00 risk=0.0019
+2026-04-21 19:55:33,667 [INFO] [RegimeClassifier] [REGIME] UNKNOWN → CHOP

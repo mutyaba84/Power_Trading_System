@@ -22,12 +22,11 @@ state = {
 
     "margin_pressure": 0.0,
 
-    # legacy flags
+    # execution flags
     "order_pending": False,
     "order_timestamp": 0,
 
-    # execution engine
-    "execution_state": "IDLE",   # IDLE / PENDING / COOLDOWN
+    "execution_state": "IDLE",
     "last_order_time": 0,
     "last_order_side": None,
     "active_order_id": None,
@@ -35,18 +34,48 @@ state = {
     # portfolio controls
     "max_exposure_pct": 0.25,
     "deploy_pct": 0.25,
+
+    # 🔥 NEW: sync health flag (CRITICAL)
+    "sync_ok": True,
 }
 
 
+# =========================================================
+# 🔄 BROKER SYNC (FULLY HARDENED)
+# =========================================================
 def sync_with_broker(state, broker):
     try:
+        # 🔴 Assume failure until proven success
+        state["sync_ok"] = False
+
         account = broker.get_account()
-        pos = broker.get_position("SPY")
 
-        cash = float(account.cash)
-        total_equity = float(account.equity)
-        broker_buying_power = float(account.buying_power)
+        # -------------------------
+        # ACCOUNT SAFETY
+        # -------------------------
+        if not account:
+            _log_once("[SYNC ERROR] account returned None")
+            return
 
+        cash = getattr(account, "cash", None)
+        if cash is None:
+            _log_once("[SYNC ERROR] missing cash field in account")
+            return
+        cash = float(cash)
+
+        equity = getattr(account, "equity", None)
+        buying_power = getattr(account, "buying_power", None)
+
+        if equity is None or buying_power is None:
+            _log_once("[SYNC ERROR] missing equity or buying_power")
+            return
+
+        total_equity = float(equity)
+        broker_buying_power = float(buying_power)
+
+        # -------------------------
+        # DEPLOYMENT CONTROL
+        # -------------------------
         deploy_pct = state.get("deploy_pct", 0.25)
         deployable_equity = total_equity * deploy_pct
 
@@ -54,24 +83,32 @@ def sync_with_broker(state, broker):
         state["total_equity"] = total_equity
         state["equity"] = deployable_equity
 
-        # margin pressure
+        # -------------------------
+        # MARGIN PRESSURE
+        # -------------------------
         if cash < 0:
             state["margin_pressure"] = min(1.0, abs(cash) / max(total_equity, 1e-9))
         else:
             state["margin_pressure"] = 0.0
 
-        # position sync
-        if pos and float(pos.get("qty", 0)) != 0:
+        # -------------------------
+        # POSITION SYNC
+        # -------------------------
+        try:
+            pos = broker.get_position("SPY")
+        except Exception:
+            pos = None
+
+        if pos and pos.get("qty") is not None and float(pos.get("qty", 0)) != 0:
             qty = float(pos.get("qty", 0))
+
             state["position"] = "long" if qty > 0 else "short"
             state["qty"] = abs(int(qty))
             state["entry_price"] = float(pos.get("avg_price", 0.0) or 0.0)
 
-            # hard capital lock while in a position
             state["buying_power"] = 0.0
             state["can_trade"] = False
 
-            # if broker confirms position, clear pending state
             if state["execution_state"] == "PENDING":
                 state["execution_state"] = "IDLE"
                 state["active_order_id"] = None
@@ -83,27 +120,49 @@ def sync_with_broker(state, broker):
             state["entry_price"] = None
 
             state["buying_power"] = min(broker_buying_power, deployable_equity)
-            state["can_trade"] = state["execution_state"] == "IDLE" and state["buying_power"] > 0
+            state["can_trade"] = (
+                state["execution_state"] == "IDLE"
+                and state["buying_power"] > 0
+            )
 
-        # fail-safe timeout for stuck pending state
+        # -------------------------
+        # FAILSAFE: STUCK ORDER RESET
+        # -------------------------
         if state["execution_state"] == "PENDING":
             if time.time() - state["last_order_time"] > 20:
                 state["execution_state"] = "COOLDOWN"
                 state["last_order_time"] = time.time()
                 state["active_order_id"] = None
                 state["order_pending"] = False
-                state["logs"].append("[SYNC] Pending order timeout -> COOLDOWN")
+                _log_once("[SYNC] Pending order timeout -> COOLDOWN")
+
+        # 🟢 SUCCESS — SYNC IS HEALTHY
+        state["sync_ok"] = True
 
     except Exception as e:
-        state["logs"].append(f"[SYNC ERROR] {e}")
+        _log_once(f"[SYNC ERROR] {e}")
+        state["sync_ok"] = False
 
 
+# =========================================================
+# 💰 PNL UPDATE
+# =========================================================
 def update_pnl(state):
     price = state["price"]
 
     if state["position"] == "long" and state["entry_price"]:
         state["unrealized_pnl"] = (price - state["entry_price"]) * state["qty"]
+
     elif state["position"] == "short" and state["entry_price"]:
         state["unrealized_pnl"] = (state["entry_price"] - price) * state["qty"]
+
     else:
         state["unrealized_pnl"] = 0.0
+
+
+# =========================================================
+# 🧠 LOGGING HELPER
+# =========================================================
+def _log_once(message: str):
+    if not state["logs"] or message not in state["logs"][-1]:
+        state["logs"].append(message)
