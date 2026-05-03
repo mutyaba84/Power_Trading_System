@@ -1,7 +1,7 @@
 {
-  "timestamp": 1777842239.5947683,
+  "timestamp": 1777848151.752705,
   "market_mood": "neutral",
-  "confidence": 0.5326,
-  "volatility": 0.0903,
+  "confidence": 0.5233,
+  "volatility": 0.1387,
   "source": "dummy_market_feed"
 }
