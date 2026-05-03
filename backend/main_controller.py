@@ -8,9 +8,19 @@ from backend.brokers.alpaca_broker import AlpacaBroker
 from backend.brokers.config import get_alpaca_config
 
 
+# =========================================================
+# TESTING CONTROL
+# =========================================================
+# True  = allow paper-test orders outside normal market hours
+# False = block orders when market is closed
+ALLOW_AFTER_HOURS_TESTING = True
+
+
 class TradingController:
 
     def __init__(self):
+        print("[CONTROLLER] Loaded testing controller v5 - market gate override enabled")
+
         self.running = False
         self.ai = LiveTrader()
 
@@ -28,11 +38,12 @@ class TradingController:
         # Trade lifecycle
         self._peak_price = None
         self._entry_time = None
+        self._scaled_out = False
 
-        # Filters
+        # Entry filters
         self._last_price = None
         self._last_trade_time = 0
-        self._last_entry_price = None  # 🔥 IMPORTANT (prevents attribute errors)
+        self._last_entry_price = None
 
         self._clear_stale_orders()
 
@@ -52,9 +63,6 @@ class TradingController:
                     time.sleep(1)
                     continue
 
-                # -------------------------
-                # SYNC
-                # -------------------------
                 sync_with_broker(state, self.broker)
                 update_pnl(state)
 
@@ -63,18 +71,12 @@ class TradingController:
                     time.sleep(1)
                     continue
 
-                # -------------------------
-                # TRADE CLOSE DETECTION
-                # -------------------------
                 self._detect_trade_close(price)
 
-                # -------------------------
-                # POSITION MANAGEMENT
-                # -------------------------
                 exit_signal = self._manage_position(price)
                 if exit_signal:
                     self._execute(
-                        action="SELL",
+                        action=exit_signal,
                         price=price,
                         strategy="risk_exit",
                         regime="N/A",
@@ -84,15 +86,15 @@ class TradingController:
                     time.sleep(1)
                     continue
 
-                # -------------------------
-                # AI DECISION
-                # -------------------------
                 action, strategy, regime, confidence, volatility = self.ai.decide_action(
                     price,
                     state["equity"],
                 )
 
-                print(f"[AI] action={action} conf={confidence:.2f}")
+                print(
+                    f"[AI DEBUG] action={action} strategy={strategy} "
+                    f"regime={regime} confidence={confidence:.2f} volatility={volatility}"
+                )
 
                 self._execute(
                     action=action,
@@ -127,6 +129,8 @@ class TradingController:
             return None
 
         entry = state["entry_price"]
+        qty = state["qty"]
+
         if not entry:
             return None
 
@@ -139,17 +143,23 @@ class TradingController:
 
         drawdown = (self._peak_price - price) / self._peak_price
 
-        if pnl_pct <= -0.01:
+        if pnl_pct <= -0.04:
             print(f"[EXIT] STOP_LOSS | pnl={pnl_pct:.4f}")
-            return "STOP_LOSS"
+            return "FULL_EXIT"
 
-        if pnl_pct >= 0.02:
-            print(f"[EXIT] TAKE_PROFIT | pnl={pnl_pct:.4f}")
-            return "TAKE_PROFIT"
+        if pnl_pct >= 0.02 and qty >= 2:
+            if not self._scaled_out:
+                print(f"[EXIT] SCALE OUT | pnl={pnl_pct:.4f}")
+                self._scaled_out = True
+                return "PARTIAL_EXIT"
 
-        if pnl_pct > 0.01 and drawdown > 0.005:
-            print(f"[EXIT] TRAILING_STOP | pnl={pnl_pct:.4f}")
-            return "TRAILING_STOP"
+        if pnl_pct > 0.02 and drawdown > 0.001:
+            print(f"[EXIT] TRAILING STOP | pnl={pnl_pct:.4f} drawdown={drawdown:.4f}")
+            return "FULL_EXIT"
+
+        if pnl_pct >= 0.06:
+            print(f"[EXIT] MAX PROFIT | pnl={pnl_pct:.4f}")
+            return "FULL_EXIT"
 
         return None
 
@@ -174,14 +184,16 @@ class TradingController:
                 "exit": price,
                 "qty": self._last_qty,
                 "pnl": pnl,
-                "duration": time.time() - self._entry_time if self._entry_time else 0
+                "duration": time.time() - self._entry_time if self._entry_time else 0,
             })
 
             self._peak_price = None
             self._entry_time = None
+            self._scaled_out = False
 
             state["execution_state"] = "IDLE"
             state["order_pending"] = False
+            state["active_order_id"] = None
 
         self._last_position = current_position
         self._last_qty = state["qty"]
@@ -194,72 +206,133 @@ class TradingController:
         try:
             now = time.time()
 
-            if not self._market_open():
+            print(
+                f"[EXEC] action={action} price={price} "
+                f"position={state['position']} sync_ok={state.get('sync_ok')}"
+            )
+
+            market_open = self._market_open()
+
+            if not market_open and not ALLOW_AFTER_HOURS_TESTING:
+                print("[BLOCK] Market closed")
                 return
+
+            if not market_open and ALLOW_AFTER_HOURS_TESTING:
+                print("[TEST MODE] Market closed but after-hours testing is enabled")
 
             if state["execution_state"] == "PENDING":
                 if now - state["last_order_time"] < 15:
+                    print("[BLOCK] Order pending")
                     return
+
+                print("[RESET] Pending order timeout -> IDLE")
                 state["execution_state"] = "IDLE"
+                state["order_pending"] = False
+                state["active_order_id"] = None
 
             if action == "HOLD":
                 return
 
-            # -------------------------
-            # NOISE FILTER
-            # -------------------------
-            if self._last_price:
-                move = abs(price - self._last_price) / self._last_price
-                if move < 0.0005:
-                    print("[FILTER] Noise")
+            # =====================================================
+            # SELL / EXIT — NEVER APPLY BUY FILTERS HERE
+            # =====================================================
+            if action in ["SELL", "FULL_EXIT", "PARTIAL_EXIT"]:
+                if state["position"] == "flat":
+                    print("[SELL BLOCK] Already flat")
                     return
 
-            self._last_price = price
-
-            # -------------------------
-            # CONFIDENCE FILTER
-            # -------------------------
-            if confidence < 0.6:
-                print("[FILTER] Low confidence")
-                return
-
-            # -------------------------
-            # COOLDOWN (STRONG)
-            # -------------------------
-            if now - self._last_trade_time < 30:
-                print("[FILTER] Cooldown")
-                return
-
-            # -------------------------
-            # PRICE ZONE FILTER
-            # -------------------------
-            if self._last_entry_price:
-                zone = abs(price - self._last_entry_price) / self._last_entry_price
-                if zone < 0.001:
-                    print("[FILTER] Same zone")
+                pos = self.broker.get_position("SPY")
+                if not pos:
+                    print("[SELL BLOCK] No broker position")
                     return
 
-            # -------------------------
-            # EXECUTION
-            # -------------------------
-            if action == "BUY" and state["position"] == "flat":
+                available_qty = int(float(pos.get("qty_available", 0) or 0))
+                if available_qty <= 0:
+                    print("[SELL BLOCK] No available qty")
+                    return
+
+                if action == "PARTIAL_EXIT":
+                    exit_qty = max(1, available_qty // 2)
+                else:
+                    exit_qty = available_qty
+
+                print(f"[SELL] action={action} qty={exit_qty}")
+
+                if self.broker.place_order("SPY", exit_qty, "sell"):
+                    self._last_trade_time = now
+
+                    state["execution_state"] = "PENDING"
+                    state["last_order_time"] = now
+                    state["last_order_side"] = "SELL"
+                    state["order_pending"] = True
+                    state["order_timestamp"] = now
+                    state["last_action"] = "SELL"
+
+                return
+
+            # =====================================================
+            # BUY — FILTERS APPLY ONLY HERE
+            # =====================================================
+            if action == "BUY":
+                if state["position"] != "flat":
+                    print("[BUY BLOCK] Already in position")
+                    return
+
+                min_move_pct = 0.00015
+
+                if self._last_price:
+                    move = abs(price - self._last_price) / self._last_price
+
+                    if move < min_move_pct:
+                        print(f"[FILTER] Noise move={move:.5f}")
+                        return
+
+                self._last_price = price
+
+                min_confidence = 0.50
+
+                if confidence < min_confidence:
+                    print(f"[FILTER] Low confidence confidence={confidence:.2f}")
+                    return
+
+                cooldown_seconds = 12
+
+                if now - self._last_trade_time < cooldown_seconds:
+                    remaining = cooldown_seconds - (now - self._last_trade_time)
+                    print(f"[FILTER] Cooldown remaining={remaining:.1f}s")
+                    return
+
+                zone_limit = 0.0003
+
+                if self._last_entry_price:
+                    zone = abs(price - self._last_entry_price) / self._last_entry_price
+
+                    if zone < zone_limit:
+                        print(f"[FILTER] Same zone zone={zone:.5f}")
+                        return
+
                 qty = max(1, int(state["equity"] * 0.01 // price))
+
+                print(
+                    f"[BUY] qty={qty} price={price} "
+                    f"confidence={confidence:.2f} equity={state['equity']}"
+                )
 
                 if self.broker.place_order("SPY", qty, "buy"):
                     self._entry_time = now
                     self._peak_price = price
                     self._last_trade_time = now
                     self._last_entry_price = price
+                    self._scaled_out = False
 
                     state["execution_state"] = "PENDING"
+                    state["last_order_time"] = now
+                    state["last_order_side"] = "BUY"
+                    state["order_pending"] = True
+                    state["order_timestamp"] = now
                     state["last_action"] = "BUY"
 
-            elif action == "SELL" and state["position"] != "flat":
-                if self.broker.place_order("SPY", state["qty"], "sell"):
-                    self._last_trade_time = now
-
-                    state["execution_state"] = "PENDING"
-                    state["last_action"] = "SELL"
+                return
 
         except Exception as e:
             state["logs"].append(f"[EXEC ERROR] {e}")

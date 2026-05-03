@@ -1,0 +1,22 @@
+2026-04-23 18:45:50,656 [INFO] [KnowledgeGraph] KnowledgeGraph initialized (runtime-safe).
+2026-04-23 18:45:50,657 [INFO] [LearningEngine] KnowledgeGraph loaded.
+2026-04-23 18:45:50,739 [INFO] [MemoryManager] MemoryManager initialized (runtime-safe).
+2026-04-23 18:45:50,739 [INFO] [LearningEngine] MemoryManager loaded.
+2026-04-23 18:45:51,084 [INFO] [LearningEngine] LearningEngine ready. ai_state_dir=C:\Users\dennis\Power_Trading_System\external_memory\ai_state read_only=True
+2026-04-23 19:00:41,477 [INFO] [KnowledgeGraph] KnowledgeGraph initialized (runtime-safe).
+2026-04-23 19:00:41,478 [INFO] [LearningEngine] KnowledgeGraph loaded.
+2026-04-23 19:00:41,484 [INFO] [MemoryManager] MemoryManager initialized (runtime-safe).
+2026-04-23 19:00:41,484 [INFO] [LearningEngine] MemoryManager loaded.
+2026-04-23 19:00:41,890 [INFO] [LearningEngine] LearningEngine ready. ai_state_dir=C:\Users\dennis\Power_Trading_System\external_memory\ai_state read_only=True
+2026-04-23 19:01:17,221 [INFO] [RegimeClassifier] [REGIME] UNKNOWN → CHOP
+2026-04-23 20:03:17,117 [INFO] [KnowledgeGraph] KnowledgeGraph initialized (runtime-safe).
+2026-04-23 20:03:17,233 [INFO] [LearningEngine] KnowledgeGraph loaded.
+2026-04-23 20:03:17,238 [INFO] [MemoryManager] MemoryManager initialized (runtime-safe).
+2026-04-23 20:03:17,239 [INFO] [LearningEngine] MemoryManager loaded.
+2026-04-23 20:03:18,296 [INFO] [LearningEngine] LearningEngine ready. ai_state_dir=C:\Users\dennis\Power_Trading_System\external_memory\ai_state read_only=True
+2026-04-23 20:05:11,241 [INFO] [KnowledgeGraph] KnowledgeGraph initialized (runtime-safe).
+2026-04-23 20:05:11,265 [INFO] [LearningEngine] KnowledgeGraph loaded.
+2026-04-23 20:05:11,289 [INFO] [MemoryManager] MemoryManager initialized (runtime-safe).
+2026-04-23 20:05:11,302 [INFO] [LearningEngine] MemoryManager loaded.
+2026-04-23 20:05:11,939 [INFO] [LearningEngine] LearningEngine ready. ai_state_dir=C:\Users\dennis\Power_Trading_System\external_memory\ai_state read_only=True
+2026-04-23 20:05:58,835 [INFO] [RegimeClassifier] [REGIME] UNKNOWN → CHOP
