@@ -1,11 +1,9 @@
-/* ===============================
-   GLOBAL RESET / BASE
-================================ */
 * {
   box-sizing: border-box;
 }
 
-html, body {
+html,
+body {
   margin: 0;
   padding: 0;
   min-height: 100%;
@@ -13,13 +11,11 @@ html, body {
 
 body {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  background-color: #242424;
-  color: rgba(255, 255, 255, 0.87);
+  background: #0f172a;
+  color: #e5e7eb;
+  font-size: 14px;
 }
 
-/* ===============================
-   APP ROOT
-================================ */
 #root {
   max-width: 1280px;
   margin: 0 auto;
@@ -27,23 +23,67 @@ body {
 }
 
 /* ===============================
-   CARD BASE
+   DASHBOARD LAYOUT
 ================================ */
-.card {
+.container {
+  width: 100%;
+}
+
+h1 {
+  margin: 0 0 0.75rem;
+  font-size: 1.8rem;
+  letter-spacing: -0.03em;
+}
+
+.status {
+  margin-bottom: 1rem;
+  padding: 0.5rem 0.75rem;
   background: #020617;
   border: 1px solid #1f2937;
   border-radius: 8px;
-  padding: 1rem;
-  text-align: left;
+  display: inline-block;
+  font-weight: 600;
 }
 
-/* ensure nothing inside cards forces column layout */
-.card * {
-  max-width: 100%;
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1.3fr 0.7fr;
+  gap: 1rem;
+  margin-top: 1rem;
 }
 
 /* ===============================
-   TERMINAL SECTIONS
+   CARDS
+================================ */
+.card {
+  background: linear-gradient(180deg, #020617, #030712);
+  border: 1px solid #1f2937;
+  border-radius: 14px;
+  padding: 1rem;
+  text-align: left;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+}
+
+.card h3 {
+  margin: 0 0 0.85rem;
+  font-size: 1rem;
+  color: #f8fafc;
+}
+
+.card p {
+  margin: 0.45rem 0;
+  color: #cbd5e1;
+}
+
+/* ===============================
+   TERMINAL ROWS
 ================================ */
 .terminal-section {
   border-bottom: 1px solid #1f2937;
@@ -51,46 +91,36 @@ body {
   margin-bottom: 10px;
 }
 
-/* ===============================
-   TERMINAL ROW (BULLETPROOF)
-================================ */
 .terminal-row {
-  display: flex !important;
-  flex-direction: row !important;
-  justify-content: space-between !important;
-  align-items: center !important;
-  width: 100%;
-  font-size: 0.85rem;
-  margin-top: 4px;
-}
-
-/* FORCE children inline no matter what */
-.terminal-row > * {
-  display: inline-flex !important;
+  display: flex;
+  justify-content: space-between;
   align-items: center;
-  white-space: nowrap;
+  gap: 12px;
+  width: 100%;
+  font-size: 0.88rem;
+  margin-top: 8px;
 }
 
-/* ===============================
-   TERMINAL TEXT
-================================ */
-.terminal-label {
-  color: #9ca3af;
+.terminal-label,
+label {
+  color: #94a3b8;
+  font-weight: 500;
 }
 
 .terminal-value {
   font-family: monospace;
   color: #e5e7eb;
+  font-weight: 700;
 }
 
 /* ===============================
    BADGES
 ================================ */
 .badge {
-  padding: 2px 8px;
+  padding: 3px 9px;
   border-radius: 999px;
-  font-size: 0.7rem;
-  font-weight: 600;
+  font-size: 0.72rem;
+  font-weight: 700;
 }
 
 .badge-green {
@@ -99,7 +129,7 @@ body {
 }
 
 .badge-yellow {
-  background: #3f3f46;
+  background: #422006;
   color: #facc15;
 }
 
@@ -109,64 +139,135 @@ body {
 }
 
 /* ===============================
+   RISK CONTROLS / SLIDERS
+================================ */
+input[type="range"] {
+  width: 100%;
+  margin: 8px 0 18px;
+  cursor: pointer;
+  accent-color: #22c55e;
+}
+
+input[type="range"]:last-child {
+  margin-bottom: 0;
+}
+
+/* ===============================
    BUTTONS
 ================================ */
+button {
+  width: 100%;
+  margin-top: 10px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  transition: transform 0.12s ease, opacity 0.12s ease, background 0.12s ease;
+}
+
+button:hover {
+  transform: translateY(-1px);
+  opacity: 0.95;
+}
+
+button:active {
+  transform: translateY(0);
+}
+
 .terminal-buttons {
   display: flex;
-  gap: 8px;
-  margin-top: 6px;
+  gap: 10px;
+  margin-top: 10px;
 }
 
 .terminal-btn {
-  padding: 4px 10px;
-  border-radius: 4px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  cursor: pointer;
-  border: none;
-}
-
-.btn-start {
-  background: #065f46;
-  color: #ecfdf5;
+  padding: 8px 10px;
+  font-size: 0.78rem;
 }
 
 .btn-stop {
   background: #7f1d1d;
   color: #fee2e2;
+  border-color: #991b1b;
+}
+
+.btn-stop:hover {
+  background: #991b1b;
+}
+
+.btn-start {
+  background: #065f46;
+  color: #ecfdf5;
+  border-color: #047857;
+}
+
+.btn-start:hover {
+  background: #047857;
 }
 
 /* ===============================
-   LINKS / MISC
+   LOGS
+================================ */
+.logs {
+  max-height: 240px;
+  overflow-y: auto;
+  background: #020617;
+  border: 1px solid #1f2937;
+  border-radius: 10px;
+  padding: 0.75rem;
+  font-family: monospace;
+  font-size: 0.8rem;
+}
+
+.logs ul {
+  margin: 0;
+  padding-left: 1rem;
+}
+
+.logs li {
+  margin-bottom: 6px;
+  color: #cbd5e1;
+}
+
+/* ===============================
+   PNL COLORS
+================================ */
+.pnl-positive {
+  color: #34d399;
+}
+
+.pnl-negative {
+  color: #f87171;
+}
+
+/* ===============================
+   LINKS
 ================================ */
 a {
-  color: #646cff;
+  color: #60a5fa;
   text-decoration: none;
 }
 
 a:hover {
-  color: #535bf2;
+  color: #93c5fd;
 }
 
 /* ===============================
-   LIGHT MODE (OPTIONAL)
+   RESPONSIVE
 ================================ */
-@media (prefers-color-scheme: light) {
-  body {
-    background-color: #ffffff;
-    color: #213547;
+@media (max-width: 900px) {
+  #root {
+    padding: 1rem;
   }
 
-  .card {
-    background: #f9fafb;
-    border-color: #e5e7eb;
+  .grid-3,
+  .grid-2 {
+    grid-template-columns: 1fr;
   }
 
-  .terminal-label {
-    color: #6b7280;
-  }
-
-  .terminal-value {
-    color: #111827;
+  h1 {
+    font-size: 1.5rem;
   }
 }

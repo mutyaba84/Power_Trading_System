@@ -38,6 +38,8 @@ state = {
     "last_order_time": 0,
     "last_order_side": None,
     "active_order_id": None,
+    
+    "trading_enabled": True,
 
     # portfolio controls
     "max_exposure_pct": 0.25,
@@ -45,6 +47,13 @@ state = {
 
     # sync health
     "sync_ok": True,
+
+
+    # NEW — UI CONTROLLED
+    "risk_per_trade": 0.01,
+
+    # NEW — derived
+    "deployable_capital": 0.0,
 }
 
 
@@ -221,3 +230,6 @@ def update_pnl(state):
 
     else:
         state["unrealized_pnl"] = 0.0
+
+
+    

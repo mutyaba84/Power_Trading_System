@@ -11,15 +11,13 @@ from backend.brokers.config import get_alpaca_config
 # =========================================================
 # TESTING CONTROL
 # =========================================================
-# True  = allow paper-test orders outside normal market hours
-# False = block orders when market is closed
 ALLOW_AFTER_HOURS_TESTING = True
 
 
 class TradingController:
 
     def __init__(self):
-        print("[CONTROLLER] Loaded testing controller v5 - market gate override enabled")
+        print("[CONTROLLER] Loaded controller v6 (risk-integrated)")
 
         self.running = False
         self.ai = LiveTrader()
@@ -70,6 +68,11 @@ class TradingController:
                     print("[BLOCK] Sync unstable -> trading paused")
                     time.sleep(1)
                     continue
+
+                # 🔥 DEPLOYABLE CAPITAL TRACKING
+                state["deployable_capital"] = (
+                    state["total_equity"] * state.get("deploy_pct", 0.25)
+                )
 
                 self._detect_trade_close(price)
 
@@ -206,6 +209,11 @@ class TradingController:
         try:
             now = time.time()
 
+            # 🔴 KILL SWITCH
+            if not state.get("trading_enabled", True):
+                print("[BLOCK] Trading disabled")
+                return
+
             print(
                 f"[EXEC] action={action} price={price} "
                 f"position={state['position']} sync_ok={state.get('sync_ok')}"
@@ -216,9 +224,6 @@ class TradingController:
             if not market_open and not ALLOW_AFTER_HOURS_TESTING:
                 print("[BLOCK] Market closed")
                 return
-
-            if not market_open and ALLOW_AFTER_HOURS_TESTING:
-                print("[TEST MODE] Market closed but after-hours testing is enabled")
 
             if state["execution_state"] == "PENDING":
                 if now - state["last_order_time"] < 15:
@@ -233,106 +238,72 @@ class TradingController:
             if action == "HOLD":
                 return
 
-            # =====================================================
-            # SELL / EXIT — NEVER APPLY BUY FILTERS HERE
-            # =====================================================
+            # =========================
+            # SELL / EXIT
+            # =========================
             if action in ["SELL", "FULL_EXIT", "PARTIAL_EXIT"]:
                 if state["position"] == "flat":
-                    print("[SELL BLOCK] Already flat")
                     return
 
                 pos = self.broker.get_position("SPY")
                 if not pos:
-                    print("[SELL BLOCK] No broker position")
                     return
 
                 available_qty = int(float(pos.get("qty_available", 0) or 0))
                 if available_qty <= 0:
-                    print("[SELL BLOCK] No available qty")
                     return
 
-                if action == "PARTIAL_EXIT":
-                    exit_qty = max(1, available_qty // 2)
-                else:
-                    exit_qty = available_qty
-
-                print(f"[SELL] action={action} qty={exit_qty}")
+                exit_qty = max(1, available_qty // 2) if action == "PARTIAL_EXIT" else available_qty
 
                 if self.broker.place_order("SPY", exit_qty, "sell"):
-                    self._last_trade_time = now
-
                     state["execution_state"] = "PENDING"
                     state["last_order_time"] = now
-                    state["last_order_side"] = "SELL"
                     state["order_pending"] = True
-                    state["order_timestamp"] = now
-                    state["last_action"] = "SELL"
 
                 return
 
-            # =====================================================
-            # BUY — FILTERS APPLY ONLY HERE
-            # =====================================================
+            # =========================
+            # BUY
+            # =========================
             if action == "BUY":
+
                 if state["position"] != "flat":
-                    print("[BUY BLOCK] Already in position")
                     return
 
-                min_move_pct = 0.00015
-
-                if self._last_price:
-                    move = abs(price - self._last_price) / self._last_price
-
-                    if move < min_move_pct:
-                        print(f"[FILTER] Noise move={move:.5f}")
-                        return
-
-                self._last_price = price
-
-                min_confidence = 0.50
-
-                if confidence < min_confidence:
-                    print(f"[FILTER] Low confidence confidence={confidence:.2f}")
+                if confidence < 0.5:
                     return
 
-                cooldown_seconds = 12
-
-                if now - self._last_trade_time < cooldown_seconds:
-                    remaining = cooldown_seconds - (now - self._last_trade_time)
-                    print(f"[FILTER] Cooldown remaining={remaining:.1f}s")
-                    return
-
-                zone_limit = 0.0003
-
-                if self._last_entry_price:
-                    zone = abs(price - self._last_entry_price) / self._last_entry_price
-
-                    if zone < zone_limit:
-                        print(f"[FILTER] Same zone zone={zone:.5f}")
-                        return
-
-                qty = max(1, int(state["equity"] * 0.01 // price))
-
-                print(
-                    f"[BUY] qty={qty} price={price} "
-                    f"confidence={confidence:.2f} equity={state['equity']}"
+                # 🔥 RISK ENGINE
+                risk_pct = self.ai.risk.get_risk(
+                    action=action,
+                    confidence=confidence,
+                    equity=state["total_equity"],
+                    volatility=volatility,
+                    strategy=strategy,
+                    regime=regime,
+                    performance={"margin_pressure": state.get("margin_pressure", 0)},
+                    deploy_pct=state.get("deploy_pct", 0.25),
                 )
 
-                if self.broker.place_order("SPY", qty, "buy"):
-                    self._entry_time = now
-                    self._peak_price = price
-                    self._last_trade_time = now
-                    self._last_entry_price = price
-                    self._scaled_out = False
+                # 🔒 UI CAP
+                risk_pct = min(risk_pct, state.get("risk_per_trade", 0.01))
 
+                position_value = state["total_equity"] * risk_pct
+                qty = max(1, int(position_value // price))
+
+                # 🚨 EXPOSURE GUARD
+                max_allowed = state["total_equity"] * state["max_exposure_pct"]
+
+                if qty * price > max_allowed:
+                    print("[BLOCK] Exposure limit hit")
+                    return
+
+                print(f"[BUY] qty={qty} risk={risk_pct:.4f}")
+
+                if self.broker.place_order("SPY", qty, "buy"):
                     state["execution_state"] = "PENDING"
                     state["last_order_time"] = now
-                    state["last_order_side"] = "BUY"
                     state["order_pending"] = True
-                    state["order_timestamp"] = now
-                    state["last_action"] = "BUY"
-
-                return
 
         except Exception as e:
             state["logs"].append(f"[EXEC ERROR] {e}")

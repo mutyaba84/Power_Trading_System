@@ -23,14 +23,17 @@ export default function ControllerControls() {
 
   return (
     <Card title="Controller">
-      <div style={{ display: "flex", gap: 12 }}>
+      <div className="terminal-buttons">
         <button
+          className="terminal-btn btn-start"
           onClick={() => run(startController, "START")}
           disabled={busy}
         >
           Start
         </button>
+
         <button
+          className="terminal-btn btn-stop"
           onClick={() => run(stopController, "STOP")}
           disabled={busy}
         >
@@ -38,8 +41,9 @@ export default function ControllerControls() {
         </button>
       </div>
 
-      <div style={{ marginTop: 10, fontSize: 13 }}>
-        Status: {status}
+      <div className="terminal-row">
+        <span className="terminal-label">Status</span>
+        <span className="terminal-value">{status}</span>
       </div>
     </Card>
   );

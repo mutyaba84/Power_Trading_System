@@ -1,0 +1,35 @@
+2026-05-15 22:26:24,070 [INFO] [KnowledgeGraph] KnowledgeGraph initialized (runtime-safe).
+2026-05-15 22:26:24,071 [INFO] [LearningEngine] KnowledgeGraph loaded.
+2026-05-15 22:26:24,081 [INFO] [MemoryManager] MemoryManager initialized (runtime-safe).
+2026-05-15 22:26:24,082 [INFO] [LearningEngine] MemoryManager loaded.
+2026-05-15 22:26:24,310 [INFO] [LearningEngine] LearningEngine ready. ai_state_dir=C:\Users\dennis\Power_Trading_System\external_memory\ai_state read_only=True
+2026-05-15 22:27:03,392 [INFO] [RegimeClassifier] [REGIME] UNKNOWN → CHOP
+2026-05-15 22:29:04,461 [INFO] [KnowledgeGraph] KnowledgeGraph initialized (runtime-safe).
+2026-05-15 22:29:04,469 [INFO] [LearningEngine] KnowledgeGraph loaded.
+2026-05-15 22:29:04,495 [INFO] [MemoryManager] MemoryManager initialized (runtime-safe).
+2026-05-15 22:29:04,524 [INFO] [LearningEngine] MemoryManager loaded.
+2026-05-15 22:29:04,625 [INFO] [LearningEngine] LearningEngine ready. ai_state_dir=C:\Users\dennis\Power_Trading_System\external_memory\ai_state read_only=True
+2026-05-15 22:29:34,232 [INFO] [RegimeClassifier] [REGIME] UNKNOWN → CHOP
+2026-05-15 22:47:29,265 [INFO] [KnowledgeGraph] KnowledgeGraph initialized (runtime-safe).
+2026-05-15 22:47:29,266 [INFO] [LearningEngine] KnowledgeGraph loaded.
+2026-05-15 22:47:29,276 [INFO] [MemoryManager] MemoryManager initialized (runtime-safe).
+2026-05-15 22:47:29,278 [INFO] [LearningEngine] MemoryManager loaded.
+2026-05-15 22:47:29,349 [INFO] [LearningEngine] LearningEngine ready. ai_state_dir=C:\Users\dennis\Power_Trading_System\external_memory\ai_state read_only=True
+2026-05-15 22:48:00,076 [INFO] [RegimeClassifier] [REGIME] UNKNOWN → CHOP
+2026-05-15 23:24:24,494 [INFO] [KnowledgeGraph] KnowledgeGraph initialized (runtime-safe).
+2026-05-15 23:24:24,497 [INFO] [LearningEngine] KnowledgeGraph loaded.
+2026-05-15 23:24:24,540 [INFO] [MemoryManager] MemoryManager initialized (runtime-safe).
+2026-05-15 23:24:24,541 [INFO] [LearningEngine] MemoryManager loaded.
+2026-05-15 23:24:24,628 [INFO] [LearningEngine] LearningEngine ready. ai_state_dir=C:\Users\dennis\Power_Trading_System\external_memory\ai_state read_only=True
+2026-05-15 23:24:54,492 [INFO] [RegimeClassifier] [REGIME] UNKNOWN → CHOP
+2026-05-15 23:27:02,492 [INFO] [KnowledgeGraph] KnowledgeGraph initialized (runtime-safe).
+2026-05-15 23:27:02,497 [INFO] [LearningEngine] KnowledgeGraph loaded.
+2026-05-15 23:27:02,548 [INFO] [MemoryManager] MemoryManager initialized (runtime-safe).
+2026-05-15 23:27:02,576 [INFO] [LearningEngine] MemoryManager loaded.
+2026-05-15 23:27:02,749 [INFO] [LearningEngine] LearningEngine ready. ai_state_dir=C:\Users\dennis\Power_Trading_System\external_memory\ai_state read_only=True
+2026-05-15 23:27:32,223 [INFO] [RegimeClassifier] [REGIME] UNKNOWN → CHOP
+2026-05-15 23:27:49,158 [INFO] [KnowledgeGraph] KnowledgeGraph initialized (runtime-safe).
+2026-05-15 23:27:49,158 [INFO] [LearningEngine] KnowledgeGraph loaded.
+2026-05-15 23:27:49,169 [INFO] [MemoryManager] MemoryManager initialized (runtime-safe).
+2026-05-15 23:27:49,170 [INFO] [LearningEngine] MemoryManager loaded.
+2026-05-15 23:27:49,280 [INFO] [LearningEngine] LearningEngine ready. ai_state_dir=C:\Users\dennis\Power_Trading_System\external_memory\ai_state read_only=True
