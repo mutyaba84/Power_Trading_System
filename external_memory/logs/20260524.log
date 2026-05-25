@@ -3,3 +3,9 @@
 2026-05-24 10:14:59,199 [INFO] [MemoryManager] MemoryManager initialized (runtime-safe).
 2026-05-24 10:14:59,200 [INFO] [LearningEngine] MemoryManager loaded.
 2026-05-24 10:14:59,475 [INFO] [LearningEngine] LearningEngine ready. ai_state_dir=C:\Users\dennis\Power_Trading_System\external_memory\ai_state read_only=True
+2026-05-24 10:16:24,789 [INFO] [KnowledgeGraph] KnowledgeGraph initialized (runtime-safe).
+2026-05-24 10:16:24,790 [INFO] [LearningEngine] KnowledgeGraph loaded.
+2026-05-24 10:16:24,795 [INFO] [MemoryManager] MemoryManager initialized (runtime-safe).
+2026-05-24 10:16:24,796 [INFO] [LearningEngine] MemoryManager loaded.
+2026-05-24 10:16:24,873 [INFO] [LearningEngine] LearningEngine ready. ai_state_dir=C:\Users\dennis\Power_Trading_System\external_memory\ai_state read_only=True
+2026-05-24 10:17:03,661 [INFO] [RegimeClassifier] [REGIME] UNKNOWN → CHOP
