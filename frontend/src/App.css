@@ -22,9 +22,6 @@ body {
   padding: 2rem;
 }
 
-/* ===============================
-   DASHBOARD LAYOUT
-================================ */
 .container {
   width: 100%;
 }
@@ -45,6 +42,11 @@ h1 {
   font-weight: 600;
 }
 
+.status-divider {
+  margin: 0 10px;
+  color: #64748b;
+}
+
 .grid-3 {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -59,9 +61,6 @@ h1 {
   margin-top: 1rem;
 }
 
-/* ===============================
-   CARDS
-================================ */
 .card {
   background: linear-gradient(180deg, #020617, #030712);
   border: 1px solid #1f2937;
@@ -82,29 +81,11 @@ h1 {
   color: #cbd5e1;
 }
 
-/* ===============================
-   TERMINAL ROWS
-================================ */
-.terminal-section {
-  border-bottom: 1px solid #1f2937;
-  padding-bottom: 10px;
-  margin-bottom: 10px;
-}
-
-.terminal-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 12px;
-  width: 100%;
-  font-size: 0.88rem;
-  margin-top: 8px;
-}
-
-.terminal-label,
 label {
+  display: block;
   color: #94a3b8;
   font-weight: 500;
+  margin-bottom: 4px;
 }
 
 .terminal-value {
@@ -113,34 +94,6 @@ label {
   font-weight: 700;
 }
 
-/* ===============================
-   BADGES
-================================ */
-.badge {
-  padding: 3px 9px;
-  border-radius: 999px;
-  font-size: 0.72rem;
-  font-weight: 700;
-}
-
-.badge-green {
-  background: #064e3b;
-  color: #34d399;
-}
-
-.badge-yellow {
-  background: #422006;
-  color: #facc15;
-}
-
-.badge-red {
-  background: #450a0a;
-  color: #f87171;
-}
-
-/* ===============================
-   RISK CONTROLS / SLIDERS
-================================ */
 input[type="range"] {
   width: 100%;
   margin: 8px 0 18px;
@@ -148,13 +101,6 @@ input[type="range"] {
   accent-color: #22c55e;
 }
 
-input[type="range"]:last-child {
-  margin-bottom: 0;
-}
-
-/* ===============================
-   BUTTONS
-================================ */
 button {
   width: 100%;
   margin-top: 10px;
@@ -174,17 +120,6 @@ button:hover {
 
 button:active {
   transform: translateY(0);
-}
-
-.terminal-buttons {
-  display: flex;
-  gap: 10px;
-  margin-top: 10px;
-}
-
-.terminal-btn {
-  padding: 8px 10px;
-  font-size: 0.78rem;
 }
 
 .btn-stop {
@@ -207,9 +142,11 @@ button:active {
   background: #047857;
 }
 
-/* ===============================
-   LOGS
-================================ */
+.control-state {
+  margin-top: 14px;
+  font-size: 0.85rem;
+}
+
 .logs {
   max-height: 240px;
   overflow-y: auto;
@@ -219,6 +156,7 @@ button:active {
   padding: 0.75rem;
   font-family: monospace;
   font-size: 0.8rem;
+  line-height: 1.5;
 }
 
 .logs ul {
@@ -231,20 +169,21 @@ button:active {
   color: #cbd5e1;
 }
 
-/* ===============================
-   PNL COLORS
-================================ */
+.trade-row {
+  padding: 6px 0;
+  border-bottom: 1px solid #1f2937;
+}
+
 .pnl-positive {
-  color: #34d399;
+  color: #34d399 !important;
+  font-weight: 700;
 }
 
 .pnl-negative {
-  color: #f87171;
+  color: #f87171 !important;
+  font-weight: 700;
 }
 
-/* ===============================
-   LINKS
-================================ */
 a {
   color: #60a5fa;
   text-decoration: none;
@@ -254,9 +193,6 @@ a:hover {
   color: #93c5fd;
 }
 
-/* ===============================
-   RESPONSIVE
-================================ */
 @media (max-width: 900px) {
   #root {
     padding: 1rem;
@@ -269,5 +205,9 @@ a:hover {
 
   h1 {
     font-size: 1.5rem;
+  }
+
+  .status {
+    display: block;
   }
 }

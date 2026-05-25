@@ -4,6 +4,7 @@ import { getStatus, getSettings, updateSettings } from "../api";
 export default function Dashboard() {
   const [data, setData] = useState({});
   const [connected, setConnected] = useState(false);
+  const [lastUpdate, setLastUpdate] = useState("--");
 
   const [settings, setSettings] = useState({
     deploy_pct: 0.25,
@@ -12,16 +13,14 @@ export default function Dashboard() {
     trading_enabled: true,
   });
 
-  // -------------------------
-  // LOAD DATA
-  // -------------------------
   useEffect(() => {
     const fetchData = async () => {
       const res = await getStatus();
 
-      if (res && res.price !== undefined) {
+      if (res && Object.keys(res).length > 0) {
         setConnected(true);
         setData(res);
+        setLastUpdate(new Date().toLocaleTimeString());
       } else {
         setConnected(false);
       }
@@ -29,7 +28,10 @@ export default function Dashboard() {
 
     const fetchSettings = async () => {
       const cfg = await getSettings();
-      if (cfg) setSettings((prev) => ({ ...prev, ...cfg }));
+      if (cfg) {
+        const clean = cfg.settings ? cfg.settings : cfg;
+        setSettings((prev) => ({ ...prev, ...clean }));
+      }
     };
 
     fetchData();
@@ -39,116 +41,108 @@ export default function Dashboard() {
     return () => clearInterval(interval);
   }, []);
 
-  // -------------------------
-  // UPDATE SETTINGS
-  // -------------------------
-  const update = (key, value) => {
+  const update = async (key, value) => {
     const updated = { ...settings, [key]: value };
     setSettings(updated);
-    updateSettings(updated);
+
+    try {
+      await updateSettings(updated);
+    } catch (err) {
+      console.error("Settings update failed:", err);
+    }
   };
 
-  // -------------------------
-  // DERIVED METRICS
-  // -------------------------
+  const fmtMoney = (value) =>
+    typeof value === "number" && !Number.isNaN(value)
+      ? `$${value.toFixed(2)}`
+      : "--";
+
+  const fmtNumber = (value, decimals = 2) =>
+    typeof value === "number" && !Number.isNaN(value)
+      ? value.toFixed(decimals)
+      : "--";
+
   const exposure =
-    data.position !== "flat"
+    data.total_equity && data.price && data.qty
       ? (data.qty * data.price) / data.total_equity
       : 0;
+
+  const pnlClass = (value) =>
+    Number(value || 0) >= 0 ? "pnl-positive" : "pnl-negative";
 
   return (
     <div className="container">
       <h1>⚡ Power Trading System</h1>
 
       <div className="status">
-        Status: {connected ? "🟢 ONLINE" : "🔴 OFFLINE"}
+        {connected ? "🟢 ONLINE" : "🔴 OFFLINE"}
+        <span className="status-divider">|</span>
+        Trading:{" "}
+        <strong>{settings.trading_enabled ? "ENABLED" : "DISABLED"}</strong>
+        <span className="status-divider">|</span>
+        Last Update: {lastUpdate}
       </div>
 
-      {/* ========================= */}
-      {/* TOP GRID */}
-      {/* ========================= */}
       <div className="grid-3">
-
-        {/* MARKET */}
         <div className="card">
           <h3>📊 Market</h3>
-          <p>Price: {data.price?.toFixed?.(2)}</p>
+          <p>Price: {fmtNumber(data.price)}</p>
         </div>
 
-        {/* TRADING */}
         <div className="card">
           <h3>🤖 Trading</h3>
-          <p>Action: {data.last_action}</p>
-          <p>Position: {data.position}</p>
+          <p>Action: {data.last_action ?? "--"}</p>
+          <p>Position: {data.position ?? "--"}</p>
+          <p>Qty: {data.qty ?? 0}</p>
+          <p>Entry: {fmtNumber(data.entry_price)}</p>
         </div>
 
-        {/* ACCOUNT */}
         <div className="card">
           <h3>💰 Account</h3>
-          <p>Total Equity: {data.total_equity?.toFixed?.(2)}</p>
-          <p>Deployable: {data.deployable_capital?.toFixed?.(2)}</p>
+          <p>Total Equity: {fmtMoney(data.total_equity)}</p>
+          <p>Deployable: {fmtMoney(data.deployable_capital)}</p>
+          <p>Cash: {fmtMoney(data.cash)}</p>
+          <p>Buying Power: {fmtMoney(data.buying_power)}</p>
           <p>Exposure: {(exposure * 100).toFixed(2)}%</p>
         </div>
-
       </div>
 
-
-
-
-          {/* ========================= */}
-          {     /* PNL PANEL */}
-          {/* ========================= */}
-        <div className="grid-3">
+      <div className="grid-3">
+        <div className="card">
+          <h3>📈 Unrealized PnL</h3>
+          <p className={pnlClass(data.unrealized_pnl)}>
+            {fmtMoney(data.unrealized_pnl)}
+          </p>
+        </div>
 
         <div className="card">
-           <h3>📈 Unrealized PnL</h3>
-         <p>
-         ${data.unrealized_pnl?.toFixed?.(2)}
-         </p>
-       </div>
+          <h3>💵 Realized PnL</h3>
+          <p className={pnlClass(data.realized_pnl)}>
+            {fmtMoney(data.realized_pnl)}
+          </p>
+        </div>
 
-     <div className="card">
-      <h3>💵 Realized PnL</h3>
-       <p>
-            ${data.realized_pnl?.toFixed?.(2)}
-       </p>
-     </div>
-
-     <div className="card">
-      <h3>⚠️ Margin Pressure</h3>
-      <p>
-         {(data.margin_pressure * 100)?.toFixed?.(2)}%
-      </p>
+        <div className="card">
+          <h3>⚠️ Margin Pressure</h3>
+          <p>{((Number(data.margin_pressure) || 0) * 100).toFixed(2)}%</p>
+        </div>
       </div>
 
-     </div>
-
-      {/* ========================= */}
-      {/* CONTROL GRID */}
-      {/* ========================= */}
       <div className="grid-2">
-
-        {/* RISK CONTROLS */}
         <div className="card">
           <h3>⚙️ Risk Controls</h3>
 
-          <label>
-            Capital Allocation: {(settings.deploy_pct * 100).toFixed(0)}%
-          </label>
+          <label>Capital Allocation: {(settings.deploy_pct * 100).toFixed(0)}%</label>
           <input
             type="range"
             min="0.01"
             max="1"
             step="0.01"
             value={settings.deploy_pct}
-            onChange={(e) =>
-              update("deploy_pct", parseFloat(e.target.value))
-            }
+            onChange={(e) => update("deploy_pct", parseFloat(e.target.value))}
           />
 
-          <label>
-            Max Exposure: {(settings.max_exposure_pct * 100).toFixed(0)}%
-          </label>
+          <label>Max Exposure: {(settings.max_exposure_pct * 100).toFixed(0)}%</label>
           <input
             type="range"
             min="0.01"
@@ -160,9 +154,7 @@ export default function Dashboard() {
             }
           />
 
-          <label>
-            Risk Per Trade: {(settings.risk_per_trade * 100).toFixed(2)}%
-          </label>
+          <label>Risk Per Trade: {(settings.risk_per_trade * 100).toFixed(2)}%</label>
           <input
             type="range"
             min="0.001"
@@ -175,7 +167,6 @@ export default function Dashboard() {
           />
         </div>
 
-        {/* KILL SWITCH */}
         <div className="card">
           <h3>🚨 Controls</h3>
 
@@ -192,34 +183,32 @@ export default function Dashboard() {
           >
             ▶️ RESUME
           </button>
+
+          <p className="control-state">
+            Trading State:{" "}
+            <strong>{settings.trading_enabled ? "ENABLED" : "DISABLED"}</strong>
+          </p>
         </div>
-
       </div>
-      {/* ========================= */}
-      { /* TRADE TAPE */}
-      {/* ========================= */}
-     <div className="card">
-     <h3>📜 Trade Tape</h3>
 
+      <div className="card">
+        <h3>📜 Trade Tape</h3>
         <div className="logs">
           <ul>
             {(data.trades || []).slice(-10).reverse().map((trade, i) => (
-             <li key={i}>
-                Qty: {trade.qty} |
-                Entry: {trade.entry?.toFixed?.(2)} |
-                Exit: {trade.exit?.toFixed?.(2)} |
-                PnL: {trade.pnl?.toFixed?.(2)}
-             </li>
-          ))}
-        </ul>
+              <li key={i} className="trade-row">
+                Qty: {trade.qty ?? "--"} | Entry:{" "}
+                {typeof trade.entry === "number" ? trade.entry.toFixed(2) : "--"} |
+                Exit:{" "}
+                {typeof trade.exit === "number" ? trade.exit.toFixed(2) : "--"} |
+                PnL:{" "}
+                {typeof trade.pnl === "number" ? trade.pnl.toFixed(2) : "--"}
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
-</div>
 
-      
-
-      {/* ========================= */}
-      {/* LOGS */}
-      {/* ========================= */}
       <div className="card">
         <h3>🧾 Logs</h3>
         <div className="logs">
